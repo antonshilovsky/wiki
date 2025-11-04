@@ -30,3 +30,4 @@ markdown_extensions:
   - attr_list
   - pymdownx.superfences
   - pymdownx.emoji
+  - md_in_html
