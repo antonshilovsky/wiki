@@ -1,0 +1,25 @@
+site_name: Антон Шиловский — Wiki
+site_url: https://wiki.shilovsky.com
+
+theme:
+  name: material
+  language: ru
+  features:
+    - navigation.instant
+    - navigation.sections
+    - toc.integrate
+    - content.code.copy
+
+nav:
+  - Главная: index.md
+  - Задачи: tasks.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - footnotes
+  - attr_list
+  - pymdownx.superfences
+  - pymdownx.emoji
+
