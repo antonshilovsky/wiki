@@ -1,0 +1,111 @@
+/* Общий фон и шрифты */
+body {
+  background: #0d0d0d;
+  color: #e0e0e0;
+  font-family: "Inter", sans-serif;
+  line-height: 1.8;
+}
+
+
+.hero-inner {
+  max-width: 900px;
+}
+
+.hero-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 3px solid #444;
+  margin-bottom: 1.5rem;
+}
+
+/* Ссылки навигации */
+.nav-links {
+  text-align: center;
+  margin: 1.5em 0;
+  font-size: 1.1em;
+  letter-spacing: 0.3px;
+}
+.nav-links a {
+  color: #c0c0c0;
+  text-decoration: none;
+  margin: 0 0.5em;
+}
+.nav-links a:hover {
+  color: #fff;
+}
+
+/* Карточки секций */
+.section-card {
+  background: #111;
+  border-radius: 14px;
+  padding: 24px;
+  margin: 24px 0;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+  transition: transform .2s, box-shadow .2s;
+}
+.section-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(255,255,255,0.08);
+}
+.section-card h2 {
+  margin-top: 0;
+  color: #d0d0d0;
+}
+.section-card p {
+  color: #b0b0b0;
+}
+
+/* --- HERO COLOR OVERRIDE (FULL FIX) --- */
+
+/* Принудительно делаем весь текст в hero белым */
+.md-content .hero,
+.md-content .hero *,
+.hero,
+.hero * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Повышаем приоритет переменных темы */
+:root {
+  --md-typeset-color: #ffffff !important;
+  --md-default-fg-color: #ffffff !important;
+  --md-primary-fg-color: #ffffff !important;
+}
+
+/* Для надёжности задаём фон hero, чтобы контраст был гарантирован */
+.hero {
+  background: linear-gradient(135deg, #0d0d0d, #1b1b1b);
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+
+
+/* --- DARK TABLE STYLE --- */
+.md-typeset table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #0f0f0f !important; /* чёрная заливка */
+  color: #f5f5f5 !important;            /* белый текст */
+}
+
+.md-typeset th,
+.md-typeset td {
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* тонкие разделители */
+  text-align: center;
+  padding: 12px 10px;
+}
+
+.md-typeset th {
+  font-weight: 600;
+  color: #fff !important;
+  background: #161616 !important; /* немного светлее для заголовков */
+}
+
+.md-typeset tr:hover td {
+  background: rgba(255, 255, 255, 0.05); /* лёгкое подсвечивание при наведении */
+}
