@@ -1,19 +1,27 @@
-site_name: Антон Шиловский — Wiki
-site_url: https://wiki.shilovsky.com
-
+site_name: Anton Shilovsky
+site_url: https://shilovskyanton.ru/
 theme:
   name: material
   language: ru
+  font:
+    text: Inter
+    code: Fira Code
+  palette:
+    - scheme: slate
+      primary: black
+      accent: grey
   features:
     - navigation.instant
+    - navigation.expand
     - navigation.sections
+    - navigation.top
     - toc.integrate
     - content.code.copy
-
+extra_css:
+  - styles/extra.css
 nav:
   - Главная: index.md
   - Задачи: tasks.md
-
 markdown_extensions:
   - toc:
       permalink: true
@@ -22,4 +30,3 @@ markdown_extensions:
   - attr_list
   - pymdownx.superfences
   - pymdownx.emoji
-
