@@ -1,16 +1,30 @@
-/* Общий фон и шрифты */
+/* ===========================
+   БАЗА: фон, шрифты, типографика
+   =========================== */
 body {
   background: #0d0d0d;
   color: #e0e0e0;
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   line-height: 1.8;
 }
 
-
-.hero-inner {
-  max-width: 900px;
+/* Цвет текста в типографике Material */
+:root {
+  --md-typeset-color: #e0e0e0;
+  --md-default-fg-color: #e0e0e0;
+  --md-primary-fg-color: #ffffff;
+  --md-typeset-a-color: #c0c0c0;
 }
 
+/* ===========================
+   HERO-БЛОК
+   =========================== */
+.hero {
+  background: linear-gradient(135deg, #0d0d0d, #1b1b1b);
+  padding: 6rem 2rem;
+  text-align: center;
+}
+.hero-inner { max-width: 900px; margin: 0 auto; }
 .hero-photo {
   width: 160px;
   height: 160px;
@@ -18,114 +32,145 @@ body {
   border: 3px solid #444;
   margin-bottom: 1.5rem;
 }
+.md-content .hero,
+.hero,
+.hero * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255,255,255,.15);
+}
+.main-content h1:first-child,
+.md-typeset h1:first-child { color: #ffffff !important; }
 
-/* Ссылки навигации */
+/* ===========================
+   ССЫЛКИ — серебряная тема
+   =========================== */
+
+/* Глобальные переменные цвета ссылок */
+:root {
+  --md-primary-fg-color: #c0c0c0 !important;
+  --md-accent-fg-color: #ffffff !important;
+  --md-typeset-a-color: #c0c0c0 !important;
+}
+
+/* Все обычные ссылки */
+a,
+.md-typeset a,
+.md-content a,
+.md-typeset a:link,
+.md-typeset a:visited {
+  color: #c0c0c0 !important;
+  text-decoration: none !important;
+  transition: color .25s ease, text-shadow .25s ease;
+}
+a:hover,
+.md-typeset a:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255,255,255,.4);
+}
+a:active,
+.md-typeset a:active { color: #d0d0d0 !important; }
+
+/* Кнопки-ссылки */
+a.md-button,
+.md-typeset .md-button {
+  border: 1px solid #c0c0c0 !important;
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: #c0c0c0 !important;
+  background: transparent;
+  text-transform: uppercase;
+  font-size: .9em;
+  letter-spacing: .5px;
+  transition: all .25s ease;
+}
+a.md-button:hover,
+.md-typeset .md-button:hover {
+  background: linear-gradient(90deg, #d0d0d0 0%, #ffffff 100%) !important;
+  color: #000 !important;
+  box-shadow: 0 0 14px rgba(255,255,255,.4);
+}
+
+/* Навигация (левое и верхнее меню) */
+.md-nav__link,
+.md-header a,
+.md-tabs__link {
+  color: #c0c0c0 !important;
+  transition: color .25s ease, text-shadow .25s ease;
+}
+.md-nav__link:hover,
+.md-header a:hover,
+.md-tabs__link:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255,255,255,.4);
+}
+.md-nav__link--active,
+.md-nav__item--active > .md-nav__link { color: #ffffff !important; }
+
+/* Футер */
+.md-footer a {
+  color: #c0c0c0 !important;
+  transition: color .25s ease;
+}
+.md-footer a:hover {
+  color: #ffffff !important;
+  text-shadow: 0 0 6px rgba(255,255,255,.35);
+}
+
+/* Навигационные блоки на страницах */
 .nav-links {
   text-align: center;
   margin: 1.5em 0;
   font-size: 1.1em;
   letter-spacing: 0.3px;
 }
-.nav-links a {
-  color: #c0c0c0;
-  text-decoration: none;
-  margin: 0 0.5em;
-}
-.nav-links a:hover {
-  color: #fff;
-}
 
-/* Карточки секций */
+/* ===========================
+   КАРТОЧКИ СЕКЦИЙ
+   =========================== */
 .section-card {
   background: #111;
   border-radius: 14px;
   padding: 24px;
   margin: 24px 0;
-  box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+  box-shadow: 0 4px 12px rgba(255,255,255,.05);
   transition: transform .2s, box-shadow .2s;
 }
 .section-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(255,255,255,0.08);
+  box-shadow: 0 6px 20px rgba(255,255,255,.08);
 }
-.section-card h2 {
-  margin-top: 0;
-  color: #d0d0d0;
-}
-.section-card p {
-  color: #b0b0b0;
-}
+.section-card h2 { color: #d0d0d0; }
+.section-card p  { color: #b0b0b0; }
 
-/* --- HERO COLOR OVERRIDE (FULL FIX) --- */
-
-/* Принудительно делаем весь текст в hero белым */
-.md-content .hero,
-.md-content .hero *,
-.hero,
-.hero * {
-  color: #ffffff !important;
-  fill: #ffffff !important;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
-}
-
-/* Повышаем приоритет переменных темы */
-:root {
-  --md-typeset-color: #ffffff !important;
-  --md-default-fg-color: #ffffff !important;
-  --md-primary-fg-color: #ffffff !important;
-}
-
-/* Для надёжности задаём фон hero, чтобы контраст был гарантирован */
-.hero {
-  background: linear-gradient(135deg, #0d0d0d, #1b1b1b);
-  padding: 6rem 2rem;
-  text-align: center;
-}
-
-
-
-/* --- DARK TABLE STYLE --- */
+/* ===========================
+   ТЁМНЫЕ ТАБЛИЦЫ
+   =========================== */
 .md-typeset table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #0f0f0f !important; /* чёрная заливка */
-  color: #f5f5f5 !important;            /* белый текст */
+  background-color: #0f0f0f !important;
+  color: #f5f5f5 !important;
 }
-
 .md-typeset th,
 .md-typeset td {
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* тонкие разделители */
+  border-bottom: 1px solid rgba(255,255,255,.15);
   text-align: center;
   padding: 12px 10px;
 }
-
 .md-typeset th {
   font-weight: 600;
   color: #fff !important;
-  background: #161616 !important; /* немного светлее для заголовков */
+  background: #161616 !important;
 }
-
 .md-typeset tr:hover td {
-  background: rgba(255, 255, 255, 0.05); /* лёгкое подсвечивание при наведении */
+  background: rgba(255,255,255,.05);
 }
 
-/* --- Portfolio screenshots --- */
-.portfolio-gallery img {
-  width: 560px;
-  max-width: 95%;
-  margin: 18px;
-  border-radius: 14px;
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.portfolio-gallery img:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 22px rgba(255, 255, 255, 0.15);
-}
-
-/* --- Portfolio: серебристая окантовка и глянец --- */
+/* ===========================
+   ПОРТФОЛИО
+   =========================== */
 .portfolio-gallery {
   display: flex;
   flex-wrap: wrap;
@@ -133,41 +178,35 @@ body {
   gap: 24px;
   margin-top: 2rem;
 }
-
 .portfolio-gallery img {
   width: 560px;
   max-width: 95%;
   border-radius: 16px;
-  padding: 2px; /* пространство под градиент */
-  background: linear-gradient(145deg, #dcdcdc, #8e8e8e); /* серебристая рамка */
-  box-shadow: 0 0 18px rgba(255, 255, 255, 0.05);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  padding: 2px;
+  background: linear-gradient(145deg, #dcdcdc, #8e8e8e);
+  box-shadow: 0 0 18px rgba(255,255,255,.05);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
   cursor: pointer;
   position: relative;
 }
-
-/* Эффект лёгкого "глянца" */
 .portfolio-gallery img::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   border-radius: 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
+  background: linear-gradient(180deg, rgba(255,255,255,.15) 0%, rgba(255,255,255,0) 60%);
   pointer-events: none;
-  transition: opacity 0.3s ease;
-  opacity: 0.4;
+  transition: opacity .3s ease;
+  opacity: .4;
 }
-
-/* Анимация при наведении */
 .portfolio-gallery img:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 24px rgba(255,255,255,.15);
   background: linear-gradient(145deg, #f0f0f0, #aaa);
 }
+.portfolio-gallery img:hover::after { opacity: .7; }
 
-.portfolio-gallery img:hover::after {
-  opacity: 0.7;
-}
+/* ===========================
+   ОСНОВНОЙ КОНТЕНТ
+   =========================== */
+.main-content { padding: 2rem; }
