@@ -1,0 +1,17 @@
+{# --- кастомный hero-блок перед контентом --- #}
+{% if page.url == "index.html" %}
+  <section class="hero">
+    <div class="hero-inner">
+      <img src="assets/photo.jpg" alt="Anton Shilovsky" class="hero-photo">
+      <div class="hero-text">
+        <h1>Антон Шиловский</h1>
+        <p>Бизнес-аналитик, преподаватель, автор BI-решений</p>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{# --- стандартный контент страницы (Markdown) --- #}
+<article class="main-content">
+  {{ page.content }}
+</article>

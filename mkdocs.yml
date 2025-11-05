@@ -1,4 +1,4 @@
-site_name: Anton Shilovsky
+site_name: Антон Шиловский
 site_url: https://shilovskyanton.ru/
 theme:
   name: material
@@ -18,10 +18,12 @@ theme:
     - toc.integrate
     - content.code.copy
 extra_css:
-  - styles/extra.css
+  - styles/site.css
 nav:
   - Главная: index.md
   - Задачи: tasks.md
+  - Портфолио: portfolio.md
+
 markdown_extensions:
   - toc:
       permalink: true
