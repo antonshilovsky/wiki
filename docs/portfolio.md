@@ -2,7 +2,8 @@
 
 ## Вебинары
 
-[▶ Вебинар — Анализ рисков](https://rutube.ru/video/private/9f09435600dffcd0e6b6982eef9e8305/?p=lWbUlzcLtTf34blXKCGEAA){ .md-button }
+[▶ Вебинар — Управление требованиями и изменениями](https://rutube.ru/video/private/c944c2cf401cb8cf2d616b97e1ec3520/?p=Toqm04uhwxzfWnY-1PFmag&t=211&r=plwd){ .md-button }<br>
+[▶ Вебинар — Анализ рисков](https://rutube.ru/video/private/9f09435600dffcd0e6b6982eef9e8305/?p=lWbUlzcLtTf34blXKCGEAA&t=625&r=plwd){ .md-button }
 
 ---
 
