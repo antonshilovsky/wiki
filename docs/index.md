@@ -121,7 +121,7 @@ Power BI, SQL, Python, REST API, MS Access, VBA, Docker, WSL, Windows Server
 ---
 
 ## Профессиональные сообщества {#профессиональные-сообщества}
-- Участник Interfax-lab.  
+- Участник [Interfax-lab] (http://interfax.lab.fa.ru.tilda.ws/).  
 
 ---
 
