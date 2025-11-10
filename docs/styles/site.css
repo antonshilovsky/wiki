@@ -75,6 +75,7 @@ a:active,
 a.md-button,
 .md-typeset .md-button {
   border: 1px solid #c0c0c0 !important;
+  margin: 0.4em;
   padding: 8px 14px;
   border-radius: 6px;
   color: #c0c0c0 !important;
