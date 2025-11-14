@@ -211,3 +211,35 @@ a.md-button:hover,
    ОСНОВНОЙ КОНТЕНТ
    =========================== */
 .main-content { padding: 2rem; }
+/* --- Исправление навигации в мобильной версии --- */
+@media screen and (max-width: 768px) {
+  .md-content .nav-links,
+  .md-typeset .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 0.6rem;
+    font-size: 1.05em;
+    margin-top: 1em;
+  }
+
+  .md-content .nav-links a,
+  .md-typeset .nav-links a {
+    display: inline-block;
+    color: #c0c0c0 !important;
+    text-decoration: none;
+    line-height: 1.5;
+  }
+
+  .md-content .nav-links a:hover,
+  .md-typeset .nav-links a:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(255,255,255,0.4);
+  }
+
+  /* скрываем точки (•) между ссылками в мобильной версии */
+  .md-content .nav-links br + *::before {
+    content: none !important;
+  }
+}
