@@ -1,6 +1,6 @@
 # Бизнес-аналитик. Преподаватель. Исследователь с фокусом на бизнес-выгоды.
 
-<img src="images/main.png" alt="Антон Шиловский" width="260" style="border-radius: 12px; float: right; margin: 0 0 1em 1.5em;">
+<img src="images/new_main.png" alt="Антон Шиловский" width="260" style="border-radius: 12px; float: right; margin: 0 0 1em 1.5em;">
 
 ---
 
