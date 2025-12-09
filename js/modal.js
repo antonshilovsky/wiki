@@ -89,4 +89,57 @@ document$.subscribe(() => {
   btnPrev.addEventListener('click', () => {
     if (currentIndex - 1 >= 0) showImage(c
 
+document$.subscribe(() => {
+  const modal = document.getElementById("contactModal");
+  const openBtn = document.getElementById("openContactForm");
+  const closeBtn = document.getElementById("closeModal");
+  const overlay = document.getElementById("modalOverlay");
+  const form = document.getElementById("modalContactForm");
+
+  if (modal && openBtn && closeBtn && overlay) {
+    openBtn.onclick = () => {
+      modal.style.display = "block";
+      setTimeout(() => modal.classList.add("modal-show"), 10);
+    };
+    closeBtn.onclick = () => {
+      modal.classList.remove("modal-show");
+      setTimeout(() => modal.style.display = "none", 250);
+    };
+    overlay.onclick = () => {
+      modal.classList.remove("modal-show");
+      setTimeout(() => modal.style.display = "none", 250);
+    };
+    document.onkeydown = (e) => {
+      if (e.key === "Escape") {
+        modal.classList.remove("modal-show");
+        setTimeout(() => modal.style.display = "none", 250);
+      }
+    };
+  }
+
+  if (form && !form.dataset.bound) {
+    form.dataset.bound = "true";
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: formData,
+          headers: { Accept: "application/json" }
+        });
+
+        if (res.ok) {
+          form.reset();
+          alert("Сообщение отправлено!");
+        } else {
+          alert("Ошибка отправки. Попробуйте позже.");
+        }
+      } catch (err) {
+        alert("Ошибка соединения.");
+      }
+    });
+  }
+});
 
