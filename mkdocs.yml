@@ -18,15 +18,23 @@ theme:
     - toc.integrate
     - content.code.copy
 extra_css:
-  - styles/site.css
+  - styles/new_site.css?v=2
+extra:
+  features:
+    - content.image.lightbox
 nav:
-  - Главная: index.md
-  - Задачи: tasks.md
-  - Портфолио: portfolio.md
-
+ - Навигация:
+      - Главная: index.md
+      - Портфолио: portfolio.md
+      - Контакты: contacts.md
+extra_javascript:
+  - js/modal.js?v=2
+  - js/contact.js?v=2
+plugins:
+  - glightbox
 markdown_extensions:
   - toc:
-      permalink: true
+      permalink: false
   - admonition
   - footnotes
   - attr_list
