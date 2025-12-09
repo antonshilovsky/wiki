@@ -1,145 +1,266 @@
-document$.subscribe(() => {
-  const modal = document.getElementById("contactModal");
-  const openBtn = document.getElementById("openContactForm");
-  const closeBtn = document.getElementById("closeModal");
-  const overlay = document.getElementById("modalOverlay");
 
-  function openModal() {
-    modal.style.display = "block";
-    setTimeout(() => {
-      modal.classList.add("modal-show");
-    }, 10);
-  }
+(function(){
 
-  function closeModal() {
-    modal.classList.remove("modal-show");
-    setTimeout(() => {
-      modal.style.display = "none";
-    }, 250);
-  }
+  let escapeHandlerAdded = false;
+  let lightboxOverlay = null;
+  let lightboxImage = null;
+  let lightboxCaption = null;
+  let lightboxPrev = null;
+  let lightboxNext = null;
+  let lightboxClose = null;
 
-  if (openBtn && closeBtn && overlay) {
-    openBtn.addEventListener("click", openModal);
-    closeBtn.addEventListener("click", closeModal);
-    overlay.addEventListener("click", closeModal);
-  }
+  let lightboxImages = [];
+  let currentIndex = 0;
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeModal();
-  });
-
-  const images = Array.from(document.querySelectorAll('.md-content img')).filter(img => !img.closest('a') && !img.classList.contains('no-lightbox'));
-  if (!images.length) return;
-
-  const overlayEl = document.createElement('div');
-  overlayEl.id = 'lightbox-overlay';
-  const inner = document.createElement('div');
-  inner.id = 'lightbox-inner';
-  const lbImg = document.createElement('img');
-  lbImg.id = 'lightbox-img';
-  const caption = document.createElement('div');
-  caption.id = 'lightbox-caption';
-  const btnClose = document.createElement('button');
-  btnClose.id = 'lightbox-close';
-  btnClose.innerHTML = '&times;';
-  const btnNext = document.createElement('button');
-  btnNext.id = 'lightbox-next';
-  btnNext.innerHTML = '&#8250;';
-  const btnPrev = document.createElement('button');
-  btnPrev.id = 'lightbox-prev';
-  btnPrev.innerHTML = '&#8249;';
-
-  inner.append(lbImg, caption, btnClose, btnNext, btnPrev);
-  overlayEl.appendChild(inner);
-  document.body.appendChild(overlayEl);
-
-  let currentIndex = -1;
-  const imgArray = Array.from(images);
-
-  function showImage(index) {
-    if (index < 0 || index >= imgArray.length) return;
+  function showLightboxImage(index) {
+    if (!lightboxOverlay) return;
     currentIndex = index;
-    const img = imgArray[index];
-    lbImg.src = img.src;
-    lbImg.alt = img.alt;
-    caption.textContent = img.alt || '';
-    btnPrev.style.display = (index > 0) ? 'block' : 'none';
-    btnNext.style.display = (index < imgArray.length - 1) ? 'block' : 'none';
-    overlayEl.classList.add('open');
+    const imgElem = lightboxImages[index];
+
+    lightboxImage.src = imgElem.src;
+    lightboxImage.alt = imgElem.alt || "";
+    lightboxCaption.textContent = imgElem.alt || "";
+
+    if (lightboxPrev && lightboxNext) {
+      lightboxPrev.style.display = (index > 0) ? "" : "none";
+      lightboxNext.style.display = (index < lightboxImages.length - 1) ? "" : "none";
+    }
+  }
+
+  function openLightbox(index) {
+
+    if (!lightboxOverlay) {
+
+      lightboxOverlay = document.createElement("div");
+      lightboxOverlay.id = "lightboxOverlay";
+      lightboxOverlay.style.position = "fixed";
+      lightboxOverlay.style.top = "0";
+      lightboxOverlay.style.left = "0";
+      lightboxOverlay.style.width = "100%";
+      lightboxOverlay.style.height = "100%";
+      lightboxOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+      lightboxOverlay.style.zIndex = "10000";
+      lightboxOverlay.style.display = "none";
+      lightboxOverlay.style.cursor = "pointer";  // cursor pointer for background
+
+      const contentContainer = document.createElement("div");
+      contentContainer.style.position = "absolute";
+      contentContainer.style.top = "50%";
+      contentContainer.style.left = "50%";
+      contentContainer.style.transform = "translate(-50%, -50%)";
+      contentContainer.style.cursor = "auto";
+
+      lightboxImage = document.createElement("img");
+      lightboxImage.className = "lightbox-img";
+
+      lightboxImage.style.maxWidth = "90%";
+      lightboxImage.style.maxHeight = "90%";
+      lightboxImage.style.display = "block";
+      lightboxImage.style.margin = "0 auto";
+
+      lightboxImage.addEventListener("click", function(e){ e.stopPropagation(); });
+
+
+      lightboxCaption = document.createElement("div");
+      lightboxCaption.className = "lightbox-caption";
+      lightboxCaption.style.color = "#fff";
+      lightboxCaption.style.textAlign = "center";
+      lightboxCaption.style.marginTop = "8px";
+
+      lightboxCaption.addEventListener("click", function(e){ e.stopPropagation(); });
+
+      lightboxPrev = document.createElement("button");
+      lightboxPrev.innerHTML = "&#10094;";  // heavy left angle quote symbol
+      lightboxPrev.className = "lightbox-prev";
+      lightboxPrev.style.position = "absolute";
+      lightboxPrev.style.left = "20px";
+      lightboxPrev.style.top = "50%";
+      lightboxPrev.style.transform = "translate(0, -50%)";
+      lightboxPrev.style.fontSize = "2rem";
+      lightboxPrev.style.color = "#fff";
+      lightboxPrev.style.background = "none";
+      lightboxPrev.style.border = "none";
+      lightboxPrev.style.cursor = "pointer";
+
+      lightboxPrev.addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (currentIndex > 0) {
+          showLightboxImage(currentIndex - 1);
+        }
+      });
+
+      lightboxNext = document.createElement("button");
+      lightboxNext.innerHTML = "&#10095;";  // heavy right angle quote symbol
+      lightboxNext.className = "lightbox-next";
+      lightboxNext.style.position = "absolute";
+      lightboxNext.style.right = "20px";
+      lightboxNext.style.top = "50%";
+      lightboxNext.style.transform = "translate(0, -50%)";
+      lightboxNext.style.fontSize = "2rem";
+      lightboxNext.style.color = "#fff";
+      lightboxNext.style.background = "none";
+      lightboxNext.style.border = "none";
+      lightboxNext.style.cursor = "pointer";
+      lightboxNext.addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (currentIndex < lightboxImages.length - 1) {
+          showLightboxImage(currentIndex + 1);
+        }
+      });
+
+      lightboxClose = document.createElement("button");
+      lightboxClose.innerHTML = "&times;";
+      lightboxClose.className = "lightbox-close";
+      lightboxClose.style.position = "absolute";
+      lightboxClose.style.top = "20px";
+      lightboxClose.style.right = "30px";
+      lightboxClose.style.fontSize = "2rem";
+      lightboxClose.style.color = "#fff";
+      lightboxClose.style.background = "none";
+      lightboxClose.style.border = "none";
+      lightboxClose.style.cursor = "pointer";
+      lightboxClose.addEventListener("click", function(e) {
+        e.stopPropagation();
+        closeLightbox();
+      });
+
+      contentContainer.appendChild(lightboxImage);
+      contentContainer.appendChild(lightboxCaption);
+      lightboxOverlay.appendChild(contentContainer);
+      lightboxOverlay.appendChild(lightboxPrev);
+      lightboxOverlay.appendChild(lightboxNext);
+      lightboxOverlay.appendChild(lightboxClose);
+
+      lightboxOverlay.addEventListener("click", closeLightbox);
+
+      document.body.appendChild(lightboxOverlay);
+    }
+
+    showLightboxImage(index);
+
+    lightboxOverlay.style.display = "block";
   }
 
   function closeLightbox() {
-    overlayEl.classList.remove('open');
-    currentIndex = -1;
-    lbImg.src = '';
-    caption.textContent = '';
+    if (lightboxOverlay) {
+      lightboxOverlay.style.display = "none";
+    }
   }
 
-  imgArray.forEach((img, index) => {
-    img.style.cursor = 'pointer';
-    img.addEventListener('click', () => {
-      showImage(index);
-    });
-  });
+  function initPageFeatures() {
 
-  btnClose.addEventListener('click', closeLightbox);
-  btnNext.addEventListener('click', () => {
-    if (currentIndex + 1 < imgArray.length) showImage(currentIndex + 1);
-  });
-  btnPrev.addEventListener('click', () => {
-    if (currentIndex - 1 >= 0) showImage(c
+    const contactModal = document.getElementById("contactModal");
+    if (contactModal && contactModal.style.display === "block") {
+      contactModal.style.display = "none";
+    }
+    if (lightboxOverlay && lightboxOverlay.style.display === "block") {
+      lightboxOverlay.style.display = "none";
+    }
 
-document$.subscribe(() => {
-  const modal = document.getElementById("contactModal");
-  const openBtn = document.getElementById("openContactForm");
-  const closeBtn = document.getElementById("closeModal");
-  const overlay = document.getElementById("modalOverlay");
-  const form = document.getElementById("modalContactForm");
+    const openBtn = document.getElementById("openContactForm");
+    const closeBtn = document.getElementById("closeModal");
+    const modalOverlay = document.getElementById("modalOverlay");
+    if (contactModal && openBtn && closeBtn && modalOverlay) {
 
-  if (modal && openBtn && closeBtn && overlay) {
-    openBtn.onclick = () => {
-      modal.style.display = "block";
-      setTimeout(() => modal.classList.add("modal-show"), 10);
-    };
-    closeBtn.onclick = () => {
-      modal.classList.remove("modal-show");
-      setTimeout(() => modal.style.display = "none", 250);
-    };
-    overlay.onclick = () => {
-      modal.classList.remove("modal-show");
-      setTimeout(() => modal.style.display = "none", 250);
-    };
-    document.onkeydown = (e) => {
-      if (e.key === "Escape") {
-        modal.classList.remove("modal-show");
-        setTimeout(() => modal.style.display = "none", 250);
-      }
-    };
-  }
+      contactModal.style.display = contactModal.style.display || "none";
 
-  if (form && !form.dataset.bound) {
-    form.dataset.bound = "true";
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const formData = new FormData(form);
+      openBtn.addEventListener("click", function() {
+        contactModal.style.display = "block";
+      });
+      closeBtn.addEventListener("click", function() {
+        contactModal.style.display = "none";
+      });
+      modalOverlay.addEventListener("click", function() {
+        contactModal.style.display = "none";
+      });
+    }
 
-      try {
-        const res = await fetch(form.action, {
-          method: "POST",
-          body: formData,
-          headers: { Accept: "application/json" }
-        });
+    if (!escapeHandlerAdded) {
+      escapeHandlerAdded = true;
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape" || e.key === "Esc") {
 
-        if (res.ok) {
-          form.reset();
-          alert("Сообщение отправлено!");
-        } else {
-          alert("Ошибка отправки. Попробуйте позже.");
+          if (lightboxOverlay && lightboxOverlay.style.display === "block") {
+            closeLightbox();
+          }
+
+          if (contactModal && contactModal.style.display === "block") {
+            contactModal.style.display = "none";
+          }
         }
-      } catch (err) {
-        alert("Ошибка соединения.");
-      }
-    });
-  }
-});
+      });
+    }
 
+    const form = document.getElementById("modalContactForm");
+    if (form && !form.dataset.bound) {
+      form.dataset.bound = "true";
+
+      let statusMsg = document.getElementById("formStatus");
+      if (!statusMsg) {
+        statusMsg = document.createElement("p");
+        statusMsg.id = "formStatus";
+        statusMsg.style.marginTop = "8px";
+        form.parentNode.appendChild(statusMsg);
+      }
+      form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        fetch(form.action, {
+          method: form.method || "POST",
+          body: formData,
+          headers: { "Accept": "application/json" }
+        }).then(async (response) => {
+          if (response.ok) {
+
+            statusMsg.style.color = "green";
+            statusMsg.textContent = "Спасибо! Ваше сообщение отправлено.";
+            form.reset();
+          } else {
+
+            let errText = "Ошибка: сообщение не отправлено. Попробуйте позже.";
+            try {
+              const data = await response.json();
+              if (data && data.errors) {
+
+                errText = data.errors.map(e => e.message).join(", ");
+              }
+            } catch(e) { /* ignore JSON parse errors */ }
+            statusMsg.style.color = "red";
+            statusMsg.textContent = errText;
+          }
+        }).catch((_error) => {
+
+          statusMsg.style.color = "red";
+          statusMsg.textContent = "Ошибка отправки. Проверьте подключение и попробуйте снова.";
+        });
+      });
+    }
+
+    lightboxImages = [];
+    const contentArea = document.querySelector(".md-content");
+    if (contentArea) {
+      const candidates = contentArea.querySelectorAll("img:not(.no-lightbox)");
+      candidates.forEach(img => {
+
+        if (img.closest("a") !== null) {
+          return;
+        }
+
+        lightboxImages.push(img);
+        img.style.cursor = "pointer";
+        img.addEventListener("click", function() {
+
+          openLightbox(lightboxImages.indexOf(img));
+        });
+      });
+    }
+  }
+
+  if (typeof document$ !== "undefined") {
+    document$.subscribe(initPageFeatures);
+  } else {
+
+    document.addEventListener("DOMContentLoaded", initPageFeatures);
+  }
+})();
