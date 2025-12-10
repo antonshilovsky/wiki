@@ -1,550 +1,238 @@
-/* =====================================================
-   1) БАЗА — фон, стекло, типографика
-   ===================================================== */
-body {
-  background: rgba(0, 0, 0, 0.75) !important; /* полупрозрачный фон */
-  -webkit-backdrop-filter: blur(6px); /* поддержка iOS/Safari */
-  backdrop-filter: blur(6px);         /* все современные браузеры */
-  color: #e0e0e0;
-  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  line-height: 1.8;
-}
+(function () {
+  let escapeHandlerAdded = false;
+  let lightboxOverlay = null;
+  let lightboxImage = null;
+  let lightboxCaption = null;
+  let lightboxPrev = null;
+  let lightboxNext = null;
+  let lightboxClose = null;
+  let lightboxImages = [];
+  let currentIndex = 0;
 
-/* Глобальные цвета темы */
-:root {
-  --md-typeset-color: #e0e0e0;
-  --md-default-fg-color: #e0e0e0;
-  --md-primary-fg-color: #ffffff;
-  --md-typeset-a-color: #c0c0c0;   /* серебряные ссылки */
-}
+  function showLightboxImage(index) {
+    if (!lightboxOverlay) return;
+    currentIndex = index;
+    const imgElem = lightboxImages[index];
+    lightboxImage.src = imgElem.src;
+    lightboxImage.alt = imgElem.alt || "";
+    lightboxCaption.textContent = imgElem.alt || "";
 
-
-/* =====================================================
-   2) HERO-БЛОК
-   ===================================================== */
-.hero {
-  background: linear-gradient(135deg, #0d0d0d, #1b1b1b);
-  padding: 6rem 2rem;
-  text-align: center;
-}
-.hero-inner { max-width: 900px; margin: 0 auto; }
-
-.hero-photo {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  border: 3px solid #444;
-  margin-bottom: 1.5rem;
-}
-
-/* Белый текст в hero */
-.hero, .hero * {
-  color: #ffffff !important;
-  fill: #ffffff !important;
-  text-shadow: 0 0 8px rgba(255,255,255,.15);
-}
-
-/* Белый заголовок */
-.main-content h1:first-child,
-.md-typeset h1:first-child {
-  color: #ffffff !important;
-}
-
-
-/* =====================================================
-   3) ССЫЛКИ — серебро + мягкий fade
-   ===================================================== */
-
-/* Основной стиль ссылок */
-a,
-.md-typeset a,
-.md-content a,
-.md-typeset a:link,
-.md-typeset a:visited {
-  color: #c0c0c0 !important;
-  text-decoration: none !important;
-  transition: color .35s ease, opacity .35s ease, text-shadow .35s ease;
-}
-
-/* fade + мягкое выцветание */
-a,
-.md-typeset a {
-  color: #c0c0c0 !important;
-  opacity: .80;
-  text-decoration: none !important;
-  transition: color .35s ease, opacity .35s ease, text-shadow .35s ease;
-}
-
-a:hover,
-.md-typeset a:hover {
-  opacity: 1 !important;
-  color: #ffffff !important;
-  text-shadow: 0 0 10px rgba(255,255,255,.45);
-}
-
-a {
-  opacity: .85;
-}
-a:hover {
-  opacity: 1;
-}
-
-/* Серебряные кнопки */
-a.md-button,
-.md-typeset .md-button {
-  border: 1px solid #c0c0c0 !important;
-  margin: 0.4em;
-  padding: 8px 14px;
-  border-radius: 6px;
-  color: #c0c0c0 !important;
-  background: transparent;
-  text-transform: uppercase;
-  font-size: .9em;
-  letter-spacing: .5px;
-  transition: all .25s ease;
-}
-
-a.md-button:hover,
-.md-typeset .md-button:hover {
-  background: linear-gradient(90deg, #dfdfdf 0%, #ffffff 100%);
-  color: #000 !important;
-  box-shadow: 0 0 16px rgba(255,255,255,.45);
-}
-
-/* =====================================================
-   3.1) HIDE PERMALINK ICONS (¶)
-   ===================================================== */
-
-/* Скрыть символ ¶ возле заголовков */
-.md-content .headerlink,
-.md-typeset .headerlink {
-    display: none !important;
-}
-
-
-/* =====================================================
-   4) НАВИГАЦИЯ — пепельно-серый акцент
-   ===================================================== */
-
-.md-nav__link {
-  color: #c0c0c0 !important;
-  border-left: 2px solid transparent;
-  padding-left: 10px;
-  transition: all .25s ease;
-}
-
-/* Ховер */
-.md-nav__link:hover {
-  color: #ffffff !important;
-  border-left: 2px solid #b4b4b4; /* пепельно-серый акцент */
-  text-shadow: 0 0 6px rgba(255,255,255,.35);
-}
-
-/* Активная страница */
-.md-nav__item--active > .md-nav__link,
-.md-nav__link--active {
-  color: #ffffff !important;
-  border-left: 2px solid #b4b4b4 !important;
-}
-
-
-/* ВЕРХНЕЕ МЕНЮ */
-.md-header a,
-.md-tabs__link {
-  color: #c0c0c0 !important;
-  transition: color .25s ease;
-}
-
-.md-header a:hover,
-.md-tabs__link:hover {
-  color: #ffffff !important;
-  text-shadow: 0 0 6px rgba(255,255,255,.35);
-}
-
-/* Активная ссылка в левом меню */
-.md-nav__item--active > .md-nav__link {
-  border-left: 3px solid #c7c7c7 !important;  /* пепельно-серый */
-  color: #ffffff !important;
-  background: rgba(255,255,255,0.04);         /* лёгкое стекло */
-  padding-left: 12px;
-  transition: all .25s ease;
-}
-
-/* =====================================================
-   5) ФУТЕР
-   ===================================================== */
-.md-footer a {
-  color: #c0c0c0 !important;
-  transition: color .25s ease;
-}
-
-.md-footer a:hover {
-  color: #ffffff !important;
-  text-shadow: 0 0 6px rgba(255,255,255,.35);
-}
-
-
-/* =====================================================
-   6) КАРТОЧКИ СЕКЦИЙ
-   ===================================================== */
-.section-card {
-  background: rgba(20, 20, 20, 0.65); /* стекло */
-  backdrop-filter: blur(6px);
-  border-radius: 14px;
-  padding: 24px;
-  margin: 24px 0;
-  box-shadow: 0 4px 12px rgba(255,255,255,.05);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-
-.section-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(255,255,255,.08);
-}
-
-.section-card h2 { color: #d0d0d0; }
-.section-card p  { color: #b0b0b0; }
-
-
-/* =====================================================
-   7) ТЁМНЫЕ ТАБЛИЦЫ
-   ===================================================== */
-.md-typeset table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: rgba(20,20,20,0.7) !important;
-  backdrop-filter: blur(6px);
-  color: #f5f5f5 !important;
-}
-
-.md-typeset th,
-.md-typeset td {
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,.15);
-  text-align: center;
-  padding: 12px 10px;
-}
-
-.md-typeset th {
-  font-weight: 600;
-  background: rgba(30,30,30,0.8) !important;
-}
-
-.md-typeset tr:hover td {
-  background: rgba(255,255,255,.05);
-}
-
-
-/* =====================================================
-   8) ПОРТФОЛИО — рамка + глянец
-   ===================================================== */
-.portfolio-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
-  margin-top: 2rem;
-}
-
-.portfolio-gallery img {
-  width: 560px;
-  max-width: 95%;
-  border-radius: 16px;
-  padding: 2px;
-  background: linear-gradient(145deg, #dcdcdc, #8e8e8e);
-  box-shadow: 0 0 18px rgba(255,255,255,.08);
-  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
-  position: relative;
-  cursor: pointer;
-}
-
-.portfolio-gallery img:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 24px rgba(255,255,255,.18);
-}
-
-.portfolio-gallery img::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,.15) 0%, rgba(255,255,255,0) 60%);
-  pointer-events: none;
-  opacity: .4;
-  transition: opacity .3s ease;
-}
-
-.portfolio-gallery img:hover::after { opacity: .7; }
-
-
-/* =====================================================
-   9) ОСНОВНОЙ КОНТЕНТ
-   ===================================================== */
-.main-content {
-  padding: 2rem;
-}
-
-
-/* =====================================================
-   10) МОБИЛЬНАЯ ВЕРСИЯ — фикс текста + фото
-   ===================================================== */
-@media (max-width: 768px) {
-	
-  /* Перебиваем ВСЕ float-ы и inline-стили Material */
-  .md-typeset img,
-  .main-content img {
-    float: none !important;
-    margin: 0 auto 1.2rem auto !important;
-    display: block !important;
-    width: 90% !important;         /* адаптивная ширина */
-    max-width: 340px !important;   /* ограничение по размеру */
+    lightboxPrev.style.display = index > 0 ? "" : "none";
+    lightboxNext.style.display = index < lightboxImages.length - 1 ? "" : "none";
   }
 
-  /* Заголовок уходит под фотографию */
-  .md-typeset h1:first-child,
-  .main-content h1:first-child {
-    margin-top: 1rem !important;
-    text-align: center !important;
+  function openLightbox(index) {
+    if (!lightboxOverlay) {
+      lightboxOverlay = document.createElement("div");
+      lightboxOverlay.id = "lightboxOverlay";
+      Object.assign(lightboxOverlay.style, {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0,0,0,0.85)",
+        zIndex: "10000",
+        display: "none",
+        cursor: "pointer",
+        overflow: "auto"
+      });
+
+      const contentContainer = document.createElement("div");
+      Object.assign(contentContainer.style, {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        cursor: "auto",
+        textAlign: "center"
+      });
+
+      lightboxImage = document.createElement("img");
+      lightboxImage.className = "lightbox-img";
+      Object.assign(lightboxImage.style, {
+        maxWidth: "90vw",
+        maxHeight: "80vh",
+        display: "block",
+        margin: "0 auto"
+      });
+      lightboxImage.addEventListener("click", (e) => e.stopPropagation());
+
+      lightboxCaption = document.createElement("div");
+      lightboxCaption.className = "lightbox-caption";
+      Object.assign(lightboxCaption.style, {
+        color: "#fff",
+        marginTop: "12px"
+      });
+
+      lightboxPrev = document.createElement("button");
+      lightboxPrev.innerHTML = "&#10094;";
+      Object.assign(lightboxPrev.style, {
+        position: "absolute",
+        left: "20px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        fontSize: "2rem",
+        background: "none",
+        border: "none",
+        color: "#fff",
+        cursor: "pointer"
+      });
+      lightboxPrev.onclick = (e) => {
+        e.stopPropagation();
+        if (currentIndex > 0) showLightboxImage(currentIndex - 1);
+      };
+
+      lightboxNext = document.createElement("button");
+      lightboxNext.innerHTML = "&#10095;";
+      Object.assign(lightboxNext.style, {
+        position: "absolute",
+        right: "20px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        fontSize: "2rem",
+        background: "none",
+        border: "none",
+        color: "#fff",
+        cursor: "pointer"
+      });
+      lightboxNext.onclick = (e) => {
+        e.stopPropagation();
+        if (currentIndex < lightboxImages.length - 1) showLightboxImage(currentIndex + 1);
+      };
+
+      lightboxClose = document.createElement("button");
+      lightboxClose.innerHTML = "&times;";
+      Object.assign(lightboxClose.style, {
+        position: "absolute",
+        top: "20px",
+        right: "30px",
+        fontSize: "2rem",
+        background: "none",
+        border: "none",
+        color: "#fff",
+        cursor: "pointer"
+      });
+      lightboxClose.onclick = (e) => {
+        e.stopPropagation();
+        closeLightbox();
+      };
+
+      contentContainer.appendChild(lightboxImage);
+      contentContainer.appendChild(lightboxCaption);
+      lightboxOverlay.appendChild(contentContainer);
+      lightboxOverlay.appendChild(lightboxPrev);
+      lightboxOverlay.appendChild(lightboxNext);
+      lightboxOverlay.appendChild(lightboxClose);
+      lightboxOverlay.addEventListener("click", closeLightbox);
+
+      document.body.appendChild(lightboxOverlay);
+    }
+
+    showLightboxImage(index);
+    lightboxOverlay.style.display = "block";
   }
-  /* Фото всегда сверху */
-  .main-content img {
-    float: none !important;
-    display: block !important;
-    margin: 0 auto 1.5rem auto !important;
+
+  function closeLightbox() {
+    if (lightboxOverlay) {
+      lightboxOverlay.style.display = "none";
+    }
   }
 
-  /* Текст после фото */
-  .main-content h1:first-child {
-    margin-top: 1rem !important;
-    text-align: center !important;
+  function fixMobileNavPosition() {
+    const nav = document.querySelector("nav.md-nav");
+    if (nav && window.innerWidth <= 768) {
+      nav.style.position = "fixed";
+      nav.style.top = "0";
+      nav.style.zIndex = "10001";
+      nav.style.background = "var(--md-default-bg-color)";
+    }
   }
 
-  /* Навигация — вертикальная */
-  .md-content .nav-links,
-  .md-typeset .nav-links {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    gap: 0.6rem;
-    font-size: 1.05em;
-    margin-top: 1em;
+  function initPageFeatures() {
+    fixMobileNavPosition();
+
+    const contactModal = document.getElementById("contactModal");
+    if (contactModal?.style.display === "block") contactModal.style.display = "none";
+    if (lightboxOverlay?.style.display === "block") lightboxOverlay.style.display = "none";
+
+    const openBtn = document.getElementById("openContactForm");
+    const closeBtn = document.getElementById("closeModal");
+    const modalOverlay = document.getElementById("modalOverlay");
+    if (contactModal && openBtn && closeBtn && modalOverlay) {
+      contactModal.style.display = "none";
+      openBtn.onclick = () => contactModal.style.display = "block";
+      closeBtn.onclick = () => contactModal.style.display = "none";
+      modalOverlay.onclick = () => contactModal.style.display = "none";
+    }
+
+    if (!escapeHandlerAdded) {
+      escapeHandlerAdded = true;
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (lightboxOverlay?.style.display === "block") closeLightbox();
+          if (contactModal?.style.display === "block") contactModal.style.display = "none";
+        }
+      });
+    }
+
+    const form = document.getElementById("modalContactForm");
+    if (form && !form.dataset.bound) {
+      form.dataset.bound = "true";
+      let statusMsg = document.getElementById("formStatus");
+      if (!statusMsg) {
+        statusMsg = document.createElement("p");
+        statusMsg.id = "formStatus";
+        statusMsg.style.marginTop = "8px";
+        form.parentNode.appendChild(statusMsg);
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+        fetch(form.action, {
+          method: form.method || "POST",
+          body: formData,
+          headers: { Accept: "application/json" }
+        })
+          .then(async (response) => {
+            if (response.ok) {
+              statusMsg.style.color = "green";
+              statusMsg.textContent = "Спасибо! Ваше сообщение отправлено.";
+              form.reset();
+            } else {
+              let errText = "Ошибка: сообщение не отправлено.";
+              try {
+                const data = await response.json();
+                if (data?.errors) errText = data.errors.map(e => e.message).join(", ");
+              } catch {}
+              statusMsg.style.color = "red";
+              statusMsg.textContent = errText;
+            }
+          })
+          .catch(() => {
+            statusMsg.style.color = "red";
+            statusMsg.textContent = "Ошибка отправки. Проверьте соединение.";
+          });
+      });
+    }
+
+    lightboxImages = [];
+    const contentArea = document.querySelector(".md-content");
+    if (contentArea) {
+      const imgs = contentArea.querySelectorAll("img:not(.no-lightbox)");
+      imgs.forEach((img) => {
+        if (img.closest("a")) return;
+        lightboxImages.push(img);
+        img.style.cursor = "pointer";
+        img.addEventListener("click", () => openLightbox(lightboxImages.indexOf(img)));
+      });
+    }
   }
 
-  /* Удаление лишних точек между ссылками */
-  .md-content .nav-links br + *::before {
-    content: none !important;
+  if (typeof document$ !== "undefined") {
+    document$.subscribe(initPageFeatures);
+  } else {
+    document.addEventListener("DOMContentLoaded", initPageFeatures);
   }
-}
-
-/* --------------------------------------------------------
-   11) MOBILE: фиксированное левое меню (как на десктопе)
---------------------------------------------------------- */
-@media (max-width: 768px) {
-
-  /* Контейнер навигации */
-  .md-sidebar--primary {
-    position: fixed !important;
-    top: 56px !important;        /* высота верхнего хедера */
-    left: 0;
-    width: 260px !important;
-    height: calc(100vh - 56px) !important;
-    overflow-y: auto !important;
-    background: rgba(0,0,0,0.85) !important;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    z-index: 2000 !important;
-    transform: translateX(-260px);
-    transition: transform .35s ease;
-  }
-
-  /* Когда меню открывается */
-  .md-sidebar--primary[data-md-state="open"] {
-    transform: translateX(0);
-  }
-
-  /* Затемняющая подложка при открытом меню */
-  .md-sidebar__overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    backdrop-filter: blur(4px);
-    z-index: 1500;
-  }
-
-  /* Чтобы контент не прыгал под фиксированным меню */
-  .md-main {
-    margin-left: 0 !important;
-  }
-}
-
-/* Увеличиваем hit-area кнопки меню */
-.md-header-nav__button.md-icon {
-  padding: 14px !important;
-}
-
-/* --------------------------------------------------------
-   12) CONTACT FORM (MODAL) — тёмная тема + стекло
---------------------------------------------------------- */
-
-/* Кнопка */
-.contact-btn {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid #c0c0c0;
-  padding: 12px 24px;
-  font-size: 1.1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #e0e0e0;
-  transition: .3s;
-}
-.contact-btn:hover {
-  background: rgba(255,255,255,0.18);
-}
-
-/* Модальное окно */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 5000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(6px);
-}
-
-/* Окно формы */
-.modal-content {
-  background: rgba(20,20,20,0.75);
-  backdrop-filter: blur(8px);
-  margin: 10% auto;
-  padding: 30px;
-  border-radius: 14px;
-  width: 90%;
-  max-width: 520px;
-  color: #e0e0e0;
-  box-shadow: 0 0 30px rgba(0,0,0,0.4);
-}
-
-/* Крестик */
-.close {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-  color: #ccc;
-}
-.close:hover {
-  color: #fff;
-}
-
-/* Поля */
-input, textarea {
-  width: 100%;
-  margin: 8px 0 20px;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #555;
-  background: rgba(0,0,0,0.35);
-  color: #fff;
-}
-
-/* Кнопка отправки */
-.submit-btn {
-  width: 100%;
-  padding: 14px;
-  background: #fff;
-  color: #000;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: .25s;
-}
-.submit-btn:hover {
-  background: #e5e5e5;
-}
-/* Затемняющий фон */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(4px);
-}
-
-/* Чтобы модал по центру даже на мобилках */
-.modal-content {
-  margin-top: 12vh !important;
-}
-
-/* Анимация появления модального окна */
-@keyframes modalFadeZoom {
-  0% {
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Плавное появление содержимого */
-.modal-content {
-  animation: modalFadeZoom 0.35s ease forwards;
-  opacity: 0; /* чтобы не мигало */
-}
-
-#lightbox-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-}
-#lightbox-overlay.open {
-  display: flex;
-}
-#lightbox-inner {
-  position: relative;
-  max-width: 90%;
-  max-height: 90%;
-}
-#lightbox-inner img {
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
-  margin: 0 auto;
-}
-#lightbox-caption {
-  color: #fff;
-  text-align: center;
-  margin-top: 0.5em;
-}
-#lightbox-close, #lightbox-prev, #lightbox-next {
-  position: absolute;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 2em;
-  cursor: pointer;
-}
-#lightbox-close {
-  top: 10px;
-  right: 20px;
-}
-#lightbox-prev, #lightbox-next {
-  top: 50%;
-  transform: translateY(-50%);
-}
-#lightbox-prev {
-  left: 20px;
-}
-#lightbox-next {
-  right: 20px;
-}
-#lightbox-prev:hover, #lightbox-next:hover, #lightbox-close:hover {
-  color: #ddd;
-}
-
+})();
