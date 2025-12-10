@@ -1,3 +1,4 @@
+<script>
 (function () {
   let escapeHandlerAdded = false;
   let lightboxOverlay = null;
@@ -16,7 +17,6 @@
     lightboxImage.src = imgElem.src;
     lightboxImage.alt = imgElem.alt || "";
     lightboxCaption.textContent = imgElem.alt || "";
-
     lightboxPrev.style.display = index > 0 ? "" : "none";
     lightboxNext.style.display = index < lightboxImages.length - 1 ? "" : "none";
   }
@@ -151,7 +151,6 @@
 
   function initPageFeatures() {
     fixMobileNavPosition();
-
     const contactModal = document.getElementById("contactModal");
     if (contactModal?.style.display === "block") contactModal.style.display = "none";
     if (lightboxOverlay?.style.display === "block") lightboxOverlay.style.display = "none";
@@ -236,3 +235,35 @@
     document.addEventListener("DOMContentLoaded", initPageFeatures);
   }
 })();
+</script>
+
+<style>
+a {
+  color: #bbb;
+  text-decoration: none;
+  transition: font-weight 0.2s ease;
+}
+
+a:hover {
+  font-weight: bold;
+  color: #ddd;
+}
+
+.contact-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 1rem;
+  color: #bbb;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: font-weight 0.2s ease, color 0.2s ease;
+}
+
+.contact-btn:hover {
+  color: #ddd;
+  font-weight: bold;
+}
+</style>
