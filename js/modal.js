@@ -4,7 +4,6 @@
   let lightboxCaption = null;
   let lightboxPrev = null;
   let lightboxNext = null;
-  let lightboxClose = null;
   let lightboxImages = [];
   let currentIndex = 0;
 
@@ -16,9 +15,7 @@
     lightboxImage.alt = img.alt || "";
     lightboxCaption.textContent = img.alt || "";
     lightboxPrev.style.display = index > 0 ? "" : "none";
-    lightboxNext.style.display =
-      index < lightboxImages.length - 1 ? "" : "none";
-    lightboxOverlay.style.display = "block";
+    lightboxNext.style.display = index < lightboxImages.length - 1 ? "" : "none";
   }
 
   function openLightbox(index) {
@@ -57,7 +54,7 @@
 
       lightboxCaption = document.createElement("div");
       lightboxCaption.style.color = "#fff";
-      lightboxCaption.style.marginTop = "8px";
+      lightboxCaption.style.marginTop = "12px";
 
       lightboxPrev = document.createElement("button");
       lightboxPrev.innerHTML = "&#10094;";
@@ -92,9 +89,7 @@
       });
       lightboxNext.onclick = e => {
         e.stopPropagation();
-        if (currentIndex < lightboxImages.length - 1) {
-          showLightboxImage(currentIndex + 1);
-        }
+        if (currentIndex < lightboxImages.length - 1) showLightboxImage(currentIndex + 1);
       };
 
       lightboxClose = document.createElement("button");
@@ -120,15 +115,41 @@
       lightboxOverlay.appendChild(lightboxPrev);
       lightboxOverlay.appendChild(lightboxNext);
       lightboxOverlay.appendChild(lightboxClose);
-      lightboxOverlay.addEventListener(
-        "click",
-        () => (lightboxOverlay.style.display = "none")
-      );
+      lightboxOverlay.addEventListener("click", () => {
+        lightboxOverlay.style.display = "none";
+      });
 
       document.body.appendChild(lightboxOverlay);
     }
 
     showLightboxImage(index);
+    lightboxOverlay.style.display = "block";
+  }
+
+  function initLightbox() {
+    lightboxImages = [];
+    const contentArea = document.querySelector(".md-content");
+    if (!contentArea) return;
+
+    const imgs = contentArea.querySelectorAll("img:not(.no-lightbox)");
+    imgs.forEach(img => {
+      if (img.closest("a")) return;
+      lightboxImages.push(img);
+      img.style.cursor = "pointer";
+      img.addEventListener("click", () => {
+        openLightbox(lightboxImages.indexOf(img));
+      });
+    });
+  }
+
+  function fixMobileNav() {
+    const nav = document.querySelector("nav.md-nav");
+    if (nav && window.innerWidth <= 768) {
+      nav.style.position = "fixed";
+      nav.style.top = "0";
+      nav.style.zIndex = "10001";
+      nav.style.background = "var(--md-default-bg-color)";
+    }
   }
 
   function initContactModal() {
@@ -142,21 +163,37 @@
 
     modal.style.display = "none";
 
-    const open = () => (modal.style.display = "flex");
-    const close = () => (modal.style.display = "none");
+    function openModal() {
+      modal.style.display = "block";
+    }
+    function closeModal() {
+      modal.style.display = "none";
+    }
 
-    openBtn.onclick = open;
-    closeBtn.onclick = close;
-    overlay.onclick = close;
+    openBtn.onclick = openModal;
+    closeBtn.onclick = closeModal;
+    overlay.onclick = closeModal;
 
     document.addEventListener("keydown", e => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") closeModal();
     });
 
     if (!form.dataset.bound) {
       form.dataset.bound = "true";
-      form.addEventListener("submit", async e => {
+
+      let status = document.getElementById("formStatus");
+      if (!status) {
+        status = document.createElement("p");
+        status.id = "formStatus";
+        status.style.marginTop = "8px";
+        form.appendChild(status);
+      }
+
+      form.addEventListener("submit", async function (e) {
         e.preventDefault();
+        status.style.color = "#cccccc";
+        status.textContent = "Отправка сообщения...";
+
         const formData = new FormData(form);
 
         try {
@@ -167,34 +204,41 @@
           });
 
           if (res.ok) {
-            alert("Спасибо! Ваше сообщение отправлено.");
+            status.style.color = "#4caf50";
+            status.textContent = "Спасибо! Ваше сообщение отправлено.";
+            alert("Сообщение отправлено.");
             form.reset();
-            close();
           } else {
-            alert("Ошибка: сообщение не отправлено.");
+            let msg = "Ошибка: сообщение не отправлено.";
+
+            try {
+              const data = await res.json();
+              if (data && data.errors && data.errors.length) {
+                msg = "Ошибка: " + data.errors.map(e => e.message).join("; ");
+              } else if (data && data.message) {
+                msg = "Ошибка: " + data.message;
+              } else {
+                msg = `Ошибка: сообщение не отправлено (код ${res.status}).`;
+              }
+            } catch {
+              msg = `Ошибка: сообщение не отправлено (код ${res.status}).`;
+            }
+
+            status.style.color = "#f44336";
+            status.textContent = msg;
+            alert(msg);
           }
-        } catch {
-          alert("Ошибка соединения.");
+        } catch (err) {
+          status.style.color = "#f44336";
+          status.textContent = "Ошибка соединения. Попробуйте позже.";
+          alert("Ошибка соединения. Попробуйте позже.");
         }
       });
     }
   }
 
-  function initLightbox() {
-    const content = document.querySelector(".md-content");
-    if (!content) return;
-
-    lightboxImages = [];
-    const imgs = content.querySelectorAll("img:not(.no-lightbox)");
-    imgs.forEach(img => {
-      if (img.closest("a")) return;
-      lightboxImages.push(img);
-      img.style.cursor = "pointer";
-      img.onclick = () => openLightbox(lightboxImages.indexOf(img));
-    });
-  }
-
   function initAll() {
+    fixMobileNav();
     initContactModal();
     initLightbox();
   }
