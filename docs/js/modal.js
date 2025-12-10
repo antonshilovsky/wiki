@@ -102,9 +102,30 @@
   function initFeatures() {
     fixMobileNav();
 
-    // Показываем форму сразу при загрузке
     const contactModal = document.getElementById("contactModal");
-    if (contactModal) contactModal.style.display = "block";
+    const openBtn = document.getElementById("openContactForm");
+    const closeBtn = document.getElementById("closeModal");
+    const modalOverlay = document.getElementById("modalOverlay");
+
+    if (contactModal) contactModal.style.display = "none";
+
+    if (openBtn && contactModal) {
+      openBtn.onclick = () => contactModal.style.display = "block";
+    }
+
+    if (closeBtn && contactModal) {
+      closeBtn.onclick = () => contactModal.style.display = "none";
+    }
+
+    if (modalOverlay && contactModal) {
+      modalOverlay.onclick = () => contactModal.style.display = "none";
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && contactModal?.style.display === "block") {
+        contactModal.style.display = "none";
+      }
+    });
 
     const form = document.getElementById("modalContactForm");
     if (form && !form.dataset.bound) {
