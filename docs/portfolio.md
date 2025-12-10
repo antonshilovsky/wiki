@@ -26,21 +26,11 @@
 
 ## BI-дашборды
 
-<div class="portfolio-gallery">
+![Дашборд 1](images/dashboard1.png)
 
-  <a href="/images/dashboard1.png" title="перезагрузите страницу, если изображение не увеличивается, и выберите повторно">
-    <img src="/images/dashboard1.png" alt="Дашборд 1">
-  </a>
+![Дашборд 2](images/dashboard2.png)
 
-  <a href="/images/dashboard2.png" title="перезагрузите страницу, если изображение не увеличивается, и выберите повторно">
-    <img src="/images/dashboard2.png" alt="Дашборд 2">
-  </a>
-
-  <a href="/images/dashboard3.png" title="перезагрузите страницу, если изображение не увеличивается, и выберите повторно">
-    <img src="/images/dashboard3.png" alt="Дашборд 3">
-  </a>
-
-</div>
+![Дашборд 3](images/dashboard3.png)
 
 
 [⤴ Вернуться к началу](https://shilovskyanton.ru)

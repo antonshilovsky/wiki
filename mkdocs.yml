@@ -21,15 +21,14 @@ extra_css:
   - styles/new_site.css?v=2
 extra:
   features:
-    - content.image.lightbox
+    - navigation.instant
 nav:
  - Навигация:
       - Главная: index.md
       - Портфолио: portfolio.md
       - Контакты: contacts.md
 extra_javascript:
-  - js/modal.js?v=2
-  - js/contact.js?v=2
+  - js/modal.js
 plugins:
   - glightbox
 markdown_extensions:

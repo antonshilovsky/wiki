@@ -1,0 +1,100 @@
+/* --- Общие настройки --- */
+body {
+  background: #0d0d0d;
+  color: #d9d9d9;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  line-height: 1.7;
+  letter-spacing: 0.2px;
+}
+
+/* Центровка первого блока ссылок в лонгриде */
+.md-content__inner > p:first-of-type {
+  text-align: center;
+  margin: 1.2rem 0 0.6rem;
+  line-height: 1.9;
+  letter-spacing: .3px;
+}
+
+/* --- Заголовок и шапка --- */
+.md-header {
+  background: #111;
+  color: #e0e0e0;
+  border-bottom: 1px solid #2a2a2a;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.md-header__inner {
+  max-width: 960px;
+  margin: auto;
+}
+
+/* --- Контент --- */
+.md-content__inner {
+  max-width: 820px;
+  margin: 0 auto;
+  padding-top: 2em;
+  animation: fadein 0.6s ease-in;
+}
+
+/* --- Заголовки --- */
+.md-content__inner h1:first-of-type {
+  font-size: 2.6em;
+  font-weight: 800;
+  color: #f2f2f2;
+  text-align: center;
+  margin: 1.5em 0 0.5em;
+  letter-spacing: 0.5px;
+}
+h2, h3, h4 {
+  color: #bfbfbf;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-top: 1.5em;
+}
+
+/* --- Ссылки --- */
+a {
+  color: #c0c0c0;
+  text-decoration: none;
+  border-bottom: 1px solid #444;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+a:hover {
+  color: #ffffff;
+  border-color: #888;
+}
+
+/* --- Карточки разделов --- */
+.section-card {
+  background: #121212;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.section-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(255,255,255,0.08);
+}
+.section-card h2 {
+  color: #d0d0d0;
+  margin-top: 0;
+}
+.section-card p {
+  color: #b0b0b0;
+}
+
+/* --- Навигация слева (меню) --- */
+.md-sidebar--primary {
+  background: #0f0f0f;
+  border-right: 1px solid #1c1c1c;
+}
+.md-nav__item a {
+  color: #aaa;
+}
+.md-nav__item a:hover {
+  color: #fff;
+}
+
+/* --- Ко*

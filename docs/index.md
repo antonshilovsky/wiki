@@ -12,7 +12,6 @@
 → [Навыки](#навыки) •<br>
 → [Сообщества](#профессиональные-сообщества) •<br>
 → [О себе](#о-себе) •<br>
-→ [Функционал](https://shilovskyanton.ru/tasks/) •<br>
 → [Портфолио](https://shilovskyanton.ru/portfolio/) •<br>
 → [Контакты](https://shilovskyanton.ru/contacts/) •
 
