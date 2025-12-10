@@ -18,7 +18,7 @@ theme:
     - toc.integrate
     - content.code.copy
 extra_css:
-  - styles/new_site.css?v=2
+  - styles/new_site.css
 extra:
   features:
     - navigation.instant

@@ -2,7 +2,7 @@
 
 Открыт к консультациям, совместным исследовательским проектам, выступлениям, вебинарам и образовательным мероприятиям. Если требуется — оставьте сообщение.
 
-<button id="openContactForm" class="contact-btn" title="перезагрузите страницу, если форма для обратной связи не открывается, и выберите повторно">
+<button id="openContactForm" class="contact-btn" title="Перезагрузите страницу, если форма не открывается.">
   Связаться
 </button>
 
@@ -32,7 +32,7 @@
   <div id="modalOverlay" class="modal-overlay"></div>
 
   <div class="modal-content modal-animate">
-    <span id="closeModal" class="close">&times;</span>
+    <button id="closeModal" class="close-button" aria-label="Закрыть">&times;</button>
 
     <h2 style="margin-top:0;">Связаться со мной</h2>
 
@@ -42,19 +42,19 @@
       method="POST"
     >
 
-      <label>Имя</label>
+      <label for="first_name">Имя</label>
       <input type="text" name="first_name" required>
 
-      <label>Фамилия</label>
+      <label for="last_name">Фамилия</label>
       <input type="text" name="last_name">
 
-      <label>Email</label>
+      <label for="email">Email</label>
       <input type="email" name="email" required>
 
-      <label>Тема сообщения</label>
+      <label for="subject">Тема сообщения</label>
       <input type="text" name="subject" required>
 
-      <label>Сообщение</label>
+      <label for="message">Сообщение</label>
       <textarea name="message" rows="6" required></textarea>
 
       <input type="hidden" name="_subject" value="Новое сообщение с сайта shilovskyanton.ru">
@@ -64,7 +64,6 @@
     </form>
 
   </div>
-
 </div>
 
 [⤴ Вернуться к началу](https://shilovskyanton.ru)

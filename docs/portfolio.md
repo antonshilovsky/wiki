@@ -2,9 +2,9 @@
 
 ## Вебинары
 
-[▶ Вебинар — Управление требованиями и изменениями](https://rutube.ru/video/private/000332cfb46a0aedae9ab09c8a8ee115/?p=WJ5zQK7i6pvsUdr4jFCXHw&t=98&r=plwd){ .md-button }
+[▶ Вебинар — Управление требованиями и изменениями](https://rutube.ru/video/private/c944c2cf401cb8cf2d616b97e1ec3520/?p=Toqm04uhwxzfWnY-1PFmag&t=211&r=plwd){ .md-button }
 
-[▶ Вебинар — Анализ рисков](https://rutube.ru/video/private/4d20af1660878b7ae73f5f5c197a5d0a/?p=YvEKwHRObqkWJ52TpWPLgQ&t=1512&r=plwd){ .md-button }
+[▶ Вебинар — Анализ рисков](https://rutube.ru/video/private/9f09435600dffcd0e6b6982eef9e8305/?p=lWbUlzcLtTf34blXKCGEAA&t=625&r=plwd){ .md-button }
 
 ---
 
@@ -20,17 +20,19 @@
    *Научная статья по вопросам управления рисками.*
 
 4. **[Призёр студенческой олимпиады «Я – профессионал»](https://www.gup.ru/events/news/detail.php?ID=193703)**  
-   *Профиль: финансы.*
+   *Направление: финансы и анализ данных.*
 
 ---
 
 ## BI-дашборды
 
-![Дашборд 1](images/dashboard1.png)
+<div class="portfolio-gallery">
 
-![Дашборд 2](images/dashboard2.png)
+<img src="/images/dashboard1.png" alt="Дашборд 1">
+<img src="/images/dashboard2.png" alt="Дашборд 2">
+<img src="/images/dashboard3.png" alt="Дашборд 3">
 
-![Дашборд 3](images/dashboard3.png)
+</div>
 
 
 [⤴ Вернуться к началу](https://shilovskyanton.ru)
