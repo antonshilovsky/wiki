@@ -4,11 +4,12 @@
   let lightboxCaption = null;
   let lightboxPrev = null;
   let lightboxNext = null;
+  let lightboxClose = null;
   let lightboxImages = [];
   let currentIndex = 0;
 
   function showLightboxImage(index) {
-    if (!lightboxOverlay || !lightboxImages.length) return;
+    if (!lightboxOverlay) return;
     currentIndex = index;
     const img = lightboxImages[index];
     lightboxImage.src = img.src;
@@ -24,13 +25,15 @@
       lightboxOverlay.id = "lightboxOverlay";
       Object.assign(lightboxOverlay.style, {
         position: "fixed",
-        inset: 0,
+        top: 0,
+        left: 0,
         width: "100vw",
         height: "100vh",
         backgroundColor: "rgba(0,0,0,0.85)",
         zIndex: "10000",
         display: "none",
-        cursor: "pointer"
+        cursor: "pointer",
+        overflow: "auto"
       });
 
       const container = document.createElement("div");
@@ -126,13 +129,79 @@
     lightboxOverlay.style.display = "block";
   }
 
+  function initContactModal() {
+    const contactModal = document.getElementById("contactModal");
+    const openBtn = document.getElementById("openContactForm");
+    const closeBtn = document.getElementById("closeModal");
+    const overlay = document.getElementById("modalOverlay");
+
+    if (!contactModal || !openBtn || !closeBtn || !overlay) return;
+
+    const hide = () => (contactModal.style.display = "none");
+    const show = () => (contactModal.style.display = "block");
+
+    contactModal.style.display = "none";
+
+    openBtn.onclick = show;
+    closeBtn.onclick = hide;
+    overlay.onclick = hide;
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") hide();
+    });
+
+    const form = document.getElementById("modalContactForm");
+    if (form && !form.dataset.bound) {
+      form.dataset.bound = "true";
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        try {
+          const res = await fetch(form.action, {
+            method: form.method || "POST",
+            headers: { Accept: "application/json" },
+            body: formData
+          });
+
+          if (res.ok) {
+            alert("Спасибо! Ваше сообщение отправлено.");
+            form.reset();
+            hide();
+            return;
+          }
+
+          const code = res.status;
+          if (code === 403) {
+            alert(
+              "Ошибка: сообщение не отправлено (код 403).\n" +
+              "Это проблема на стороне сервиса Formspree (домен или лимиты).\n" +
+              "Вы можете написать напрямую: Anton.Shilovsky@avkavk.ru"
+            );
+          } else {
+            alert(
+              "Ошибка: сообщение не отправлено (код " +
+              code +
+              "). Попробуйте позже или напишите на почту: Anton.Shilovsky@avkavk.ru"
+            );
+          }
+        } catch (err) {
+          alert(
+            "Ошибка сети: сообщение не отправлено.\n" +
+            "Проверьте подключение или напишите на почту: Anton.Shilovsky@avkavk.ru"
+          );
+        }
+      });
+    }
+  }
+
   function initLightbox() {
     lightboxImages = [];
     const contentArea = document.querySelector(".md-content");
     if (!contentArea) return;
 
     const imgs = contentArea.querySelectorAll("img:not(.no-lightbox)");
-    imgs.forEach(img => {
+    imgs.forEach((img) => {
       if (img.closest("a")) return;
       lightboxImages.push(img);
       img.style.cursor = "pointer";
@@ -142,110 +211,14 @@
     });
   }
 
-  function fixMobileNav() {
-    const nav = document.querySelector("nav.md-nav");
-    if (nav && window.innerWidth <= 768) {
-      nav.style.position = "fixed";
-      nav.style.top = "0";
-      nav.style.zIndex = "10001";
-      nav.style.background = "var(--md-default-bg-color)";
-    }
-  }
-
-  function initContactModal() {
-    const modal = document.getElementById("contactModal");
-    const openBtn = document.getElementById("openContactForm");
-    const closeBtn = document.getElementById("closeModal");
-    const overlay = document.getElementById("modalOverlay");
-    const form = document.getElementById("modalContactForm");
-
-    if (!modal || !openBtn || !closeBtn || !overlay || !form) return;
-
-    modal.style.display = "none";
-
-    function openModal() {
-      modal.style.display = "block";
-    }
-    function closeModal() {
-      modal.style.display = "none";
-    }
-
-    openBtn.onclick = openModal;
-    closeBtn.onclick = closeModal;
-    overlay.onclick = closeModal;
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeModal();
-    });
-
-    if (!form.dataset.bound) {
-      form.dataset.bound = "true";
-
-      let status = document.getElementById("formStatus");
-      if (!status) {
-        status = document.createElement("p");
-        status.id = "formStatus";
-        status.style.marginTop = "8px";
-        form.appendChild(status);
-      }
-
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        status.style.color = "#cccccc";
-        status.textContent = "Отправка сообщения...";
-
-        const formData = new FormData(form);
-
-        try {
-          const res = await fetch(form.action, {
-            method: form.method || "POST",
-            body: formData,
-            headers: { Accept: "application/json" }
-          });
-
-          if (res.ok) {
-            status.style.color = "#4caf50";
-            status.textContent = "Спасибо! Ваше сообщение отправлено.";
-            alert("Сообщение отправлено.");
-            form.reset();
-          } else {
-            let msg = "Ошибка: сообщение не отправлено.";
-
-            try {
-              const data = await res.json();
-              if (data && data.errors && data.errors.length) {
-                msg = "Ошибка: " + data.errors.map(e => e.message).join("; ");
-              } else if (data && data.message) {
-                msg = "Ошибка: " + data.message;
-              } else {
-                msg = `Ошибка: сообщение не отправлено (код ${res.status}).`;
-              }
-            } catch {
-              msg = `Ошибка: сообщение не отправлено (код ${res.status}).`;
-            }
-
-            status.style.color = "#f44336";
-            status.textContent = msg;
-            alert(msg);
-          }
-        } catch (err) {
-          status.style.color = "#f44336";
-          status.textContent = "Ошибка соединения. Попробуйте позже.";
-          alert("Ошибка соединения. Попробуйте позже.");
-        }
-      });
-    }
-  }
-
-  function initAll() {
-    fixMobileNav();
+  function initPage() {
     initContactModal();
     initLightbox();
   }
 
   if (typeof document$ !== "undefined") {
-    document$.subscribe(initAll);
+    document$.subscribe(initPage);
   } else {
-    document.addEventListener("DOMContentLoaded", initAll);
+    document.addEventListener("DOMContentLoaded", initPage);
   }
 })();
