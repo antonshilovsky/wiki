@@ -151,6 +151,7 @@
 
   function initPageFeatures() {
     fixMobileNavPosition();
+
     const contactModal = document.getElementById("contactModal");
     if (contactModal?.style.display === "block") contactModal.style.display = "none";
     if (lightboxOverlay?.style.display === "block") lightboxOverlay.style.display = "none";
@@ -241,12 +242,12 @@
 a {
   color: #bbb;
   text-decoration: none;
-  transition: font-weight 0.2s ease;
+  transition: font-weight 0.2s ease, color 0.2s ease;
 }
 
 a:hover {
   font-weight: bold;
-  color: #ddd;
+  color: #999;
 }
 
 .contact-btn {
@@ -263,7 +264,7 @@ a:hover {
 }
 
 .contact-btn:hover {
-  color: #ddd;
+  color: #999;
   font-weight: bold;
 }
 </style>
