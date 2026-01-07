@@ -16,8 +16,7 @@
     lightboxImage.alt = img.alt || "";
     lightboxCaption.textContent = img.alt || "";
     lightboxPrev.style.display = index > 0 ? "" : "none";
-    lightboxNext.style.display =
-      index < lightboxImages.length - 1 ? "" : "none";
+    lightboxNext.style.display = index < lightboxImages.length - 1 ? "" : "none";
     lightboxOverlay.style.display = "block";
   }
 
@@ -53,7 +52,7 @@
         display: "block",
         margin: "0 auto"
       });
-      lightboxImage.addEventListener("click", e => e.stopPropagation());
+      lightboxImage.addEventListener("click", (e) => e.stopPropagation());
 
       lightboxCaption = document.createElement("div");
       lightboxCaption.style.color = "#fff";
@@ -72,7 +71,7 @@
         color: "#fff",
         cursor: "pointer"
       });
-      lightboxPrev.onclick = e => {
+      lightboxPrev.onclick = (e) => {
         e.stopPropagation();
         if (currentIndex > 0) showLightboxImage(currentIndex - 1);
       };
@@ -90,7 +89,7 @@
         color: "#fff",
         cursor: "pointer"
       });
-      lightboxNext.onclick = e => {
+      lightboxNext.onclick = (e) => {
         e.stopPropagation();
         if (currentIndex < lightboxImages.length - 1) {
           showLightboxImage(currentIndex + 1);
@@ -109,7 +108,7 @@
         color: "#fff",
         cursor: "pointer"
       });
-      lightboxClose.onclick = e => {
+      lightboxClose.onclick = (e) => {
         e.stopPropagation();
         lightboxOverlay.style.display = "none";
       };
@@ -120,10 +119,7 @@
       lightboxOverlay.appendChild(lightboxPrev);
       lightboxOverlay.appendChild(lightboxNext);
       lightboxOverlay.appendChild(lightboxClose);
-      lightboxOverlay.addEventListener(
-        "click",
-        () => (lightboxOverlay.style.display = "none")
-      );
+      lightboxOverlay.addEventListener("click", () => (lightboxOverlay.style.display = "none"));
 
       document.body.appendChild(lightboxOverlay);
     }
@@ -149,13 +145,13 @@
     closeBtn.onclick = close;
     overlay.onclick = close;
 
-    document.addEventListener("keydown", e => {
+    document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") close();
     });
 
     if (!form.dataset.bound) {
       form.dataset.bound = "true";
-      form.addEventListener("submit", async e => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
 
@@ -186,7 +182,7 @@
 
     lightboxImages = [];
     const imgs = content.querySelectorAll("img:not(.no-lightbox)");
-    imgs.forEach(img => {
+    imgs.forEach((img) => {
       if (img.closest("a")) return;
       lightboxImages.push(img);
       img.style.cursor = "pointer";
@@ -194,9 +190,33 @@
     });
   }
 
+  function initScrollBanner() {
+    const banner = document.getElementById("scrollBanner");
+    const trigger = document.getElementById("banner-trigger");
+
+    if (banner && trigger && !banner.dataset.bound) {
+      banner.dataset.bound = "true";
+
+      const show = () => banner.classList.add("show");
+      const hide = () => banner.classList.remove("show");
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          const e = entries[0];
+          if (!e.isIntersecting && e.boundingClientRect.top < 0) show();
+          else hide();
+        },
+        { threshold: 0 }
+      );
+
+      io.observe(trigger);
+    }
+  }
+
   function initAll() {
     initContactModal();
     initLightbox();
+    initScrollBanner();
   }
 
   if (typeof document$ !== "undefined") {

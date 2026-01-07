@@ -1,4 +1,3 @@
-/* Глобальные ссылки: светло-серые, при наведении – тёмно-серые и полужирные */
 .md-typeset a,
 .md-nav__link,
 .md-footer a {
@@ -14,7 +13,6 @@
   font-weight: 600;
 }
 
-/* Кнопка "Связаться" стилизована под текстовую ссылку */
 .contact-btn {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -35,7 +33,6 @@
   border-color: #ffffff;
 }
 
-/* Центровка заголовка + фото на главной (если используешь .hero) */
 .hero {
   text-align: center;
   margin-bottom: 2rem;
@@ -53,32 +50,27 @@
   height: auto;
 }
 
-/* На всякий случай убираем float у шапочного фото */
 img[alt="Антон Шиловский"] {
   float: none !important;
 }
 
-/* --- Модальное окно контактов --- */
-
 #contactModal {
-  display: none;              /* по умолчанию скрыто */
+  display: none;              
   position: fixed;
   inset: 0;
   z-index: 8000;
   background: rgba(0, 0, 0, 0.6);
-  align-items: center;        /* центруем содержимое */
+  align-items: center; 
   justify-content: center;
   padding: 1.5rem;
   box-sizing: border-box;
 }
 
-/* внутренний затемнённый слой, по нему клик — закрытие */
 #modalOverlay {
   position: absolute;
   inset: 0;
 }
 
-/* сама "карточка" формы */
 #contactModal .modal-content {
   position: relative;
   max-width: 520px;
@@ -107,12 +99,10 @@ img[alt="Антон Шиловский"] {
   color: #ffffff;
 }
 
-/* Заголовок формы */
 #contactModal h2 {
   margin: 0 0 0.75rem 0;
 }
 
-/* --- Вертикальный опрятный вид формы --- */
 
 #modalContactForm {
   margin-top: 0.5rem;
@@ -159,7 +149,6 @@ img[alt="Антон Шиловский"] {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Кнопка отправки в форме */
 #contactModal .submit-btn {
   margin-top: 0.5rem;
   align-self: flex-start;
@@ -180,9 +169,41 @@ img[alt="Антон Шиловский"] {
   color: #ffffff;
 }
 
-/* Адаптив: на телефоне модалка чуть шире и без огромных отступов */
 @media (max-width: 600px) {
   #contactModal .modal-content {
     padding: 20px 18px 18px;
   }
+}
+
+.scroll-banner{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translate(-50%, 130%);
+  opacity: 0;
+  transition: transform .35s ease, opacity .35s ease;
+  z-index: 9999;
+  width: min(720px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.scroll-banner.show{
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.scroll-banner__inner{
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(20, 20, 20, .55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.scroll-banner__media{
+  display: block;
+  width: 100%;
+  height: auto;
 }
