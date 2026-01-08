@@ -13,11 +13,10 @@
   font-weight: 600;
 }
 
-.md-typeset .md-button,
 .contact-btn {
   display: inline-block;
-  padding: 0.35rem 1.1rem;
-  font-size: 0.95rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 1rem;
   color: #c4c4c4;
   background: transparent;
   border: 1px solid #c4c4c4;
@@ -25,19 +24,13 @@
   cursor: pointer;
   font-family: inherit;
   text-decoration: none;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.1s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.md-typeset .md-button:hover,
 .contact-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
   color: #ffffff;
   border-color: #ffffff;
-  transform: translateY(-1px);
 }
 
 .hero {
@@ -61,14 +54,13 @@ img[alt="Антон Шиловский"] {
   float: none !important;
 }
 
-
 #contactModal {
-  display: none;
+  display: none;              
   position: fixed;
   inset: 0;
   z-index: 8000;
   background: rgba(0, 0, 0, 0.6);
-  align-items: center;
+  align-items: center; 
   justify-content: center;
   padding: 1.5rem;
   box-sizing: border-box;
@@ -91,8 +83,8 @@ img[alt="Антон Шиловский"] {
   box-sizing: border-box;
 }
 
-#contactModal .close,
-#contactModal .close-button {
+/* крестик закрытия */
+#contactModal .close {
   position: absolute;
   top: 12px;
   right: 16px;
@@ -100,14 +92,10 @@ img[alt="Антон Шиловский"] {
   line-height: 1;
   cursor: pointer;
   color: #888888;
-  background: none;
-  border: none;
-  padding: 0;
   transition: color 0.2s ease;
 }
 
-#contactModal .close:hover,
-#contactModal .close-button:hover {
+#contactModal .close:hover {
   color: #ffffff;
 }
 
@@ -164,7 +152,7 @@ img[alt="Антон Шиловский"] {
 #contactModal .submit-btn {
   margin-top: 0.5rem;
   align-self: flex-start;
-  padding: 0.45rem 1.3rem;
+  padding: 0.45rem 1.2rem;
   border-radius: 999px;
   border: 1px solid #c4c4c4;
   background: transparent;
@@ -172,18 +160,50 @@ img[alt="Антон Шиловский"] {
   cursor: pointer;
   font-size: 0.95rem;
   font-family: inherit;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 #contactModal .submit-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
   border-color: #ffffff;
   color: #ffffff;
-  transform: translateY(-1px);
 }
 
 @media (max-width: 600px) {
   #contactModal .modal-content {
     padding: 20px 18px 18px;
   }
+}
+
+.scroll-banner{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translate(-50%, 130%);
+  opacity: 0;
+  transition: transform .35s ease, opacity .35s ease;
+  z-index: 9999;
+  width: min(720px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.scroll-banner.show{
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.scroll-banner__inner{
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(20, 20, 20, .55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.scroll-banner__media{
+  display: block;
+  width: 100%;
+  height: auto;
 }
