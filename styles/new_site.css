@@ -518,11 +518,11 @@ img[alt="Антон Шиловский"] {
 }
 
 :root{
-  --sticky-offset: 12px;
+  --sticky-offset: 72px;
 }
 
 @media (max-width: 600px){
-  :root{ --sticky-offset: 18px; }
+  :root{ --sticky-offset: 88px; }
 }
 
 .md-top{
@@ -530,4 +530,12 @@ img[alt="Антон Шиловский"] {
   right: 16px !important;
   bottom: 16px !important;
   z-index: 10050 !important;
+}
+
+@media (max-width: 600px){
+  .md-top{
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
 }
