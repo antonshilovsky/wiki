@@ -9,12 +9,15 @@
   let currentIndex = 0;
 
   function showLightboxImage(index) {
+    if (!lightboxOverlay || !lightboxImages.length) return;
     currentIndex = index;
     const img = lightboxImages[index];
     lightboxImage.src = img.src;
+    lightboxImage.alt = img.alt || "";
     lightboxCaption.textContent = img.alt || "";
     lightboxPrev.style.display = index > 0 ? "" : "none";
     lightboxNext.style.display = index < lightboxImages.length - 1 ? "" : "none";
+    lightboxOverlay.style.display = "block";
   }
 
   function openLightbox(index) {
@@ -22,32 +25,53 @@
       lightboxOverlay = document.createElement("div");
       lightboxOverlay.id = "lightboxOverlay";
       Object.assign(lightboxOverlay.style, {
-        position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.85)", zIndex: "10000", display: "none", cursor: "pointer"
+        position: "fixed",
+        inset: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "rgba(0,0,0,0.85)",
+        zIndex: "10000",
+        display: "none",
+        cursor: "pointer"
       });
 
       const container = document.createElement("div");
       Object.assign(container.style, {
-        position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
-        cursor: "auto", textAlign: "center"
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        cursor: "auto",
+        textAlign: "center"
       });
 
       lightboxImage = document.createElement("img");
       Object.assign(lightboxImage.style, {
-        maxWidth: "90vw", maxHeight: "80vh", display: "block", margin: "0 auto"
+        maxWidth: "90vw",
+        maxHeight: "80vh",
+        display: "block",
+        margin: "0 auto"
       });
-      lightboxImage.addEventListener("click", e => e.stopPropagation());
+      lightboxImage.addEventListener("click", (e) => e.stopPropagation());
 
       lightboxCaption = document.createElement("div");
       lightboxCaption.style.color = "#fff";
+      lightboxCaption.style.marginTop = "8px";
 
       lightboxPrev = document.createElement("button");
       lightboxPrev.innerHTML = "&#10094;";
       Object.assign(lightboxPrev.style, {
-        position: "absolute", left: "20px", top: "50%", transform: "translateY(-50%)",
-        fontSize: "2rem", background: "none", border: "none", color: "#fff", cursor: "pointer"
+        position: "absolute",
+        left: "20px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        fontSize: "2rem",
+        background: "none",
+        border: "none",
+        color: "#fff",
+        cursor: "pointer"
       });
-      lightboxPrev.onclick = e => {
+      lightboxPrev.onclick = (e) => {
         e.stopPropagation();
         if (currentIndex > 0) showLightboxImage(currentIndex - 1);
       };
@@ -55,21 +79,36 @@
       lightboxNext = document.createElement("button");
       lightboxNext.innerHTML = "&#10095;";
       Object.assign(lightboxNext.style, {
-        position: "absolute", right: "20px", top: "50%", transform: "translateY(-50%)",
-        fontSize: "2rem", background: "none", border: "none", color: "#fff", cursor: "pointer"
+        position: "absolute",
+        right: "20px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        fontSize: "2rem",
+        background: "none",
+        border: "none",
+        color: "#fff",
+        cursor: "pointer"
       });
-      lightboxNext.onclick = e => {
+      lightboxNext.onclick = (e) => {
         e.stopPropagation();
-        if (currentIndex < lightboxImages.length - 1) showLightboxImage(currentIndex + 1);
+        if (currentIndex < lightboxImages.length - 1) {
+          showLightboxImage(currentIndex + 1);
+        }
       };
 
       lightboxClose = document.createElement("button");
       lightboxClose.innerHTML = "&times;";
       Object.assign(lightboxClose.style, {
-        position: "absolute", top: "20px", right: "30px",
-        fontSize: "2rem", background: "none", border: "none", color: "#fff", cursor: "pointer"
+        position: "absolute",
+        top: "20px",
+        right: "30px",
+        fontSize: "2rem",
+        background: "none",
+        border: "none",
+        color: "#fff",
+        cursor: "pointer"
       });
-      lightboxClose.onclick = e => {
+      lightboxClose.onclick = (e) => {
         e.stopPropagation();
         lightboxOverlay.style.display = "none";
       };
@@ -80,69 +119,109 @@
       lightboxOverlay.appendChild(lightboxPrev);
       lightboxOverlay.appendChild(lightboxNext);
       lightboxOverlay.appendChild(lightboxClose);
-      lightboxOverlay.addEventListener("click", () => lightboxOverlay.style.display = "none");
+      lightboxOverlay.addEventListener("click", () => (lightboxOverlay.style.display = "none"));
 
       document.body.appendChild(lightboxOverlay);
     }
 
     showLightboxImage(index);
-    lightboxOverlay.style.display = "block";
   }
 
-  function fixMobileNav() {
-    const nav = document.querySelector("nav.md-nav");
-    if (nav && window.innerWidth <= 768) {
-      nav.style.position = "fixed";
-      nav.style.top = "0";
-      nav.style.zIndex = "10001";
-      nav.style.background = "var(--md-default-bg-color)";
-    }
-  }
-
-  function initFeatures() {
-    fixMobileNav();
-
-    // Показываем форму сразу при загрузке
-    const contactModal = document.getElementById("contactModal");
-    if (contactModal) contactModal.style.display = "block";
-
+  function initContactModal() {
+    const modal = document.getElementById("contactModal");
+    const openBtn = document.getElementById("openContactForm");
+    const closeBtn = document.getElementById("closeModal");
+    const overlay = document.getElementById("modalOverlay");
     const form = document.getElementById("modalContactForm");
-    if (form && !form.dataset.bound) {
+
+    if (!modal || !openBtn || !closeBtn || !overlay || !form) return;
+
+    modal.style.display = "none";
+
+    const open = () => (modal.style.display = "flex");
+    const close = () => (modal.style.display = "none");
+
+    openBtn.onclick = open;
+    closeBtn.onclick = close;
+    overlay.onclick = close;
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+    });
+
+    if (!form.dataset.bound) {
       form.dataset.bound = "true";
-      form.addEventListener("submit", async function (e) {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
+
         try {
           const res = await fetch(form.action, {
             method: form.method || "POST",
             body: formData,
             headers: { Accept: "application/json" }
           });
+
           if (res.ok) {
-            form.reset();
             alert("Спасибо! Ваше сообщение отправлено.");
+            form.reset();
+            close();
           } else {
             alert("Ошибка: сообщение не отправлено.");
           }
-        } catch (err) {
+        } catch {
           alert("Ошибка соединения.");
         }
       });
     }
+  }
+
+  function initLightbox() {
+    const content = document.querySelector(".md-content");
+    if (!content) return;
 
     lightboxImages = [];
-    document.querySelectorAll(".md-content img:not(.no-lightbox)").forEach((img) => {
-      if (!img.closest("a")) {
-        lightboxImages.push(img);
-        img.style.cursor = "pointer";
-        img.addEventListener("click", () => openLightbox(lightboxImages.indexOf(img)));
-      }
+    const imgs = content.querySelectorAll("img:not(.no-lightbox)");
+    imgs.forEach((img) => {
+      if (img.closest("a")) return;
+      lightboxImages.push(img);
+      img.style.cursor = "pointer";
+      img.onclick = () => openLightbox(lightboxImages.indexOf(img));
     });
   }
 
+  function initScrollBanner() {
+    const banner = document.getElementById("scrollBanner");
+    const trigger = document.getElementById("banner-trigger");
+
+    if (banner && trigger && !banner.dataset.bound) {
+      banner.dataset.bound = "true";
+
+      const show = () => banner.classList.add("show");
+      const hide = () => banner.classList.remove("show");
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          const e = entries[0];
+          if (!e.isIntersecting && e.boundingClientRect.top < 0) show();
+          else hide();
+        },
+        { threshold: 0 }
+      );
+
+      io.observe(trigger);
+    }
+  }
+
+  function initAll() {
+    initContactModal();
+    initLightbox();
+    initScrollBanner();
+  }
+
   if (typeof document$ !== "undefined") {
-    document$.subscribe(initFeatures);
+    document$.subscribe(initAll);
   } else {
-    document.addEventListener("DOMContentLoaded", initFeatures);
+    document.addEventListener("DOMContentLoaded", initAll);
   }
 })();

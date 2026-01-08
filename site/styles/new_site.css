@@ -1,270 +1,209 @@
-<script>
-(function () {
-  let escapeHandlerAdded = false;
-  let lightboxOverlay = null;
-  let lightboxImage = null;
-  let lightboxCaption = null;
-  let lightboxPrev = null;
-  let lightboxNext = null;
-  let lightboxClose = null;
-  let lightboxImages = [];
-  let currentIndex = 0;
-
-  function showLightboxImage(index) {
-    if (!lightboxOverlay) return;
-    currentIndex = index;
-    const imgElem = lightboxImages[index];
-    lightboxImage.src = imgElem.src;
-    lightboxImage.alt = imgElem.alt || "";
-    lightboxCaption.textContent = imgElem.alt || "";
-    lightboxPrev.style.display = index > 0 ? "" : "none";
-    lightboxNext.style.display = index < lightboxImages.length - 1 ? "" : "none";
-  }
-
-  function openLightbox(index) {
-    if (!lightboxOverlay) {
-      lightboxOverlay = document.createElement("div");
-      lightboxOverlay.id = "lightboxOverlay";
-      Object.assign(lightboxOverlay.style, {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.85)",
-        zIndex: "10000",
-        display: "none",
-        cursor: "pointer",
-        overflow: "auto"
-      });
-
-      const contentContainer = document.createElement("div");
-      Object.assign(contentContainer.style, {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        cursor: "auto",
-        textAlign: "center"
-      });
-
-      lightboxImage = document.createElement("img");
-      lightboxImage.className = "lightbox-img";
-      Object.assign(lightboxImage.style, {
-        maxWidth: "90vw",
-        maxHeight: "80vh",
-        display: "block",
-        margin: "0 auto"
-      });
-      lightboxImage.addEventListener("click", (e) => e.stopPropagation());
-
-      lightboxCaption = document.createElement("div");
-      lightboxCaption.className = "lightbox-caption";
-      Object.assign(lightboxCaption.style, {
-        color: "#fff",
-        marginTop: "12px"
-      });
-
-      lightboxPrev = document.createElement("button");
-      lightboxPrev.innerHTML = "&#10094;";
-      Object.assign(lightboxPrev.style, {
-        position: "absolute",
-        left: "20px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        fontSize: "2rem",
-        background: "none",
-        border: "none",
-        color: "#fff",
-        cursor: "pointer"
-      });
-      lightboxPrev.onclick = (e) => {
-        e.stopPropagation();
-        if (currentIndex > 0) showLightboxImage(currentIndex - 1);
-      };
-
-      lightboxNext = document.createElement("button");
-      lightboxNext.innerHTML = "&#10095;";
-      Object.assign(lightboxNext.style, {
-        position: "absolute",
-        right: "20px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        fontSize: "2rem",
-        background: "none",
-        border: "none",
-        color: "#fff",
-        cursor: "pointer"
-      });
-      lightboxNext.onclick = (e) => {
-        e.stopPropagation();
-        if (currentIndex < lightboxImages.length - 1) showLightboxImage(currentIndex + 1);
-      };
-
-      lightboxClose = document.createElement("button");
-      lightboxClose.innerHTML = "&times;";
-      Object.assign(lightboxClose.style, {
-        position: "absolute",
-        top: "20px",
-        right: "30px",
-        fontSize: "2rem",
-        background: "none",
-        border: "none",
-        color: "#fff",
-        cursor: "pointer"
-      });
-      lightboxClose.onclick = (e) => {
-        e.stopPropagation();
-        closeLightbox();
-      };
-
-      contentContainer.appendChild(lightboxImage);
-      contentContainer.appendChild(lightboxCaption);
-      lightboxOverlay.appendChild(contentContainer);
-      lightboxOverlay.appendChild(lightboxPrev);
-      lightboxOverlay.appendChild(lightboxNext);
-      lightboxOverlay.appendChild(lightboxClose);
-      lightboxOverlay.addEventListener("click", closeLightbox);
-
-      document.body.appendChild(lightboxOverlay);
-    }
-
-    showLightboxImage(index);
-    lightboxOverlay.style.display = "block";
-  }
-
-  function closeLightbox() {
-    if (lightboxOverlay) {
-      lightboxOverlay.style.display = "none";
-    }
-  }
-
-  function fixMobileNavPosition() {
-    const nav = document.querySelector("nav.md-nav");
-    if (nav && window.innerWidth <= 768) {
-      nav.style.position = "fixed";
-      nav.style.top = "0";
-      nav.style.zIndex = "10001";
-      nav.style.background = "var(--md-default-bg-color)";
-    }
-  }
-
-  function initPageFeatures() {
-    fixMobileNavPosition();
-
-    const contactModal = document.getElementById("contactModal");
-    if (contactModal?.style.display === "block") contactModal.style.display = "none";
-    if (lightboxOverlay?.style.display === "block") lightboxOverlay.style.display = "none";
-
-    const openBtn = document.getElementById("openContactForm");
-    const closeBtn = document.getElementById("closeModal");
-    const modalOverlay = document.getElementById("modalOverlay");
-    if (contactModal && openBtn && closeBtn && modalOverlay) {
-      contactModal.style.display = "none";
-      openBtn.onclick = () => contactModal.style.display = "block";
-      closeBtn.onclick = () => contactModal.style.display = "none";
-      modalOverlay.onclick = () => contactModal.style.display = "none";
-    }
-
-    if (!escapeHandlerAdded) {
-      escapeHandlerAdded = true;
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          if (lightboxOverlay?.style.display === "block") closeLightbox();
-          if (contactModal?.style.display === "block") contactModal.style.display = "none";
-        }
-      });
-    }
-
-    const form = document.getElementById("modalContactForm");
-    if (form && !form.dataset.bound) {
-      form.dataset.bound = "true";
-      let statusMsg = document.getElementById("formStatus");
-      if (!statusMsg) {
-        statusMsg = document.createElement("p");
-        statusMsg.id = "formStatus";
-        statusMsg.style.marginTop = "8px";
-        form.parentNode.appendChild(statusMsg);
-      }
-
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const formData = new FormData(form);
-        fetch(form.action, {
-          method: form.method || "POST",
-          body: formData,
-          headers: { Accept: "application/json" }
-        })
-          .then(async (response) => {
-            if (response.ok) {
-              statusMsg.style.color = "green";
-              statusMsg.textContent = "Спасибо! Ваше сообщение отправлено.";
-              form.reset();
-            } else {
-              let errText = "Ошибка: сообщение не отправлено.";
-              try {
-                const data = await response.json();
-                if (data?.errors) errText = data.errors.map(e => e.message).join(", ");
-              } catch {}
-              statusMsg.style.color = "red";
-              statusMsg.textContent = errText;
-            }
-          })
-          .catch(() => {
-            statusMsg.style.color = "red";
-            statusMsg.textContent = "Ошибка отправки. Проверьте соединение.";
-          });
-      });
-    }
-
-    lightboxImages = [];
-    const contentArea = document.querySelector(".md-content");
-    if (contentArea) {
-      const imgs = contentArea.querySelectorAll("img:not(.no-lightbox)");
-      imgs.forEach((img) => {
-        if (img.closest("a")) return;
-        lightboxImages.push(img);
-        img.style.cursor = "pointer";
-        img.addEventListener("click", () => openLightbox(lightboxImages.indexOf(img)));
-      });
-    }
-  }
-
-  if (typeof document$ !== "undefined") {
-    document$.subscribe(initPageFeatures);
-  } else {
-    document.addEventListener("DOMContentLoaded", initPageFeatures);
-  }
-})();
-</script>
-
-<style>
-a {
-  color: #bbb;
+.md-typeset a,
+.md-nav__link,
+.md-footer a {
+  color: #c4c4c4 !important;
   text-decoration: none;
-  transition: font-weight 0.2s ease, color 0.2s ease;
+  transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
-a:hover {
-  font-weight: bold;
-  color: #999;
+.md-typeset a:hover,
+.md-nav__link:hover,
+.md-footer a:hover {
+  color: #999999 !important;
+  font-weight: 600;
 }
 
 .contact-btn {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 0.25rem 0.75rem;
   font-size: 1rem;
-  color: #bbb;
-  text-decoration: underline;
-  background: none;
-  border: none;
+  color: #c4c4c4;
+  background: transparent;
+  border: 1px solid #c4c4c4;
+  border-radius: 999px;
   cursor: pointer;
   font-family: inherit;
-  transition: font-weight 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .contact-btn:hover {
-  color: #999;
-  font-weight: bold;
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  border-color: #ffffff;
 }
-</style>
+
+.hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  margin-bottom: 1.2rem;
+}
+
+.hero img {
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+  max-width: 260px;
+  height: auto;
+}
+
+img[alt="Антон Шиловский"] {
+  float: none !important;
+}
+
+#contactModal {
+  display: none;              
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  background: rgba(0, 0, 0, 0.6);
+  align-items: center; 
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+#modalOverlay {
+  position: absolute;
+  inset: 0;
+}
+
+#contactModal .modal-content {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  background: #111111;
+  border-radius: 14px;
+  padding: 24px 28px 22px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+  box-sizing: border-box;
+}
+
+/* крестик закрытия */
+#contactModal .close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #888888;
+  transition: color 0.2s ease;
+}
+
+#contactModal .close:hover {
+  color: #ffffff;
+}
+
+#contactModal h2 {
+  margin: 0 0 0.75rem 0;
+}
+
+
+#modalContactForm {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+#modalContactForm label {
+  display: block;
+  font-size: 0.85rem;
+  color: #cccccc;
+  margin-bottom: 0.2rem;
+}
+
+#modalContactForm input,
+#modalContactForm textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(10, 10, 10, 0.9);
+  color: #f5f5f5;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+#modalContactForm textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+#modalContactForm input::placeholder,
+#modalContactForm textarea::placeholder {
+  color: #777777;
+}
+
+#modalContactForm input:focus,
+#modalContactForm textarea:focus {
+  outline: none;
+  border-color: #999999;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+#contactModal .submit-btn {
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  padding: 0.45rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid #c4c4c4;
+  background: transparent;
+  color: #f5f5f5;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+#contactModal .submit-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  #contactModal .modal-content {
+    padding: 20px 18px 18px;
+  }
+}
+
+.scroll-banner{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translate(-50%, 130%);
+  opacity: 0;
+  transition: transform .35s ease, opacity .35s ease;
+  z-index: 9999;
+  width: min(720px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.scroll-banner.show{
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.scroll-banner__inner{
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(20, 20, 20, .55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.scroll-banner__media{
+  display: block;
+  width: 100%;
+  height: auto;
+}
