@@ -516,3 +516,20 @@ img[alt="Антон Шиловский"] {
     scroll-margin-top: 7rem;
   }
 }
+
+:root{
+  --sticky-offset: 72px; /* высота твоей sticky-плашки + небольшой запас */
+}
+
+@media (max-width: 600px){
+  :root{ --sticky-offset: 88px; }
+}
+
+/* Кнопка "К началу" — строго внизу экрана */
+.md-top{
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 16px !important;
+  z-index: 10050 !important;
+}
+
