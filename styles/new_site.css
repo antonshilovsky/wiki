@@ -531,34 +531,3 @@ img[alt="Антон Шиловский"] {
   bottom: 16px !important;
   z-index: 10050 !important;
 }
-
-:root{
-  --sticky-offset: 72px;
-}
-
-@media (max-width: 600px){
-  :root{ --sticky-offset: 88px; }
-}
-
-.md-top{
-  position: fixed !important;
-  right: 16px !important;
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
-  z-index: 10050 !important;
-}
-
-.md-top.md-top--active{
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: auto !important;
-  transform: translateY(0) !important;
-}
-
-@media (max-width: 600px){
-  .md-top{
-    position: fixed !important;
-	right: 16px !important;
-	bottom: 16px !important;
-	z-index: 10050 !important;
-  }
-}
