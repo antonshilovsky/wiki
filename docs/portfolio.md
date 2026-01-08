@@ -6,6 +6,17 @@
 
 [▶ Вебинар — Анализ рисков](https://rutube.ru/video/private/9f09435600dffcd0e6b6982eef9e8305/?p=lWbUlzcLtTf34blXKCGEAA&t=625&r=plwd){ .md-button }
 
+<div style="margin-top: 1rem; display: flex; justify-content: center;">
+  <iframe
+    width="720"
+    height="405"
+    src="https://rutube.ru/play/embed/df0b764170114ad53cb1b56550033d29/?p=Ir32sndo_DhMZRgOTUU47Q&t=1266&r=plwd"
+    style="border: none; max-width: 100%;"
+    allow="clipboard-write; autoplay"
+    allowfullscreen
+  ></iframe>
+</div>
+
 ---
 
 ## Достижения и публикации
@@ -21,7 +32,17 @@
 
 4. **[Призёр студенческой олимпиады «Я – профессионал»](https://www.gup.ru/events/news/detail.php?ID=193703)**  
    *Направление: финансы и анализ данных.*
+---
+<div id="banner-trigger"></div>
 
+<div id="scrollBanner" class="scroll-banner" aria-hidden="true">
+  <div class="scroll-banner__inner">
+    <video class="scroll-banner__media" autoplay muted loop playsinline preload="metadata">
+      <source src="images/banner-loop.webm" type="video/webm">
+      <source src="images/banner-loop.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
 ---
 
 ## BI-дашборды
