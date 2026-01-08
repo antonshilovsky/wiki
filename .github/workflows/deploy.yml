@@ -1,32 +1,40 @@
-﻿name: Deploy MkDocs site to GitHub Pages
+﻿name: Deploy MkDocs to gh-pages
 
 on:
   push:
-    branches:
-      - main  # имя основной ветки
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
-  contents: write  # необходимо для пуша в gh-pages
+  contents: write
+
+concurrency:
+  group: "gh-pages"
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.12"
 
       - name: Install dependencies
         run: |
-          pip install mkdocs
-          pip install mkdocs-material
-          pip install mkdocs-glightbox
-          pip install glightbox
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install mkdocs mkdocs-material; fi
 
-      - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force
+      - name: Build
+        run: mkdocs build --clean
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          force_orphan: true

@@ -71,18 +71,7 @@
 - Управление 11 инвестиционными портфелями (суммарно $180 000).  
 - Опыт трейдинга на NYSE и NASDAQ.  
 
----
 
-<div id="banner-trigger"></div>
-
-<div id="scrollBanner" class="scroll-banner" aria-hidden="true">
-  <div class="scroll-banner__inner">
-    <video class="scroll-banner__media" autoplay muted loop playsinline preload="metadata">
-      <source src="images/banner-loop.webm" type="video/webm">
-      <source src="images/banner-loop.mp4" type="video/mp4">
-    </video>
-  </div>
-</div>
 
 ---
 
