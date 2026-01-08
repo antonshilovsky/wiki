@@ -556,6 +556,9 @@ img[alt="Антон Шиловский"] {
 
 @media (max-width: 600px){
   .md-top{
-    bottom: calc(var(--sticky-offset) + 16px + env(safe-area-inset-bottom, 0px)) !important;
+    position: fixed !important;
+	right: 16px !important;
+	bottom: 16px !important;
+	z-index: 10050 !important;
   }
 }
