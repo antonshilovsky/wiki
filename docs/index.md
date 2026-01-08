@@ -8,12 +8,13 @@
 ---
 
 ## Структура {#навигация}
-→ [Опыт](#опыт) •<br>
-→ [Образование](#образование) •<br>
-→ [Сообщества](#профессиональные-сообщества) •<br>
-→ [Портфолио](https://shilovskyanton.ru/portfolio/) •<br>
-→ [Контакты](https://shilovskyanton.ru/contacts/) •
 
+<div class="home-quicknav" role="navigation" aria-label="Быстрая навигация">
+  <a class="hq-btn" href="#опыт">Опыт</a>
+  <a class="hq-btn" href="https://shilovskyanton.ru/portfolio/">Портфолио</a>
+  <a class="hq-btn" href="https://shilovskyanton.ru/contacts/">Контакты</a>
+_toggle_
+</div>
 
 ---
 
