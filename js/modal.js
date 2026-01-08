@@ -1,4 +1,8 @@
 (function () {
+  // --- Global state inside IIFE (survives MkDocs Material page swaps) ---
+  let escapeHandlerAdded = false;
+
+  // Lightbox state
   let lightboxOverlay = null;
   let lightboxImage = null;
   let lightboxCaption = null;
@@ -8,16 +12,24 @@
   let lightboxImages = [];
   let currentIndex = 0;
 
+  let bannerObserver = null;
+
   function showLightboxImage(index) {
     if (!lightboxOverlay || !lightboxImages.length) return;
+
     currentIndex = index;
     const img = lightboxImages[index];
+
     lightboxImage.src = img.src;
     lightboxImage.alt = img.alt || "";
     lightboxCaption.textContent = img.alt || "";
+
     lightboxPrev.style.display = index > 0 ? "" : "none";
     lightboxNext.style.display = index < lightboxImages.length - 1 ? "" : "none";
-    lightboxOverlay.style.display = "block";
+  }
+
+  function closeLightbox() {
+    if (lightboxOverlay) lightboxOverlay.style.display = "none";
   }
 
   function openLightbox(index) {
@@ -55,8 +67,10 @@
       lightboxImage.addEventListener("click", (e) => e.stopPropagation());
 
       lightboxCaption = document.createElement("div");
-      lightboxCaption.style.color = "#fff";
-      lightboxCaption.style.marginTop = "8px";
+      Object.assign(lightboxCaption.style, {
+        color: "#fff",
+        marginTop: "8px"
+      });
 
       lightboxPrev = document.createElement("button");
       lightboxPrev.innerHTML = "&#10094;";
@@ -71,10 +85,10 @@
         color: "#fff",
         cursor: "pointer"
       });
-      lightboxPrev.onclick = (e) => {
+      lightboxPrev.addEventListener("click", (e) => {
         e.stopPropagation();
         if (currentIndex > 0) showLightboxImage(currentIndex - 1);
-      };
+      });
 
       lightboxNext = document.createElement("button");
       lightboxNext.innerHTML = "&#10095;";
@@ -89,12 +103,10 @@
         color: "#fff",
         cursor: "pointer"
       });
-      lightboxNext.onclick = (e) => {
+      lightboxNext.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (currentIndex < lightboxImages.length - 1) {
-          showLightboxImage(currentIndex + 1);
-        }
-      };
+        if (currentIndex < lightboxImages.length - 1) showLightboxImage(currentIndex + 1);
+      });
 
       lightboxClose = document.createElement("button");
       lightboxClose.innerHTML = "&times;";
@@ -108,23 +120,45 @@
         color: "#fff",
         cursor: "pointer"
       });
-      lightboxClose.onclick = (e) => {
+      lightboxClose.addEventListener("click", (e) => {
         e.stopPropagation();
-        lightboxOverlay.style.display = "none";
-      };
+        closeLightbox();
+      });
 
       container.appendChild(lightboxImage);
       container.appendChild(lightboxCaption);
+
       lightboxOverlay.appendChild(container);
       lightboxOverlay.appendChild(lightboxPrev);
       lightboxOverlay.appendChild(lightboxNext);
       lightboxOverlay.appendChild(lightboxClose);
-      lightboxOverlay.addEventListener("click", () => (lightboxOverlay.style.display = "none"));
+
+      lightboxOverlay.addEventListener("click", closeLightbox);
 
       document.body.appendChild(lightboxOverlay);
     }
 
     showLightboxImage(index);
+    lightboxOverlay.style.display = "block";
+  }
+
+  function initLightbox() {
+    const content = document.querySelector(".md-content");
+    if (!content) return;
+
+    lightboxImages = [];
+    const imgs = content.querySelectorAll("img:not(.no-lightbox)");
+
+    imgs.forEach((img) => {
+      if (img.closest("a")) return;
+      if (img.dataset.lightboxBound === "true") return;
+
+      img.dataset.lightboxBound = "true";
+      img.style.cursor = "pointer";
+
+      lightboxImages.push(img);
+      img.addEventListener("click", () => openLightbox(lightboxImages.indexOf(img)));
+    });
   }
 
   function initContactModal() {
@@ -137,22 +171,28 @@
     if (!modal || !openBtn || !closeBtn || !overlay || !form) return;
 
     modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
 
-    const open = () => (modal.style.display = "flex");
-    const close = () => (modal.style.display = "none");
+    const open = () => {
+      modal.style.display = "flex";
+      modal.setAttribute("aria-hidden", "false");
+    };
+
+    const close = () => {
+      modal.style.display = "none";
+      modal.setAttribute("aria-hidden", "true");
+    };
 
     openBtn.onclick = open;
     closeBtn.onclick = close;
     overlay.onclick = close;
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") close();
-    });
-
     if (!form.dataset.bound) {
       form.dataset.bound = "true";
+
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
         const formData = new FormData(form);
 
         try {
@@ -167,7 +207,13 @@
             form.reset();
             close();
           } else {
-            alert("Ошибка: сообщение не отправлено.");
+
+            let msg = "Ошибка: сообщение не отправлено.";
+            try {
+              const data = await res.json();
+              if (data?.errors?.length) msg = data.errors.map((x) => x.message).join(", ");
+            } catch {}
+            alert(msg);
           }
         } catch {
           alert("Ошибка соединения.");
@@ -176,47 +222,93 @@
     }
   }
 
-  function initLightbox() {
-    const content = document.querySelector(".md-content");
-    if (!content) return;
-
-    lightboxImages = [];
-    const imgs = content.querySelectorAll("img:not(.no-lightbox)");
-    imgs.forEach((img) => {
-      if (img.closest("a")) return;
-      lightboxImages.push(img);
-      img.style.cursor = "pointer";
-      img.onclick = () => openLightbox(lightboxImages.indexOf(img));
-    });
-  }
-
-  function initScrollBanner() {
-    const banner = document.getElementById("scrollBanner");
-    const trigger = document.getElementById("banner-trigger");
-
-    if (banner && trigger && !banner.dataset.bound) {
-      banner.dataset.bound = "true";
-
-      const show = () => banner.classList.add("show");
-      const hide = () => banner.classList.remove("show");
-
-      const io = new IntersectionObserver(
-        (entries) => {
-          const e = entries[0];
-          if (!e.isIntersecting && e.boundingClientRect.top < 0) show();
-          else hide();
-        },
-        { threshold: 0 }
-      );
-
-      io.observe(trigger);
+  function closeContactModalIfOpen() {
+    const modal = document.getElementById("contactModal");
+    if (modal && modal.style.display !== "none") {
+      modal.style.display = "none";
+      modal.setAttribute("aria-hidden", "true");
     }
   }
 
+  function initScrollBanner() {
+
+    if (bannerObserver) {
+      try { bannerObserver.disconnect(); } catch {}
+      bannerObserver = null;
+    }
+
+    const banner = document.getElementById("scrollBanner");
+    const trigger = document.getElementById("banner-trigger");
+    if (!banner || !trigger) return;
+
+    const show = () => banner.classList.add("show");
+    const hide = () => banner.classList.remove("show");
+
+    bannerObserver = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+
+        if (!e.isIntersecting && e.boundingClientRect.top < 0) show();
+        else hide();
+      },
+      { threshold: 0 }
+    );
+
+    bannerObserver.observe(trigger);
+  }
+
+  function initEduTimelines() {
+    document.querySelectorAll("[data-edu-timeline]").forEach((wrap) => {
+      const track = wrap.querySelector(".edu-track");
+      const prev = wrap.querySelector(".edu-prev");
+      const next = wrap.querySelector(".edu-next");
+      if (!track || !prev || !next) return;
+
+      const cards = Array.from(track.querySelectorAll(".edu-card"));
+      if (!cards.length) return;
+
+      const update = () => {
+        const max = track.scrollWidth - track.clientWidth - 2;
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= max;
+      };
+
+      const stepTo = (dir) => {
+        const cardWidth = cards[0].getBoundingClientRect().width;
+        const gap = parseFloat(getComputedStyle(track).gap || "14");
+        track.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
+        setTimeout(update, 250);
+      };
+
+      prev.onclick = () => stepTo(-1);
+      next.onclick = () => stepTo(1);
+      track.onscroll = update;
+
+      update();
+    });
+  }
+
+  function ensureEscapeHandler() {
+    if (escapeHandlerAdded) return;
+    escapeHandlerAdded = true;
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      closeLightbox();
+      closeContactModalIfOpen();
+    });
+  }
+
   function initAll() {
+    ensureEscapeHandler();
+
+    closeLightbox();
+    closeContactModalIfOpen();
+
     initContactModal();
     initLightbox();
     initScrollBanner();
+    initEduTimelines();
   }
 
   if (typeof document$ !== "undefined") {

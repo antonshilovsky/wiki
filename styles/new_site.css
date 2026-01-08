@@ -83,7 +83,6 @@ img[alt="Антон Шиловский"] {
   box-sizing: border-box;
 }
 
-/* крестик закрытия */
 #contactModal .close {
   position: absolute;
   top: 12px;
@@ -312,7 +311,7 @@ img[alt="Антон Шиловский"] {
 
 #contactModal .modal-body{
   padding: 18px 16px 16px;
-  padding-top: 56px; /* место под крестик */
+  padding-top: 56px;
   max-height: min(86vh, 720px);
   overflow: auto;
   -webkit-overflow-scrolling: touch;
@@ -373,7 +372,6 @@ img[alt="Антон Шиловский"] {
   }
 }
 
-/* --- Portfolio buttons (.md-button): purple hover + white text --- */
 .md-typeset a.md-button,
 .md-typeset a.md-button:visited{
   color: #c4c4c4 !important;
@@ -386,13 +384,135 @@ img[alt="Антон Шиловский"] {
 .md-typeset a.md-button:hover,
 .md-typeset a.md-button:focus,
 .md-typeset a.md-button:active{
-  background: #7a2cff !important;      /* фиолетовый */
+  background: #7a2cff !important;
   border-color: #7a2cff !important;
-  color: #ffffff !important;            /* белый текст */
+  color: #ffffff !important;
   font-weight: 600 !important;
 }
 
 .md-typeset a.md-button:focus{
   outline: none;
   box-shadow: 0 0 0 3px rgba(122,44,255,0.25);
+}
+
+.edu-timeline{
+  position: relative;
+  margin: 1rem 0 2rem;
+}
+
+.edu-track{
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 8px 56px 14px 8px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.edu-track::-webkit-scrollbar{ height: 8px; }
+.edu-track::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.16); border-radius: 999px; }
+.edu-track::-webkit-scrollbar-track{ background: rgba(255,255,255,0.06); border-radius: 999px; }
+
+.edu-card{
+  scroll-snap-align: start;
+  min-width: min(520px, calc(100vw - 92px));
+  background: rgba(20,20,20,0.65);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+}
+
+.edu-card--section{
+  background: rgba(255,255,255,0.04);
+}
+
+.edu-meta{
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.edu-title{
+  margin: 0 0 6px 0;
+  font-size: 1.05rem;
+}
+
+.edu-subtitle{
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 10px;
+}
+
+.edu-text{
+  color: rgba(255,255,255,0.74);
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.edu-cert{
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.edu-arrow{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+}
+
+.edu-prev{ left: 6px; }
+.edu-next{ right: 6px; }
+
+.edu-arrow:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+.edu-arrow:disabled{
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (max-width: 600px){
+  .edu-track{ padding-right: 56px; }
+}
+
+.edu-text::before{
+  content: "› ";
+  color: rgba(255,255,255,0.55);
+}
+
+@media (max-width: 600px){
+  .home-quicknav{
+    flex-wrap: wrap;
+  }
+  .hq-btn{
+    white-space: nowrap;
+    font-size: 0.88rem;
+    padding: 8px 10px;
+  }
+}
+
+.md-content :target{
+  scroll-margin-top: 8rem;
+}
+
+@media (max-width: 600px){
+  .md-content :target{
+    scroll-margin-top: 7rem;
+  }
 }
