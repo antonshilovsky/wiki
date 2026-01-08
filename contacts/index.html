@@ -376,40 +376,37 @@
 </div>
 
 <hr>
-<!-- ░░░ МОДАЛЬНОЕ ОКНО ░░░ -->
-
-<div id="contactModal" class="modal">
-
+<div id="contactModal" class="modal" aria-hidden="true">
   <div id="modalOverlay" class="modal-overlay"></div>
 
-  <div class="modal-content modal-animate">
+  <div class="modal-content modal-animate" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
     <button id="closeModal" class="close-button" aria-label="Закрыть">×</button>
 
-    <h2 style="margin-top:0;">Связаться со мной</h2>
+    <div class="modal-body">
+      <h2 id="contactModalTitle" style="margin-top:0;">Связаться со мной</h2>
 
-    <form id="modalContactForm" action="https://formspree.io/f/xblbedrj" method="POST">
+      <form id="modalContactForm" action="https://formspree.io/f/xblbedrj" method="POST">
+        <label for="first_name">Имя</label>
+        <input id="first_name" type="text" name="first_name" required>
 
-      <label for="first_name">Имя</label>
-      <input type="text" name="first_name" required>
+        <label for="last_name">Фамилия</label>
+        <input id="last_name" type="text" name="last_name">
 
-      <label for="last_name">Фамилия</label>
-      <input type="text" name="last_name">
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" required>
 
-      <label for="email">Email</label>
-      <input type="email" name="email" required>
+        <label for="subject">Тема сообщения</label>
+        <input id="subject" type="text" name="subject" required>
 
-      <label for="subject">Тема сообщения</label>
-      <input type="text" name="subject" required>
+        <label for="message">Сообщение</label>
+        <textarea id="message" name="message" rows="6" required></textarea>
 
-      <label for="message">Сообщение</label>
-      <textarea name="message" rows="6" required></textarea>
+        <input type="hidden" name="_subject" value="Новое сообщение с сайта shilovskyanton.ru">
+        <input type="hidden" name="_language" value="ru">
 
-      <input type="hidden" name="_subject" value="Новое сообщение с сайта shilovskyanton.ru">
-      <input type="hidden" name="_language" value="ru">
-
-      <button class="submit-btn" type="submit">Отправить</button>
-    </form>
-
+        <button class="submit-btn" type="submit">Отправить</button>
+      </form>
+    </div>
   </div>
 </div>
 

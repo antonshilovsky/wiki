@@ -218,3 +218,181 @@ img[alt="Антон Шиловский"] {
   height: 100%;
   object-fit: cover;
 }
+
+.home-quicknav{
+  position: sticky;
+  top: 4rem;
+  z-index: 5;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 12px;
+  margin: 0.75rem 0 1.25rem;
+  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+}
+
+.hq-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.22);
+  text-decoration: none !important;
+  color: #bbb !important;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.hq-btn:hover{
+  background: rgba(255,255,255,0.10);
+  color: #999 !important;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px){
+  .home-quicknav{
+    top: 3.25rem;
+    gap: 8px;
+    padding: 10px;
+  }
+  .hq-btn{
+    padding: 8px 12px;
+    font-size: 0.95rem;
+  }
+}
+
+#contactModal.modal{
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+}
+
+#contactModal .modal-overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+}
+
+#contactModal .modal-content{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: min(92vw, 560px);
+  max-height: min(86vh, 720px);
+  background: rgba(20,20,20,0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+  overflow: hidden;
+}
+
+#contactModal .close-button{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: #ddd;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#contactModal .modal-body{
+  padding: 18px 16px 16px;
+  padding-top: 56px; /* место под крестик */
+  max-height: min(86vh, 720px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#modalContactForm{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+#modalContactForm label{
+  color: #cfcfcf;
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+#modalContactForm input,
+#modalContactForm textarea{
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #eee;
+}
+
+#modalContactForm textarea{
+  resize: vertical;
+  min-height: 140px;
+}
+
+#modalContactForm .submit-btn{
+  margin-top: 6px;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.10);
+  color: #eee;
+  cursor: pointer;
+}
+
+#modalContactForm .submit-btn:hover{
+  background: rgba(255,255,255,0.16);
+}
+
+@media (max-width: 420px){
+  #contactModal .modal-content{
+    width: 94vw;
+    max-height: 88vh;
+    border-radius: 14px;
+  }
+  #contactModal .modal-body{
+    padding: 16px 14px 14px;
+    padding-top: 54px;
+  }
+}
+
+/* --- Portfolio buttons (.md-button): purple hover + white text --- */
+.md-typeset a.md-button,
+.md-typeset a.md-button:visited{
+  color: #c4c4c4 !important;
+  text-decoration: none !important;
+  background: transparent !important;
+  border-color: rgba(196,196,196,0.85) !important;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.md-typeset a.md-button:hover,
+.md-typeset a.md-button:focus,
+.md-typeset a.md-button:active{
+  background: #7a2cff !important;      /* фиолетовый */
+  border-color: #7a2cff !important;
+  color: #ffffff !important;            /* белый текст */
+  font-weight: 600 !important;
+}
+
+.md-typeset a.md-button:focus{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(122,44,255,0.25);
+}
