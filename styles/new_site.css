@@ -174,6 +174,7 @@ img[alt="Антон Шиловский"] {
   }
 }
 
+/* ===== Scroll banner (works with JS class: .is-visible) ===== */
 .scroll-banner{
   position: fixed;
   left: 50%;
@@ -186,7 +187,7 @@ img[alt="Антон Шиловский"] {
   pointer-events: none;
 }
 
-.scroll-banner.show{
+.scroll-banner.is-visible{
   transform: translate(-50%, 0);
   opacity: 1;
 }
@@ -205,18 +206,9 @@ img[alt="Антон Шиловский"] {
   display: block;
   width: 100%;
   height: auto;
-}
-
-.scroll-banner__inner {
-  overflow: hidden;
-}
-
-.scroll-banner__media {
-  display: block;
-  width: 100%;
-  height: 100%;
   object-fit: cover;
 }
+
 
 .home-quicknav{
   position: sticky;
@@ -517,28 +509,86 @@ img[alt="Антон Шиловский"] {
   }
 }
 
-:root{
-  --sticky-offset: 72px;
+/* ===== Общая сетка карточек (Навыки) ===== */
+.cards-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 900px){
+  .cards-grid{ grid-template-columns: 1fr; }
 }
 
-@media (max-width: 600px){
-  :root{ --sticky-offset: 88px; }
+/* ===== Заголовок карусели (Опыт) ===== */
+.edu-wrap{ margin-top: 0.75rem; }
+.edu-head{
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  gap: 10px;
+  align-items: center;
+  margin: 0.25rem 0 0.75rem;
+}
+.edu-head__title{
+  text-align: center;
+  color: #cfcfcf;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.edu-prev, .edu-next{
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #e6e6e6;
+  cursor: pointer;
+}
+.edu-prev:disabled, .edu-next:disabled{
+  opacity: .35;
+  cursor: default;
 }
 
-.md-top{
-  position: fixed !important;
-  right: 16px !important;
-  bottom: 16px !important;
-  z-index: 10050 !important;
+/* ===== Содержимое карточек ===== */
+.edu-card__meta{ color: #a9a9a9; font-size: .9rem; }
+.edu-card__title{ margin: .35rem 0 .35rem; }
+.edu-card__subtitle{ color: #cfcfcf; margin: .25rem 0 .25rem; }
+
+.edu-list{
+  margin: .4rem 0 0;
+  padding-left: 1.1rem;
+}
+.edu-list li{ margin: .25rem 0; color: #e3e3e3; }
+
+.edu-card__result{
+  margin-top: .65rem;
+  padding: .65rem .75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  color: #eaeaea;
 }
 
-@media (max-width: 600px){
-  .md-top{
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
+/* ===== Чипсы (Навыки) ===== */
+.chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: .35rem;
+}
+.chip{
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #e6e6e6;
+  font-size: .92rem;
+  line-height: 1.1;
 }
 
-.scroll-banner { display: none; }
-.scroll-banner.is-visible { display: block; }
+.portfolio-gallery video {
+  width: 100%;
+  height: auto;
+  display: block;
+}

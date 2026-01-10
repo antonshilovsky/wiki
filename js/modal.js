@@ -13,6 +13,9 @@
   let currentIndex = 0;
 
   let bannerObserver = null;
+  
+  let bannerScrollHandler = null;
+
 
   function showLightboxImage(index) {
     if (!lightboxOverlay || !lightboxImages.length) return;
@@ -231,60 +234,46 @@
   }
 
 function initScrollBanner() {
-  if (bannerObserver) {
-    try { bannerObserver.disconnect(); } catch {}
-    bannerObserver = null;
+  const banner = document.getElementById("scrollBanner");
+  const start = document.getElementById("banner-trigger");
+  const end = document.getElementById("banner-end");
+  if (!banner || !start || !end) return;
+
+  // снять предыдущий обработчик (важно для MkDocs SPA)
+  if (bannerScrollHandler) {
+    window.removeEventListener("scroll", bannerScrollHandler);
+    window.removeEventListener("resize", bannerScrollHandler);
   }
 
-  const banner = document.getElementById("scrollBanner");
-  const trigger = document.getElementById("banner-trigger");
-  const end = document.getElementById("banner-end");
-  if (!banner || !trigger) return;
-
-  const show = () => banner.classList.add("show");
-  const hide = () => banner.classList.remove("show");
-
-  let passedStart = false;
-  let reachedEnd = false;
+  const getTop = (el) => el.getBoundingClientRect().top + window.scrollY;
 
   const update = () => {
-    if (passedStart && !reachedEnd) show();
-    else hide();
+    const startY = getTop(start);
+    const endY = getTop(end);
+    const viewportBottom = window.scrollY + window.innerHeight;
+
+    // показать после достижения триггера, скрыть на "дне"
+    const shouldShow = viewportBottom >= (startY + 40) && viewportBottom < endY;
+
+    banner.classList.toggle("is-visible", shouldShow);
   };
 
-  const ioStart = new IntersectionObserver(
-    (entries) => {
-      const e = entries[0];
-      passedStart = !e.isIntersecting && e.boundingClientRect.top < 0;
+  let ticking = false;
+  bannerScrollHandler = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
       update();
-    },
-    { threshold: 0 }
-  );
+    });
+  };
 
-  ioStart.observe(trigger);
+  window.addEventListener("scroll", bannerScrollHandler, { passive: true });
+  window.addEventListener("resize", bannerScrollHandler, { passive: true });
 
-  if (end) {
-    const ioEnd = new IntersectionObserver(
-      (entries) => {
-        reachedEnd = entries[0].isIntersecting;
-        update();
-      },
-      { threshold: 0 }
-    );
-    ioEnd.observe(end);
-
-    bannerObserver = {
-      disconnect: () => {
-        ioStart.disconnect();
-        ioEnd.disconnect();
-      }
-    };
-  } else {
-    bannerObserver = ioStart;
-  }
-
-  hide();
+  update();
 }
+
 
   function initEduTimelines() {
     document.querySelectorAll("[data-edu-timeline]").forEach((wrap) => {
