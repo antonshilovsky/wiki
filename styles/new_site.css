@@ -539,3 +539,6 @@ img[alt="Антон Шиловский"] {
     pointer-events: none !important;
   }
 }
+
+.scroll-banner { display: none; }
+.scroll-banner.is-visible { display: block; }

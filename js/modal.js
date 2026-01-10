@@ -230,32 +230,61 @@
     }
   }
 
-  function initScrollBanner() {
+function initScrollBanner() {
+  if (bannerObserver) {
+    try { bannerObserver.disconnect(); } catch {}
+    bannerObserver = null;
+  }
 
-    if (bannerObserver) {
-      try { bannerObserver.disconnect(); } catch {}
-      bannerObserver = null;
-    }
+  const banner = document.getElementById("scrollBanner");
+  const trigger = document.getElementById("banner-trigger");
+  const end = document.getElementById("banner-end");
+  if (!banner || !trigger) return;
 
-    const banner = document.getElementById("scrollBanner");
-    const trigger = document.getElementById("banner-trigger");
-    if (!banner || !trigger) return;
+  const show = () => banner.classList.add("show");
+  const hide = () => banner.classList.remove("show");
 
-    const show = () => banner.classList.add("show");
-    const hide = () => banner.classList.remove("show");
+  let passedStart = false;
+  let reachedEnd = false;
 
-    bannerObserver = new IntersectionObserver(
+  const update = () => {
+    if (passedStart && !reachedEnd) show();
+    else hide();
+  };
+
+  const ioStart = new IntersectionObserver(
+    (entries) => {
+      const e = entries[0];
+      passedStart = !e.isIntersecting && e.boundingClientRect.top < 0;
+      update();
+    },
+    { threshold: 0 }
+  );
+
+  ioStart.observe(trigger);
+
+  if (end) {
+    const ioEnd = new IntersectionObserver(
       (entries) => {
-        const e = entries[0];
-
-        if (!e.isIntersecting && e.boundingClientRect.top < 0) show();
-        else hide();
+        reachedEnd = entries[0].isIntersecting;
+        update();
       },
       { threshold: 0 }
     );
+    ioEnd.observe(end);
 
-    bannerObserver.observe(trigger);
+    bannerObserver = {
+      disconnect: () => {
+        ioStart.disconnect();
+        ioEnd.disconnect();
+      }
+    };
+  } else {
+    bannerObserver = ioStart;
   }
+
+  hide();
+}
 
   function initEduTimelines() {
     document.querySelectorAll("[data-edu-timeline]").forEach((wrap) => {
