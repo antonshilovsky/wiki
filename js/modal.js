@@ -1,8 +1,7 @@
 (function () {
-  // --- Global state inside IIFE (survives MkDocs Material page swaps) ---
+
   let escapeHandlerAdded = false;
 
-  // Lightbox state
   let lightboxOverlay = null;
   let lightboxImage = null;
   let lightboxCaption = null;
@@ -239,7 +238,6 @@ function initScrollBanner() {
   const end = document.getElementById("banner-end");
   if (!banner || !start || !end) return;
 
-  // снять предыдущий обработчик (важно для MkDocs SPA)
   if (bannerScrollHandler) {
     window.removeEventListener("scroll", bannerScrollHandler);
     window.removeEventListener("resize", bannerScrollHandler);
@@ -252,7 +250,6 @@ function initScrollBanner() {
     const endY = getTop(end);
     const viewportBottom = window.scrollY + window.innerHeight;
 
-    // показать после достижения триггера, скрыть на "дне"
     const shouldShow = viewportBottom >= (startY + 40) && viewportBottom < endY;
 
     banner.classList.toggle("is-visible", shouldShow);
