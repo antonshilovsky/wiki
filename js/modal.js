@@ -332,3 +332,17 @@ function initScrollBanner() {
     document.addEventListener("DOMContentLoaded", initAll);
   }
 })();
+
+document.querySelectorAll("[data-reco]").forEach((wrap) => {
+  if (wrap.dataset.bound) return;
+  wrap.dataset.bound = "true";
+
+  const track = wrap.querySelector(".reco-track");
+  const prev = wrap.querySelector(".reco-nav--prev");
+  const next = wrap.querySelector(".reco-nav--next");
+
+  const step = () => Math.min(track.clientWidth * 0.92, 600);
+
+  prev?.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+  next?.addEventListener("click", () => track.scrollBy({ left:  step(), behavior: "smooth" }));
+});

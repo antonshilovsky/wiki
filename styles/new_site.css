@@ -708,3 +708,64 @@ img[alt="Антон Шиловский"] {
   max-width: 260px;
   height: auto;
 }
+.reco-wrap{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-top:12px}
+.reco-track{display:flex;gap:12px;overflow:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 2px;scrollbar-width:none}
+.reco-track::-webkit-scrollbar{display:none}
+.reco-card{min-width:min(560px,84vw);scroll-snap-align:start;display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:start;padding:12px 14px;border:1px solid rgba(255,255,255,0.14);border-radius:16px;background:rgba(255,255,255,0.03)}
+.reco-ava{
+  width:56px;height:56px;border-radius:14px;object-fit:cover;
+  filter:contrast(1.05);
+  border:1px solid rgba(255,255,255,0.12)
+}
+.reco-name{font-weight:700;letter-spacing:.01em}
+.reco-role{color:rgba(255,255,255,0.70);font-size:.92rem;margin-top:2px}
+.reco-quote{margin-top:8px;color:rgba(255,255,255,0.85);line-height:1.45}
+.reco-nav{width:38px;height:38px;border-radius:14px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.06);color:#ddd;font-size:22px;line-height:1;cursor:pointer}
+.reco-nav:hover{background:rgba(255,255,255,0.10)}
+.reco-info{width:34px;height:34px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:#ddd;cursor:pointer}
+.reco-info:hover{background:rgba(255,255,255,0.10)}
+.reco-tooltip{position:absolute;opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .15s ease,transform .15s ease;max-width:min(360px,70vw);padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,0.14);background:rgba(20,20,20,0.96);color:#eee;box-shadow:0 18px 60px rgba(0,0,0,0.55);z-index:10}
+.reco-info:focus + .reco-tooltip,.reco-info:hover + .reco-tooltip{opacity:1;transform:translateY(0)}
+@media (max-width:520px){.reco-nav{display:none}}
+
+.social-icons{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:22px;
+  margin: 10px 0;
+}
+
+.social-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  transition: background .18s ease, transform .18s ease;
+}
+
+.social-icon img{
+  width:34px;
+  height:34px;
+  display:block;
+  filter: grayscale(1) brightness(1.3);
+  transition: filter .18s ease;
+}
+
+.social-icon:hover{
+  background: rgba(139, 92, 246, 0.10);
+  transform: translateY(-1px);
+}
+
+/* “примерный” фиолетовый через фильтры (можно подкрутить) */
+.social-icon:hover img{
+  filter: brightness(0) saturate(100%) invert(43%) sepia(60%) saturate(1500%) hue-rotate(235deg) brightness(95%) contrast(95%);
+}
+
+.md-typeset a.md-button:hover{
+  background-color:#8b5cf6 !important;
+  border-color:#8b5cf6 !important;
+  color:#ffffff !important;
+}
