@@ -326,6 +326,56 @@ function initScrollBanner() {
     initEduTimelines();
   }
 
+(function bindPdfPreview() {
+  const modal = document.getElementById("pdfModal");
+  const frame = document.getElementById("pdfModalFrame");
+  const title = document.getElementById("pdfModalTitle");
+  const openLink = document.getElementById("pdfModalOpen");
+  if (!modal || !frame || !title || !openLink) return;
+
+
+  const close = () => {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    frame.removeAttribute("src");
+    document.body.style.overflow = "";
+  };
+
+  const open = (pdfUrl, caption) => {
+    title.textContent = caption || "Документ";
+    openLink.href = pdfUrl;
+    frame.src = pdfUrl;
+
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  modal.querySelectorAll("[data-pdf-close]").forEach((el) => {
+    el.onclick = (e) => {
+      e.preventDefault();
+      close();
+    };
+  });
+
+  if (!modal.dataset.escapeBound) {
+    modal.dataset.escapeBound = "true";
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+    });
+  }
+
+  document.querySelectorAll("button.reco-pdf[data-pdf]").forEach((btn) => {
+    if (btn.dataset.bound) return;
+    btn.dataset.bound = "true";
+    btn.addEventListener("click", () => {
+      const pdf = btn.getAttribute("data-pdf");
+      const caption = btn.getAttribute("data-title") || "Документ";
+      if (pdf) open(pdf, caption);
+    });
+  });
+})();
+
   if (typeof document$ !== "undefined") {
     document$.subscribe(initAll);
   } else {
