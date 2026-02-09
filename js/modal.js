@@ -1,5 +1,4 @@
 (function () {
-
   let escapeHandlerAdded = false;
 
   let lightboxOverlay = null;
@@ -11,10 +10,7 @@
   let lightboxImages = [];
   let currentIndex = 0;
 
-  let bannerObserver = null;
-  
   let bannerScrollHandler = null;
-
 
   function showLightboxImage(index) {
     if (!lightboxOverlay || !lightboxImages.length) return;
@@ -46,7 +42,7 @@
         backgroundColor: "rgba(0,0,0,0.85)",
         zIndex: "10000",
         display: "none",
-        cursor: "pointer"
+        cursor: "pointer",
       });
 
       const container = document.createElement("div");
@@ -56,7 +52,7 @@
         left: "50%",
         transform: "translate(-50%, -50%)",
         cursor: "auto",
-        textAlign: "center"
+        textAlign: "center",
       });
 
       lightboxImage = document.createElement("img");
@@ -64,15 +60,12 @@
         maxWidth: "90vw",
         maxHeight: "80vh",
         display: "block",
-        margin: "0 auto"
+        margin: "0 auto",
       });
       lightboxImage.addEventListener("click", (e) => e.stopPropagation());
 
       lightboxCaption = document.createElement("div");
-      Object.assign(lightboxCaption.style, {
-        color: "#fff",
-        marginTop: "8px"
-      });
+      Object.assign(lightboxCaption.style, { color: "#fff", marginTop: "8px" });
 
       lightboxPrev = document.createElement("button");
       lightboxPrev.innerHTML = "&#10094;";
@@ -85,7 +78,7 @@
         background: "none",
         border: "none",
         color: "#fff",
-        cursor: "pointer"
+        cursor: "pointer",
       });
       lightboxPrev.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -103,7 +96,7 @@
         background: "none",
         border: "none",
         color: "#fff",
-        cursor: "pointer"
+        cursor: "pointer",
       });
       lightboxNext.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -120,7 +113,7 @@
         background: "none",
         border: "none",
         color: "#fff",
-        cursor: "pointer"
+        cursor: "pointer",
       });
       lightboxClose.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -201,7 +194,7 @@
           const res = await fetch(form.action, {
             method: form.method || "POST",
             body: formData,
-            headers: { Accept: "application/json" }
+            headers: { Accept: "application/json" },
           });
 
           if (res.ok) {
@@ -209,7 +202,6 @@
             form.reset();
             close();
           } else {
-
             let msg = "Ошибка: сообщение не отправлено.";
             try {
               const data = await res.json();
@@ -232,45 +224,43 @@
     }
   }
 
-function initScrollBanner() {
-  const banner = document.getElementById("scrollBanner");
-  const start = document.getElementById("banner-trigger");
-  const end = document.getElementById("banner-end");
-  if (!banner || !start || !end) return;
+  function initScrollBanner() {
+    const banner = document.getElementById("scrollBanner");
+    const start = document.getElementById("banner-trigger");
+    const end = document.getElementById("banner-end");
+    if (!banner || !start || !end) return;
 
-  if (bannerScrollHandler) {
-    window.removeEventListener("scroll", bannerScrollHandler);
-    window.removeEventListener("resize", bannerScrollHandler);
+    if (bannerScrollHandler) {
+      window.removeEventListener("scroll", bannerScrollHandler);
+      window.removeEventListener("resize", bannerScrollHandler);
+    }
+
+    const getTop = (el) => el.getBoundingClientRect().top + window.scrollY;
+
+    const update = () => {
+      const startY = getTop(start);
+      const endY = getTop(end);
+      const viewportBottom = window.scrollY + window.innerHeight;
+
+      const shouldShow = viewportBottom >= startY + 40 && viewportBottom < endY;
+      banner.classList.toggle("is-visible", shouldShow);
+    };
+
+    let ticking = false;
+    bannerScrollHandler = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        update();
+      });
+    };
+
+    window.addEventListener("scroll", bannerScrollHandler, { passive: true });
+    window.addEventListener("resize", bannerScrollHandler, { passive: true });
+
+    update();
   }
-
-  const getTop = (el) => el.getBoundingClientRect().top + window.scrollY;
-
-  const update = () => {
-    const startY = getTop(start);
-    const endY = getTop(end);
-    const viewportBottom = window.scrollY + window.innerHeight;
-
-    const shouldShow = viewportBottom >= (startY + 40) && viewportBottom < endY;
-
-    banner.classList.toggle("is-visible", shouldShow);
-  };
-
-  let ticking = false;
-  bannerScrollHandler = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      ticking = false;
-      update();
-    });
-  };
-
-  window.addEventListener("scroll", bannerScrollHandler, { passive: true });
-  window.addEventListener("resize", bannerScrollHandler, { passive: true });
-
-  update();
-}
-
 
   function initEduTimelines() {
     document.querySelectorAll("[data-edu-timeline]").forEach((wrap) => {
@@ -303,14 +293,104 @@ function initScrollBanner() {
     });
   }
 
+  function bindRecoCarousel() {
+    document.querySelectorAll("[data-reco]").forEach((wrap) => {
+      if (wrap.dataset.bound === "true") return;
+      wrap.dataset.bound = "true";
+
+      const track = wrap.querySelector(".reco-track");
+      const prev = wrap.querySelector(".reco-nav--prev");
+      const next = wrap.querySelector(".reco-nav--next");
+      if (!track) return;
+
+      const step = () => Math.min(track.clientWidth * 0.92, 600);
+
+      prev?.addEventListener("click", () =>
+        track.scrollBy({ left: -step(), behavior: "smooth" })
+      );
+      next?.addEventListener("click", () =>
+        track.scrollBy({ left: step(), behavior: "smooth" })
+      );
+    });
+  }
+
+  function bindPdfPreview() {
+    const modal = document.getElementById("pdfModal");
+    const frame = document.getElementById("pdfModalFrame");
+    const title = document.getElementById("pdfModalTitle");
+    const openLink = document.getElementById("pdfModalOpen");
+    if (!modal || !frame || !title || !openLink) return;
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isSmall = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
+    const noIframePreview = isIOS || isSmall;
+
+    const close = () => {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      frame.removeAttribute("src");
+      document.body.style.overflow = "";
+    };
+
+    const open = (pdfUrl, caption) => {
+      title.textContent = caption || "Документ";
+      openLink.href = pdfUrl;
+
+      if (noIframePreview) {
+
+        frame.removeAttribute("src");
+        frame.style.display = "none";
+      } else {
+        frame.style.display = "";
+        frame.src = pdfUrl;
+      }
+
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    };
+
+    modal.querySelectorAll("[data-pdf-close]").forEach((el) => {
+      el.onclick = (e) => {
+        e.preventDefault();
+        close();
+      };
+    });
+
+    if (modal.dataset.bound !== "true") {
+      modal.dataset.bound = "true";
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("button.reco-pdf[data-pdf]");
+        if (!btn) return;
+
+        const pdf = btn.getAttribute("data-pdf");
+        const caption = btn.getAttribute("data-title") || "Документ";
+        if (!pdf) return;
+
+        open(pdf, caption);
+      });
+    }
+  }
+
   function ensureEscapeHandler() {
     if (escapeHandlerAdded) return;
     escapeHandlerAdded = true;
 
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
+
       closeLightbox();
       closeContactModalIfOpen();
+
+      const pdfModal = document.getElementById("pdfModal");
+      if (pdfModal?.classList.contains("is-open")) {
+        pdfModal.classList.remove("is-open");
+        pdfModal.setAttribute("aria-hidden", "true");
+        const frame = document.getElementById("pdfModalFrame");
+        frame?.removeAttribute("src");
+        document.body.style.overflow = "";
+      }
     });
   }
 
@@ -324,57 +404,10 @@ function initScrollBanner() {
     initLightbox();
     initScrollBanner();
     initEduTimelines();
+
+    bindRecoCarousel();
+    bindPdfPreview();
   }
-
-(function bindPdfPreview() {
-  const modal = document.getElementById("pdfModal");
-  const frame = document.getElementById("pdfModalFrame");
-  const title = document.getElementById("pdfModalTitle");
-  const openLink = document.getElementById("pdfModalOpen");
-  if (!modal || !frame || !title || !openLink) return;
-
-
-  const close = () => {
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    frame.removeAttribute("src");
-    document.body.style.overflow = "";
-  };
-
-  const open = (pdfUrl, caption) => {
-    title.textContent = caption || "Документ";
-    openLink.href = pdfUrl;
-    frame.src = pdfUrl;
-
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  };
-
-  modal.querySelectorAll("[data-pdf-close]").forEach((el) => {
-    el.onclick = (e) => {
-      e.preventDefault();
-      close();
-    };
-  });
-
-  if (!modal.dataset.escapeBound) {
-    modal.dataset.escapeBound = "true";
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.classList.contains("is-open")) close();
-    });
-  }
-
-  document.querySelectorAll("button.reco-pdf[data-pdf]").forEach((btn) => {
-    if (btn.dataset.bound) return;
-    btn.dataset.bound = "true";
-    btn.addEventListener("click", () => {
-      const pdf = btn.getAttribute("data-pdf");
-      const caption = btn.getAttribute("data-title") || "Документ";
-      if (pdf) open(pdf, caption);
-    });
-  });
-})();
 
   if (typeof document$ !== "undefined") {
     document$.subscribe(initAll);
@@ -382,17 +415,3 @@ function initScrollBanner() {
     document.addEventListener("DOMContentLoaded", initAll);
   }
 })();
-
-document.querySelectorAll("[data-reco]").forEach((wrap) => {
-  if (wrap.dataset.bound) return;
-  wrap.dataset.bound = "true";
-
-  const track = wrap.querySelector(".reco-track");
-  const prev = wrap.querySelector(".reco-nav--prev");
-  const next = wrap.querySelector(".reco-nav--next");
-
-  const step = () => Math.min(track.clientWidth * 0.92, 600);
-
-  prev?.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
-  next?.addEventListener("click", () => track.scrollBy({ left:  step(), behavior: "smooth" }));
-});
