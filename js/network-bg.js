@@ -158,16 +158,18 @@
     const onMove = (e) => { pointer.active = true; pointerFromEvent(e); };
     const onLeave = () => { pointer.active = false; };
 
-    const visibilityTick = () => {
-      const rect = host.getBoundingClientRect();
-      const dim = rect.bottom < Math.min(window.innerHeight * 0.65, cfg.dimWhenBottomAbovePx);
-      canvas.classList.toggle(cfg.fadeOnScrollClass, dim);
+const visibilityTick = () => {
+  const rect = host.getBoundingClientRect();
 
-      if (cfg.pauseWhenHidden) {
-        if (dim && raf) { cancelAnimationFrame(raf); raf = 0; }
-        if (!dim && !raf) { raf = requestAnimationFrame(loop); }
-      }
-    };
+  const dim = rect.bottom <= 40;
+
+  canvas.classList.toggle(cfg.fadeOnScrollClass, dim);
+
+  if (cfg.pauseWhenHidden) {
+    if (dim && raf) { cancelAnimationFrame(raf); raf = 0; }
+    if (!dim && !raf) { raf = requestAnimationFrame(loop); }
+  }
+};
 
     resize();
     visibilityTick();
