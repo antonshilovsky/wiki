@@ -42,6 +42,58 @@
 .contact-btn:active,
 .brut-btn:active{ transform:translateY(0); }
 
+.md-typeset .brut-list{
+  display: grid;
+  gap: 14px;
+  margin: 14px 0 0;
+}
+
+.md-typeset .brut-item{
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.30);
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.md-typeset .brut-item:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.055);
+}
+
+.md-typeset .brut-item__title{
+  margin: 0 0 8px 0;
+  font-weight: 700;
+  letter-spacing: .01em;
+  line-height: 1.25;
+}
+
+.md-typeset .brut-item__title a{
+  color: rgba(255,255,255,0.92) !important;
+  text-decoration: none !important;
+}
+
+.md-typeset .brut-item__title a:hover,
+.md-typeset .brut-item__title a:focus{
+  color: #ffffff !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.md-typeset .brut-item__meta{
+  color: rgba(255,255,255,0.72);
+  font-size: .95rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+@media (max-width: 600px){
+  .md-typeset .brut-item{ padding: 12px 14px; }
+}
+
 .md-typeset a.md-button,
 .md-typeset a.md-button:visited,
 .md-typeset button.md-button{
@@ -198,7 +250,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   height:100%;
   display:block;
   z-index:0;
-  pointer-events:none; /* не мешает кнопкам/формам */
+  pointer-events:none; 
   opacity:1;
   transition:opacity .35s ease, filter .35s ease;
 }
@@ -208,7 +260,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   filter:blur(2px);
 }
 
-/* Portfolio header helpers */
 .hero__actions{
   display:flex;
   flex-wrap:wrap;
@@ -401,9 +452,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   .pdf-modal__frame{ height:calc(min(90vh,820px) - 132px); }
 }
 
-/* =========================
-Recommendations slider
-========================= */
 .reco-wrap{
   position:relative;
   display:grid;
@@ -578,4 +626,82 @@ Recommendations slider
   width:100%;
   height:auto;
   object-fit:cover;
+}
+
+.md-typeset .edu-head{
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  gap: 10px;
+  align-items: center;
+  margin: 0.25rem 0 0.85rem;
+}
+
+.md-typeset .edu-head__title{
+  text-align: center;
+  color: rgba(255,255,255,0.86);
+  font-weight: 700;
+  letter-spacing: .02em;
+  line-height: 1.2;
+}
+
+.md-typeset .edu-prev,
+.md-typeset .edu-next{
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: background .15s ease, border-color .15s ease, transform .15s ease, color .15s ease;
+}
+
+.md-typeset .edu-prev:hover,
+.md-typeset .edu-next:hover{
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.26);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.md-typeset .edu-prev:active,
+.md-typeset .edu-next:active{
+  transform: translateY(0);
+  background: rgba(255,255,255,0.10);
+}
+
+.md-typeset .edu-prev:focus-visible,
+.md-typeset .edu-next:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(122,44,255,0.28); /* фиолетовый акцент */
+  border-color: rgba(122,44,255,0.75);
+}
+
+.md-typeset .edu-prev:disabled,
+.md-typeset .edu-next:disabled{
+  opacity: 0.35;
+  cursor: default;
+  transform: none;
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.10);
+}
+
+@media (max-width: 600px){
+  .md-typeset .edu-head{
+    grid-template-columns: 40px 1fr 40px;
+  }
+  .md-typeset .edu-prev,
+  .md-typeset .edu-next{
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
 }
