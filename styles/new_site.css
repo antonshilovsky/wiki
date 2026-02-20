@@ -1,6 +1,3 @@
-/* =========================
-   Base links (minimal)
-========================= */
 .md-typeset a,
 .md-nav__link,
 .md-footer a{
@@ -16,25 +13,6 @@
   font-weight:600;
 }
 
-/* =========================
-   Hero (common)
-========================= */
-.hero{
-  text-align:center;
-  margin:0 0 1.25rem;
-}
-.hero img{
-  display:block;
-  margin:0 auto;
-  border-radius:12px;
-  max-width:260px;
-  height:auto;
-}
-img[alt="Антон Шиловский"]{ float:none !important; }
-
-/* =========================
-   Buttons (brutal)
-========================= */
 .contact-btn,
 .brut-btn{
   display:inline-flex;
@@ -52,6 +30,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   cursor:pointer;
   transition:background .15s ease, color .15s ease, transform .15s ease, border-color .15s ease;
 }
+
 .contact-btn:hover,
 .brut-btn:hover{
   background:rgba(255,255,255,0.12);
@@ -59,10 +38,10 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   color:#fff;
   transform:translateY(-1px);
 }
+
 .contact-btn:active,
 .brut-btn:active{ transform:translateY(0); }
 
-/* MkDocs Material buttons (links + buttons) */
 .md-typeset a.md-button,
 .md-typeset a.md-button:visited,
 .md-typeset button.md-button{
@@ -81,18 +60,62 @@ img[alt="Антон Шиловский"]{ float:none !important; }
 .md-typeset button.md-button:active{
   background:#7a2cff !important;
   border-color:#7a2cff !important;
-  color:#fff !important;
+  color:#ffffff !important;
   font-weight:600 !important;
 }
+
 .md-typeset a.md-button:focus,
 .md-typeset button.md-button:focus{
   outline:none;
   box-shadow:0 0 0 3px rgba(122,44,255,0.25);
 }
 
-/* =========================
-   Quick nav (sticky)
-========================= */
+.hero{
+  text-align:center;
+  margin:0 0 1.25rem;
+}
+
+.hero img{
+  display:block;
+  margin:0 auto;
+  border-radius:12px;
+  max-width:260px;
+  height:auto;
+}
+
+img[alt="Антон Шиловский"]{ float:none !important; }
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:.35rem;
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.06);
+  color:#e6e6e6;
+  font-size:.92rem;
+  line-height:1.1;
+}
+
+.chip-link{
+  text-decoration:none !important;
+  cursor:pointer;
+}
+
+.chip-link:hover{
+  background:rgba(255,255,255,0.10);
+  border-color:rgba(255,255,255,0.24);
+  color:#fff !important;
+  font-weight:600;
+}
+
 .home-quicknav{
   position:sticky;
   top:4rem;
@@ -109,6 +132,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   border:1px solid rgba(255,255,255,0.12);
   border-radius:14px;
 }
+
 .hq-btn{
   display:inline-flex;
   align-items:center;
@@ -122,25 +146,32 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   font-weight:600;
   transition:background .15s ease, color .15s ease, transform .15s ease;
 }
+
 .hq-btn:hover{
   background:rgba(255,255,255,0.10);
   color:#fff !important;
   transform:translateY(-1px);
 }
+
 @media (max-width:600px){
-  .home-quicknav{ top:3.25rem; gap:8px; padding:10px; flex-wrap:wrap; }
-  .hq-btn{ padding:8px 10px; font-size:.88rem; white-space:nowrap; }
+  .home-quicknav{
+    top:3.25rem;
+    gap:8px;
+    padding:10px;
+    flex-wrap:wrap;
+  }
+  .hq-btn{
+    padding:8px 10px;
+    font-size:.88rem;
+    white-space:nowrap;
+  }
 }
 
-/* Smooth anchor offset */
 .md-content :target{ scroll-margin-top:8rem; }
 @media (max-width:600px){
   .md-content :target{ scroll-margin-top:7rem; }
 }
 
-/* =========================
-   Network hero (canvas background)
-========================= */
 .hero--network{
   position:relative;
   overflow:hidden;
@@ -148,15 +179,18 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   min-height:220px;
   margin:0 0 1rem 0;
 }
+
 @media (max-width:600px){
   .hero--network{ min-height:180px; }
 }
+
 .hero--network .hero__content{
   position:relative;
   z-index:1;
   text-align:center;
   padding:1.25rem 0 1rem;
 }
+
 .hero--network canvas.network-bg{
   position:absolute;
   inset:0;
@@ -164,16 +198,17 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   height:100%;
   display:block;
   z-index:0;
-  pointer-events:none; /* важно: не мешает кнопкам/формам */
+  pointer-events:none; /* не мешает кнопкам/формам */
   opacity:1;
   transition:opacity .35s ease, filter .35s ease;
 }
+
 .hero--network canvas.network-bg.is-dim{
   opacity:0;
   filter:blur(2px);
 }
 
-/* optional helpers for portfolio header */
+/* Portfolio header helpers */
 .hero__actions{
   display:flex;
   flex-wrap:wrap;
@@ -181,11 +216,13 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   justify-content:center;
   margin-top:12px;
 }
+
 .hero__video{
   margin-top:14px;
   display:flex;
   justify-content:center;
 }
+
 .hero__video iframe{
   width:min(720px,100%);
   aspect-ratio:16/9;
@@ -193,20 +230,19 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   border:0;
 }
 
-/* =========================
-   Contact modal (scrollable on mobile)
-========================= */
 #contactModal.modal{
   display:none;
   position:fixed;
   inset:0;
   z-index:10020;
 }
+
 #contactModal .modal-overlay{
   position:absolute;
   inset:0;
   background:rgba(0,0,0,0.55);
 }
+
 #contactModal .modal-content{
   position:absolute;
   left:50%;
@@ -220,6 +256,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   box-shadow:0 18px 60px rgba(0,0,0,0.55);
   overflow:hidden;
 }
+
 #contactModal .close-button{
   position:absolute;
   right:10px;
@@ -235,6 +272,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   cursor:pointer;
   z-index:2;
 }
+
 #contactModal .modal-body{
   padding:18px 16px 16px;
   padding-top:56px; /* место под крестик */
@@ -248,11 +286,13 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   grid-template-columns:1fr;
   gap:10px;
 }
+
 #modalContactForm label{
   color:#cfcfcf;
   font-size:.95rem;
   margin-top:6px;
 }
+
 #modalContactForm input,
 #modalContactForm textarea{
   width:100%;
@@ -263,10 +303,12 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   background:rgba(255,255,255,0.06);
   color:#eee;
 }
+
 #modalContactForm textarea{
   resize:vertical;
   min-height:140px;
 }
+
 #modalContactForm .submit-btn{
   margin-top:6px;
   width:100%;
@@ -277,29 +319,31 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   color:#eee;
   cursor:pointer;
 }
+
 #modalContactForm .submit-btn:hover{
   background:rgba(255,255,255,0.16);
 }
+
 @media (max-width:420px){
   #contactModal .modal-content{ width:94vw; max-height:88vh; border-radius:14px; }
   #contactModal .modal-body{ padding:16px 14px 14px; padding-top:54px; }
 }
 
-/* =========================
-   PDF modal (preview)
-========================= */
 .pdf-modal{
   display:none;
   position:fixed;
   inset:0;
   z-index:10050;
 }
+
 .pdf-modal.is-open{ display:block; }
+
 .pdf-modal__overlay{
   position:absolute;
   inset:0;
   background:rgba(0,0,0,0.55);
 }
+
 .pdf-modal__content{
   position:absolute;
   left:50%;
@@ -313,6 +357,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   box-shadow:0 18px 60px rgba(0,0,0,0.55);
   overflow:hidden;
 }
+
 .pdf-modal__close{
   position:absolute;
   right:10px;
@@ -328,12 +373,14 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   cursor:pointer;
   z-index:2;
 }
+
 .pdf-modal__title{
   padding:16px 56px 10px 16px;
   font-weight:600;
   color:#e6e6e6;
   border-bottom:1px solid rgba(255,255,255,0.08);
 }
+
 .pdf-modal__frame{
   display:block;
   width:100%;
@@ -341,6 +388,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   border:0;
   background:#111;
 }
+
 .pdf-modal__footer{
   padding:10px 16px 14px;
   border-top:1px solid rgba(255,255,255,0.08);
@@ -348,12 +396,13 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   justify-content:flex-end;
   gap:10px;
 }
+
 @media (max-width:520px){
   .pdf-modal__frame{ height:calc(min(90vh,820px) - 132px); }
 }
 
 /* =========================
-   Recommendations slider
+Recommendations slider
 ========================= */
 .reco-wrap{
   position:relative;
@@ -363,6 +412,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   align-items:center;
   margin-top:12px;
 }
+
 .reco-track{
   display:flex;
   gap:12px;
@@ -372,7 +422,9 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   padding:4px 2px;
   scrollbar-width:none;
 }
+
 .reco-track::-webkit-scrollbar{ display:none; }
+
 .reco-card{
   min-width:min(560px,84vw);
   scroll-snap-align:start;
@@ -385,6 +437,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   border-radius:16px;
   background:rgba(255,255,255,0.03);
 }
+
 .reco-ava{
   width:56px;
   height:56px;
@@ -393,6 +446,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   border:1px solid rgba(255,255,255,0.12);
   filter:contrast(1.05);
 }
+
 .reco-name{ font-weight:700; letter-spacing:.01em; }
 .reco-role{ color:rgba(255,255,255,0.70); font-size:.92rem; margin-top:2px; }
 .reco-quote{ margin-top:8px; color:rgba(255,255,255,0.85); line-height:1.45; }
@@ -453,10 +507,8 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   .reco-nav{ display:none; }
 }
 
-/* =========================
-   Education horizontal cards
-========================= */
 .edu-timeline{ position:relative; margin:1rem 0 2rem; }
+
 .edu-track{
   display:flex;
   gap:14px;
@@ -466,6 +518,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   scroll-behavior:smooth;
   -webkit-overflow-scrolling:touch;
 }
+
 .edu-track::-webkit-scrollbar{ height:8px; }
 .edu-track::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.12); border-radius:999px; }
 .edu-track::-webkit-scrollbar-track{ background:transparent; }
@@ -480,6 +533,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   padding:16px 16px 14px;
   box-shadow:0 10px 26px rgba(0,0,0,0.35);
 }
+
 .edu-meta{ font-size:.85rem; color:rgba(255,255,255,0.65); margin-bottom:6px; letter-spacing:.02em; }
 .edu-title{ margin:0 0 6px 0; font-size:1.05rem; }
 .edu-subtitle{ color:rgba(255,255,255,0.8); margin-bottom:10px; }
