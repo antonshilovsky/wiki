@@ -8,16 +8,27 @@
     linkDist: 115,
     pointerDist: 140,
     fadeOnScrollClass: "is-dim",
-    pauseWhenHidden: true,
-    dimWhenBottomAbovePx: 360
+    pauseWhenHidden: true
   };
 
   const instances = new WeakMap();
 
   function rand(min, max) { return min + Math.random() * (max - min); }
 
-  function createInstance(host) {
+  function readThemeColors() {
+    const cs = getComputedStyle(document.documentElement);
+    const stroke = (cs.getPropertyValue("--net-stroke") || "255,255,255").trim();
+    const dot = (cs.getPropertyValue("--net-dot") || "255,255,255").trim();
 
+    const lineA = parseFloat(cs.getPropertyValue("--net-line-alpha")) || 0.22;
+    const ptrA = parseFloat(cs.getPropertyValue("--net-pointer-alpha")) || 0.35;
+    const ptrDotA = parseFloat(cs.getPropertyValue("--net-pointer-dot-alpha")) || 0.85;
+    const dotA = parseFloat(cs.getPropertyValue("--net-dot-alpha")) || 0.90;
+
+    return { stroke, dot, lineA, ptrA, ptrDotA, dotA };
+  }
+
+  function createInstance(host) {
     const old = instances.get(host);
     if (old) old.destroy();
 
@@ -31,6 +42,8 @@
     let raf = 0;
     const particles = [];
     const pointer = { active: false, x: 0, y: 0 };
+
+    let theme = readThemeColors();
 
     const targetCount = () => {
       const area = Math.max(1, w * h);
@@ -97,8 +110,8 @@
       ctx.clearRect(0, 0, w, h);
 
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "rgba(255,255,255,1)";
-      ctx.fillStyle = "rgba(255,255,255,1)";
+      ctx.strokeStyle = `rgba(${theme.stroke},1)`;
+      ctx.fillStyle = `rgba(${theme.dot},1)`;
 
       for (let i = 0; i < particles.length; i++) {
         const a = particles[i];
@@ -109,7 +122,7 @@
           const dist = Math.hypot(dx, dy);
           if (dist > cfg.linkDist) continue;
 
-          const alpha = 0.22 * (1 - dist / cfg.linkDist);
+          const alpha = theme.lineA * (1 - dist / cfg.linkDist);
           line(a.x, a.y, b.x, b.y, alpha);
         }
       }
@@ -121,18 +134,17 @@
           const dist = Math.hypot(dx, dy);
           if (dist > cfg.pointerDist) continue;
 
-          const alpha = 0.35 * (1 - dist / cfg.pointerDist);
+          const alpha = theme.ptrA * (1 - dist / cfg.pointerDist);
           line(pointer.x, pointer.y, p.x, p.y, alpha);
         }
 
-        ctx.globalAlpha = 0.85;
+        ctx.globalAlpha = theme.ptrDotA;
         ctx.beginPath();
         ctx.arc(pointer.x, pointer.y, cfg.radius + 0.8, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // точки
-      ctx.globalAlpha = 0.9;
+      ctx.globalAlpha = theme.dotA;
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, cfg.radius, 0, Math.PI * 2);
@@ -158,18 +170,28 @@
     const onMove = (e) => { pointer.active = true; pointerFromEvent(e); };
     const onLeave = () => { pointer.active = false; };
 
-const visibilityTick = () => {
-  const rect = host.getBoundingClientRect();
+    const visibilityTick = () => {
+      const rect = host.getBoundingClientRect();
+	
+	const cutoff = Math.min(window.innerHeight * 0.35, 220);
+	const dim = rect.bottom <= cutoff;
 
-  const dim = rect.bottom <= 40;
+      canvas.classList.toggle(cfg.fadeOnScrollClass, dim);
 
-  canvas.classList.toggle(cfg.fadeOnScrollClass, dim);
+      if (cfg.pauseWhenHidden) {
+        if (dim && raf) { cancelAnimationFrame(raf); raf = 0; }
+        if (!dim && !raf) { raf = requestAnimationFrame(loop); }
+      }
+    };
 
-  if (cfg.pauseWhenHidden) {
-    if (dim && raf) { cancelAnimationFrame(raf); raf = 0; }
-    if (!dim && !raf) { raf = requestAnimationFrame(loop); }
-  }
-};
+    const themeObserver = new MutationObserver(() => {
+      theme = readThemeColors();
+    });
+
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-md-color-scheme"]
+    });
 
     resize();
     visibilityTick();
@@ -183,11 +205,12 @@ const visibilityTick = () => {
     window.addEventListener("resize", () => { resize(); visibilityTick(); }, { passive: true });
     window.addEventListener("scroll", visibilityTick, { passive: true });
 
-    if (raf) cancelAnimationFrame(raf);
     raf = requestAnimationFrame(loop);
 
     const destroy = () => {
       if (raf) cancelAnimationFrame(raf);
+
+      themeObserver.disconnect();
 
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("touchstart", onMove);

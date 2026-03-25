@@ -705,3 +705,228 @@ img[alt="Антон Шиловский"]{ float:none !important; }
     border-radius: 12px;
   }
 }
+
+/* THEME OVERRIDES*/
+
+[data-md-color-scheme="default"] .md-typeset,
+[data-md-color-scheme="default"] .md-content {
+  color: #0f172a !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset a,
+[data-md-color-scheme="default"] .md-nav__link,
+[data-md-color-scheme="default"] .md-footer a {
+  color: #4b5563 !important;     
+  text-decoration: none !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset a:hover,
+[data-md-color-scheme="default"] .md-nav__link:hover,
+[data-md-color-scheme="default"] .md-footer a:hover {
+  color: #111827 !important;       
+  font-weight: 600 !important;
+}
+
+[data-md-color-scheme="default"] .brut-item,
+[data-md-color-scheme="default"] .edu-card,
+[data-md-color-scheme="default"] .reco-card,
+[data-md-color-scheme="default"] .scroll-banner__inner {
+  background: rgba(15, 23, 42, 0.04) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.10) !important;
+}
+
+[data-md-color-scheme="default"] .brut-item__meta,
+[data-md-color-scheme="default"] .reco-role,
+[data-md-color-scheme="default"] .edu-meta {
+  color: rgba(15, 23, 42, 0.72) !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset a.md-button,
+[data-md-color-scheme="default"] .md-typeset button.md-button {
+  color: #111827 !important;
+  background: rgba(15, 23, 42, 0.04) !important;
+  border-color: rgba(15, 23, 42, 0.18) !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset a.md-button:hover,
+[data-md-color-scheme="default"] .md-typeset button.md-button:hover {
+  background: #7a2cff !important;
+  border-color: #7a2cff !important;
+  color: #ffffff !important;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a,
+[data-md-color-scheme="slate"] .md-nav__link,
+[data-md-color-scheme="slate"] .md-footer a {
+  color: #c4c4c4 !important;
+}
+
+[data-md-color-scheme="slate"] .md-typeset a:hover,
+[data-md-color-scheme="slate"] .md-nav__link:hover,
+[data-md-color-scheme="slate"] .md-footer a:hover {
+  color: #999999 !important;
+  font-weight: 600 !important;
+}
+
+
+[data-md-color-scheme="default"] .md-typeset{
+  color: #0f172a !important;
+}
+
+[data-md-color-scheme="default"] .hero--network .hero__content,
+[data-md-color-scheme="default"] .brut-item__title,
+[data-md-color-scheme="default"] .reco-name,
+[data-md-color-scheme="default"] .edu-title{
+  color: #0f172a !important;
+}
+
+[data-md-color-scheme="default"] .brut-item__meta,
+[data-md-color-scheme="default"] .edu-meta,
+[data-md-color-scheme="default"] .edu-subtitle,
+[data-md-color-scheme="default"] .edu-text,
+[data-md-color-scheme="default"] .reco-role,
+[data-md-color-scheme="default"] .reco-quote{
+  color: rgba(15,23,42,0.78) !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset .brut-item__title a{
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] .md-typeset .brut-item__title a:hover,
+[data-md-color-scheme="default"] .md-typeset .brut-item__title a:focus{
+  color: #111827 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+[data-md-color-scheme="default"] .chip{
+  background: rgba(15,23,42,0.04) !important;
+  border-color: rgba(15,23,42,0.14) !important;
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] .chip-link:hover{
+  background: rgba(15,23,42,0.08) !important;
+  border-color: rgba(15,23,42,0.22) !important;
+  color: #111827 !important;
+  font-weight: 600;
+}
+
+[data-md-color-scheme="default"] .home-quicknav{
+  background: rgba(15,23,42,0.04) !important;
+  border-color: rgba(15,23,42,0.14) !important;
+}
+[data-md-color-scheme="default"] .hq-btn{
+  background: rgba(15,23,42,0.04) !important;
+  border-color: rgba(15,23,42,0.18) !important;
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] .hq-btn:hover{
+  background: rgba(122,44,255,0.10) !important;
+  border-color: rgba(122,44,255,0.35) !important;
+  color: #111827 !important;
+}
+
+[data-md-color-scheme="default"] .contact-btn,
+[data-md-color-scheme="default"] .brut-btn{
+  background: rgba(15,23,42,0.04) !important;
+  border-color: rgba(15,23,42,0.18) !important;
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] .contact-btn:hover,
+[data-md-color-scheme="default"] .brut-btn:hover{
+  background: rgba(122,44,255,0.12) !important;
+  border-color: rgba(122,44,255,0.38) !important;
+  color: #0f172a !important;
+}
+
+[data-md-color-scheme="default"] .md-typeset .edu-head__title{
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] .md-typeset .edu-prev,
+[data-md-color-scheme="default"] .md-typeset .edu-next{
+  background: rgba(15,23,42,0.04) !important;
+  border-color: rgba(15,23,42,0.18) !important;
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] .md-typeset .edu-prev:hover,
+[data-md-color-scheme="default"] .md-typeset .edu-next:hover{
+  background: rgba(122,44,255,0.12) !important;
+  border-color: rgba(122,44,255,0.38) !important;
+  color: #111827 !important;
+}
+
+[data-md-color-scheme="default"] #contactModal .modal-overlay,
+[data-md-color-scheme="default"] .pdf-modal__overlay{
+  background: rgba(15,23,42,0.35) !important;
+}
+
+[data-md-color-scheme="default"] #contactModal .modal-content,
+[data-md-color-scheme="default"] .pdf-modal__content{
+  background: rgba(255,255,255,0.98) !important;
+  border-color: rgba(15,23,42,0.14) !important;
+}
+
+[data-md-color-scheme="default"] #contactModal .modal-body,
+[data-md-color-scheme="default"] #contactModal h2,
+[data-md-color-scheme="default"] .pdf-modal__title{
+  color: #111827 !important;
+}
+
+[data-md-color-scheme="default"] #modalContactForm label{
+  color: rgba(15,23,42,0.78) !important;
+}
+[data-md-color-scheme="default"] #modalContactForm input,
+[data-md-color-scheme="default"] #modalContactForm textarea{
+  background: rgba(15,23,42,0.04) !important;
+  border-color: rgba(15,23,42,0.18) !important;
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] #modalContactForm .submit-btn{
+  background: rgba(15,23,42,0.04) !important;
+  border-color: rgba(15,23,42,0.18) !important;
+  color: #111827 !important;
+}
+[data-md-color-scheme="default"] #modalContactForm .submit-btn:hover{
+  background: #7a2cff !important;
+  border-color: #7a2cff !important;
+  color: #ffffff !important;
+}
+
+[data-md-color-scheme="default"] #contactModal .close-button,
+[data-md-color-scheme="default"] .pdf-modal__close{
+  background: rgba(15,23,42,0.06) !important;
+  border-color: rgba(15,23,42,0.16) !important;
+  color: #111827 !important;
+}
+
+  
+:root{
+  --net-stroke: 255,255,255;
+  --net-dot: 255,255,255;
+  --net-line-alpha: 0.22;
+  --net-pointer-alpha: 0.35;
+  --net-pointer-dot-alpha: 0.85;
+  --net-dot-alpha: 0.90;
+}
+
+/* Светлая тема */
+[data-md-color-scheme="default"]{
+  --net-stroke: 122,44,255;  /* фиолетовый */
+  --net-dot: 122,44,255;
+  --net-line-alpha: 0.28;    /* чуть ярче */
+  --net-pointer-alpha: 0.42;
+  --net-pointer-dot-alpha: 0.85;
+  --net-dot-alpha: 0.92;
+}
+
+/* Тёмная тема */
+[data-md-color-scheme="slate"]{
+  --net-stroke: 255,255,255;
+  --net-dot: 255,255,255;
+  --net-line-alpha: 0.22;
+  --net-pointer-alpha: 0.35;
+  --net-pointer-dot-alpha: 0.85;
+  --net-dot-alpha: 0.90;
+}
