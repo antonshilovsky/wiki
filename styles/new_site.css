@@ -326,7 +326,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
 
 #contactModal .modal-body{
   padding:18px 16px 16px;
-  padding-top:56px; /* место под крестик */
+  padding-top:56px;
   max-height:min(86vh,720px);
   overflow:auto;
   -webkit-overflow-scrolling:touch;
@@ -706,8 +706,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   }
 }
 
-/* THEME OVERRIDES*/
-
 [data-md-color-scheme="default"] .md-typeset,
 [data-md-color-scheme="default"] .md-content {
   color: #0f172a !important;
@@ -911,17 +909,15 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   --net-dot-alpha: 0.90;
 }
 
-/* Светлая тема */
 [data-md-color-scheme="default"]{
-  --net-stroke: 122,44,255;  /* фиолетовый */
+  --net-stroke: 122,44,255;
   --net-dot: 122,44,255;
-  --net-line-alpha: 0.28;    /* чуть ярче */
+  --net-line-alpha: 0.28;
   --net-pointer-alpha: 0.42;
   --net-pointer-dot-alpha: 0.85;
   --net-dot-alpha: 0.92;
 }
 
-/* Тёмная тема */
 [data-md-color-scheme="slate"]{
   --net-stroke: 255,255,255;
   --net-dot: 255,255,255;
@@ -929,4 +925,52 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   --net-pointer-alpha: 0.35;
   --net-pointer-dot-alpha: 0.85;
   --net-dot-alpha: 0.90;
+}
+
+.social-icons{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:22px;
+}
+
+.social-icons a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.06);
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.social-icons a:hover{
+  background: rgba(122,44,255,0.14);
+  border-color: rgba(122,44,255,0.45);
+  transform: translateY(-1px);
+}
+
+.social-icons img{
+  width:34px;
+  height:34px;
+  display:block;
+  filter: invert(1);
+  transition: filter .15s ease;
+}
+
+/* Светлая тема: иконки должны стать чёрными */
+[data-md-color-scheme="default"] .social-icons a{
+  border-color: rgba(15,23,42,0.18);
+  background: rgba(15,23,42,0.04);
+}
+
+[data-md-color-scheme="default"] .social-icons a:hover{
+  background: rgba(122,44,255,0.12);
+  border-color: rgba(122,44,255,0.38);
+}
+
+[data-md-color-scheme="default"] .social-icons img{
+  filter: invert(0);
 }

@@ -38,6 +38,41 @@
 
     const ctx = canvas.getContext("2d", { alpha: true });
 
+let colors = null;
+
+function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+
+  const stroke = (cs.getPropertyValue("--net-stroke") || "255,255,255").trim();
+  const dot = (cs.getPropertyValue("--net-dot") || stroke).trim();
+
+  const lineA = parseFloat(cs.getPropertyValue("--net-line-alpha")) || 0.22;
+  const pointerA = parseFloat(cs.getPropertyValue("--net-pointer-alpha")) || 0.35;
+  const pointerDotA = parseFloat(cs.getPropertyValue("--net-pointer-dot-alpha")) || 0.85;
+  const dotA = parseFloat(cs.getPropertyValue("--net-dot-alpha")) || 0.90;
+
+  colors = {
+    strokeRgb: stroke,
+    dotRgb: dot,
+    lineA,
+    pointerA,
+    pointerDotA,
+    dotA
+  };
+}
+
+readColors();
+
+const mo = new MutationObserver((muts) => {
+  for (const m of muts) {
+    if (m.type === "attributes" && m.attributeName === "data-md-color-scheme") {
+      readColors();
+      break;
+    }
+  }
+});
+mo.observe(document.documentElement, { attributes: true });
+
     let w = 0, h = 0, dpr = 1;
     let raf = 0;
     const particles = [];
@@ -110,8 +145,9 @@
       ctx.clearRect(0, 0, w, h);
 
       ctx.lineWidth = 1;
-      ctx.strokeStyle = `rgba(${theme.stroke},1)`;
-      ctx.fillStyle = `rgba(${theme.dot},1)`;
+		if (!colors) readColors();
+		ctx.strokeStyle = `rgba(${colors.strokeRgb},1)`;
+		ctx.fillStyle = `rgba(${colors.dotRgb},1)`;
 
       for (let i = 0; i < particles.length; i++) {
         const a = particles[i];
@@ -122,7 +158,7 @@
           const dist = Math.hypot(dx, dy);
           if (dist > cfg.linkDist) continue;
 
-          const alpha = theme.lineA * (1 - dist / cfg.linkDist);
+			const alpha = colors.lineA * (1 - dist / cfg.linkDist);
           line(a.x, a.y, b.x, b.y, alpha);
         }
       }
@@ -134,11 +170,11 @@
           const dist = Math.hypot(dx, dy);
           if (dist > cfg.pointerDist) continue;
 
-          const alpha = theme.ptrA * (1 - dist / cfg.pointerDist);
+			const alpha = colors.pointerA * (1 - dist / cfg.pointerDist);
           line(pointer.x, pointer.y, p.x, p.y, alpha);
         }
 
-        ctx.globalAlpha = theme.ptrDotA;
+		ctx.globalAlpha = colors.pointerDotA;
         ctx.beginPath();
         ctx.arc(pointer.x, pointer.y, cfg.radius + 0.8, 0, Math.PI * 2);
         ctx.fill();
@@ -151,7 +187,7 @@
         ctx.fill();
       }
 
-      ctx.globalAlpha = 1;
+		ctx.globalAlpha = colors.dotA;;
     };
 
     const loop = () => {
@@ -170,19 +206,17 @@
     const onMove = (e) => { pointer.active = true; pointerFromEvent(e); };
     const onLeave = () => { pointer.active = false; };
 
-    const visibilityTick = () => {
-      const rect = host.getBoundingClientRect();
-	
-	const cutoff = Math.min(window.innerHeight * 0.35, 220);
-	const dim = rect.bottom <= cutoff;
+	const visibilityTick = () => {
+	const rect = host.getBoundingClientRect();
 
-      canvas.classList.toggle(cfg.fadeOnScrollClass, dim);
+	const hidden = rect.bottom <= 0 || rect.top >= window.innerHeight;
+	canvas.classList.toggle(cfg.fadeOnScrollClass, hidden);
 
-      if (cfg.pauseWhenHidden) {
-        if (dim && raf) { cancelAnimationFrame(raf); raf = 0; }
-        if (!dim && !raf) { raf = requestAnimationFrame(loop); }
-      }
-    };
+	if (cfg.pauseWhenHidden) {
+    if (hidden && raf) { cancelAnimationFrame(raf); raf = 0; }
+    if (!hidden && !raf) { raf = requestAnimationFrame(loop); }
+		}
+	};
 
     const themeObserver = new MutationObserver(() => {
       theme = readThemeColors();
@@ -217,7 +251,7 @@
       window.removeEventListener("touchmove", onMove);
       window.removeEventListener("touchend", onLeave);
       window.removeEventListener("touchcancel", onLeave);
-
+		mo.disconnect();
       canvas.remove();
     };
 
