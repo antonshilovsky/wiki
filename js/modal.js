@@ -314,64 +314,73 @@
     });
   }
 
-  function bindPdfPreview() {
-    const modal = document.getElementById("pdfModal");
-    const frame = document.getElementById("pdfModalFrame");
-    const title = document.getElementById("pdfModalTitle");
-    const openLink = document.getElementById("pdfModalOpen");
-    if (!modal || !frame || !title || !openLink) return;
+function bindPdfPreview() {
+  const modal = document.getElementById("pdfModal");
+  const frame = document.getElementById("pdfModalFrame");
+  const title = document.getElementById("pdfModalTitle");
+  const openLink = document.getElementById("pdfModalOpen");
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const isSmall = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
-    const noIframePreview = isIOS || isSmall;
+  if (!modal || !frame || !title || !openLink) return;
 
-    const close = () => {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-      frame.removeAttribute("src");
-      document.body.style.overflow = "";
-    };
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  const isSmall = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
+  const noIframePreview = isIOS || isAndroid || isSmall;
 
-    const open = (pdfUrl, caption) => {
-      title.textContent = caption || "Документ";
-      openLink.href = pdfUrl;
+  const close = () => {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    frame.removeAttribute("src");
+    frame.style.display = "";
+    document.body.style.overflow = "";
+  };
 
-      if (noIframePreview) {
+  const open = (pdfUrl, caption) => {
+    title.textContent = caption || "Документ";
+    openLink.href = pdfUrl;
 
-        frame.removeAttribute("src");
-        frame.style.display = "none";
-      } else {
-        frame.style.display = "";
-        frame.src = pdfUrl;
+    if (noIframePreview) {
+      const opened = window.open(pdfUrl, "_blank", "noopener,noreferrer");
+
+      if (!opened) {
+        window.location.href = pdfUrl;
       }
 
-      modal.classList.add("is-open");
-      modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    };
-
-    modal.querySelectorAll("[data-pdf-close]").forEach((el) => {
-      el.onclick = (e) => {
-        e.preventDefault();
-        close();
-      };
-    });
-
-    if (modal.dataset.bound !== "true") {
-      modal.dataset.bound = "true";
-
-      document.addEventListener("click", (e) => {
-        const btn = e.target.closest("button.reco-pdf[data-pdf]");
-        if (!btn) return;
-
-        const pdf = btn.getAttribute("data-pdf");
-        const caption = btn.getAttribute("data-title") || "Документ";
-        if (!pdf) return;
-
-        open(pdf, caption);
-      });
+      return;
     }
+
+    frame.style.display = "";
+    frame.src = pdfUrl;
+
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  modal.querySelectorAll("[data-pdf-close]").forEach((el) => {
+    el.onclick = (e) => {
+      e.preventDefault();
+      close();
+    };
+  });
+
+  if (modal.dataset.bound !== "true") {
+    modal.dataset.bound = "true";
+
+    document.addEventListener("click", (e) => {
+      const trigger = e.target.closest("[data-pdf]");
+      if (!trigger) return;
+
+      const pdf = trigger.getAttribute("data-pdf") || trigger.getAttribute("href");
+      const caption = trigger.getAttribute("data-title") || trigger.textContent?.trim() || "Документ";
+
+      if (!pdf) return;
+
+      e.preventDefault();
+      open(pdf, caption);
+    });
   }
+}
 
   function ensureEscapeHandler() {
     if (escapeHandlerAdded) return;
