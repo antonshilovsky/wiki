@@ -11,6 +11,7 @@
   let currentIndex = 0;
 
   let bannerScrollHandler = null;
+  let pdfCloseHandler = null;
 
   function showLightboxImage(index) {
     if (!lightboxOverlay || !lightboxImages.length) return;
@@ -27,13 +28,16 @@
   }
 
   function closeLightbox() {
-    if (lightboxOverlay) lightboxOverlay.style.display = "none";
+    if (lightboxOverlay) {
+      lightboxOverlay.style.display = "none";
+    }
   }
 
   function openLightbox(index) {
     if (!lightboxOverlay) {
       lightboxOverlay = document.createElement("div");
       lightboxOverlay.id = "lightboxOverlay";
+
       Object.assign(lightboxOverlay.style, {
         position: "fixed",
         inset: 0,
@@ -46,6 +50,7 @@
       });
 
       const container = document.createElement("div");
+
       Object.assign(container.style, {
         position: "absolute",
         top: "50%",
@@ -56,19 +61,28 @@
       });
 
       lightboxImage = document.createElement("img");
+
       Object.assign(lightboxImage.style, {
         maxWidth: "90vw",
         maxHeight: "80vh",
         display: "block",
         margin: "0 auto",
       });
+
       lightboxImage.addEventListener("click", (e) => e.stopPropagation());
 
       lightboxCaption = document.createElement("div");
-      Object.assign(lightboxCaption.style, { color: "#fff", marginTop: "8px" });
+
+      Object.assign(lightboxCaption.style, {
+        color: "#fff",
+        marginTop: "8px",
+      });
 
       lightboxPrev = document.createElement("button");
+      lightboxPrev.type = "button";
       lightboxPrev.innerHTML = "&#10094;";
+      lightboxPrev.setAttribute("aria-label", "Предыдущее изображение");
+
       Object.assign(lightboxPrev.style, {
         position: "absolute",
         left: "20px",
@@ -80,13 +94,20 @@
         color: "#fff",
         cursor: "pointer",
       });
+
       lightboxPrev.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (currentIndex > 0) showLightboxImage(currentIndex - 1);
+
+        if (currentIndex > 0) {
+          showLightboxImage(currentIndex - 1);
+        }
       });
 
       lightboxNext = document.createElement("button");
+      lightboxNext.type = "button";
       lightboxNext.innerHTML = "&#10095;";
+      lightboxNext.setAttribute("aria-label", "Следующее изображение");
+
       Object.assign(lightboxNext.style, {
         position: "absolute",
         right: "20px",
@@ -98,13 +119,20 @@
         color: "#fff",
         cursor: "pointer",
       });
+
       lightboxNext.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (currentIndex < lightboxImages.length - 1) showLightboxImage(currentIndex + 1);
+
+        if (currentIndex < lightboxImages.length - 1) {
+          showLightboxImage(currentIndex + 1);
+        }
       });
 
       lightboxClose = document.createElement("button");
+      lightboxClose.type = "button";
       lightboxClose.innerHTML = "&times;";
+      lightboxClose.setAttribute("aria-label", "Закрыть изображение");
+
       Object.assign(lightboxClose.style, {
         position: "absolute",
         top: "20px",
@@ -115,6 +143,7 @@
         color: "#fff",
         cursor: "pointer",
       });
+
       lightboxClose.addEventListener("click", (e) => {
         e.stopPropagation();
         closeLightbox();
@@ -142,6 +171,7 @@
     if (!content) return;
 
     lightboxImages = [];
+
     const imgs = content.querySelectorAll("img:not(.no-lightbox)");
 
     imgs.forEach((img) => {
@@ -152,7 +182,14 @@
       img.style.cursor = "pointer";
 
       lightboxImages.push(img);
-      img.addEventListener("click", () => openLightbox(lightboxImages.indexOf(img)));
+
+      img.addEventListener("click", () => {
+        const index = lightboxImages.indexOf(img);
+
+        if (index >= 0) {
+          openLightbox(index);
+        }
+      });
     });
   }
 
@@ -171,63 +208,82 @@
     const open = () => {
       modal.style.display = "flex";
       modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
     };
 
     const close = () => {
       modal.style.display = "none";
       modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
     };
 
     openBtn.onclick = open;
     closeBtn.onclick = close;
     overlay.onclick = close;
 
-    if (!form.dataset.bound) {
-      form.dataset.bound = "true";
+    if (form.dataset.bound === "true") return;
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    form.dataset.bound = "true";
 
-        const formData = new FormData(form);
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: form.method || "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (res.ok) {
+          alert("Спасибо! Ваше сообщение отправлено.");
+          form.reset();
+          close();
+          return;
+        }
+
+        let msg = "Ошибка: сообщение не отправлено.";
 
         try {
-          const res = await fetch(form.action, {
-            method: form.method || "POST",
-            body: formData,
-            headers: { Accept: "application/json" },
-          });
+          const data = await res.json();
 
-          if (res.ok) {
-            alert("Спасибо! Ваше сообщение отправлено.");
-            form.reset();
-            close();
-          } else {
-            let msg = "Ошибка: сообщение не отправлено.";
-            try {
-              const data = await res.json();
-              if (data?.errors?.length) msg = data.errors.map((x) => x.message).join(", ");
-            } catch {}
-            alert(msg);
+          if (data?.errors?.length) {
+            msg = data.errors.map((x) => x.message).join(", ");
           }
-        } catch {
-          alert("Ошибка соединения.");
-        }
-      });
-    }
+        } catch {}
+
+        alert(msg);
+      } catch {
+        alert("Ошибка соединения.");
+      }
+    });
   }
 
   function closeContactModalIfOpen() {
     const modal = document.getElementById("contactModal");
-    if (modal && modal.style.display !== "none") {
-      modal.style.display = "none";
-      modal.setAttribute("aria-hidden", "true");
-    }
+
+    if (!modal) return;
+
+    const isOpen =
+      modal.style.display !== "none" &&
+      modal.getAttribute("aria-hidden") !== "true";
+
+    if (!isOpen) return;
+
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
   }
 
   function initScrollBanner() {
     const banner = document.getElementById("scrollBanner");
     const start = document.getElementById("banner-trigger");
     const end = document.getElementById("banner-end");
+
     if (!banner || !start || !end) return;
 
     if (bannerScrollHandler) {
@@ -243,13 +299,17 @@
       const viewportBottom = window.scrollY + window.innerHeight;
 
       const shouldShow = viewportBottom >= startY + 40 && viewportBottom < endY;
+
       banner.classList.toggle("is-visible", shouldShow);
     };
 
     let ticking = false;
+
     bannerScrollHandler = () => {
       if (ticking) return;
+
       ticking = true;
+
       requestAnimationFrame(() => {
         ticking = false;
         update();
@@ -267,6 +327,7 @@
       const track = wrap.querySelector(".edu-track");
       const prev = wrap.querySelector(".edu-prev");
       const next = wrap.querySelector(".edu-next");
+
       if (!track || !prev || !next) return;
 
       const cards = Array.from(track.querySelectorAll(".edu-card"));
@@ -274,6 +335,7 @@
 
       const update = () => {
         const max = track.scrollWidth - track.clientWidth - 2;
+
         prev.disabled = track.scrollLeft <= 2;
         next.disabled = track.scrollLeft >= max;
       };
@@ -281,7 +343,12 @@
       const stepTo = (dir) => {
         const cardWidth = cards[0].getBoundingClientRect().width;
         const gap = parseFloat(getComputedStyle(track).gap || "14");
-        track.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
+
+        track.scrollBy({
+          left: dir * (cardWidth + gap),
+          behavior: "smooth",
+        });
+
         setTimeout(update, 250);
       };
 
@@ -296,94 +363,117 @@
   function bindRecoCarousel() {
     document.querySelectorAll("[data-reco]").forEach((wrap) => {
       if (wrap.dataset.bound === "true") return;
+
       wrap.dataset.bound = "true";
 
       const track = wrap.querySelector(".reco-track");
       const prev = wrap.querySelector(".reco-nav--prev");
       const next = wrap.querySelector(".reco-nav--next");
+
       if (!track) return;
 
       const step = () => Math.min(track.clientWidth * 0.92, 600);
 
-      prev?.addEventListener("click", () =>
-        track.scrollBy({ left: -step(), behavior: "smooth" })
-      );
-      next?.addEventListener("click", () =>
-        track.scrollBy({ left: step(), behavior: "smooth" })
-      );
+      prev?.addEventListener("click", () => {
+        track.scrollBy({
+          left: -step(),
+          behavior: "smooth",
+        });
+      });
+
+      next?.addEventListener("click", () => {
+        track.scrollBy({
+          left: step(),
+          behavior: "smooth",
+        });
+      });
     });
   }
 
-function bindPdfPreview() {
-  const modal = document.getElementById("pdfModal");
-  const frame = document.getElementById("pdfModalFrame");
-  const title = document.getElementById("pdfModalTitle");
-  const openLink = document.getElementById("pdfModalOpen");
+  function closePdfPreview() {
+    const modal = document.getElementById("pdfModal");
+    const frame = document.getElementById("pdfModalFrame");
 
-  if (!modal || !frame || !title || !openLink) return;
+    if (!modal) return;
 
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  const isSmall = window.matchMedia && window.matchMedia("(max-width: 820px)").matches;
-  const noIframePreview = isIOS || isAndroid || isSmall;
-
-  const close = () => {
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
-    frame.removeAttribute("src");
-    frame.style.display = "";
-    document.body.style.overflow = "";
-  };
 
-  const open = (pdfUrl, caption) => {
+    if (frame) {
+      frame.removeAttribute("src");
+      frame.style.display = "";
+    }
+
+    document.body.style.overflow = "";
+  }
+
+  function openPdfPreview(pdfUrl, caption) {
+    const modal = document.getElementById("pdfModal");
+    const frame = document.getElementById("pdfModalFrame");
+    const title = document.getElementById("pdfModalTitle");
+    const openLink = document.getElementById("pdfModalOpen");
+
+    if (!modal || !frame || !title || !openLink || !pdfUrl) return;
+
     title.textContent = caption || "Документ";
     openLink.href = pdfUrl;
-
-    if (noIframePreview) {
-      const opened = window.open(pdfUrl, "_blank", "noopener,noreferrer");
-
-      if (!opened) {
-        window.location.href = pdfUrl;
-      }
-
-      return;
-    }
 
     frame.style.display = "";
     frame.src = pdfUrl;
 
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
+
     document.body.style.overflow = "hidden";
-  };
+  }
 
-  modal.querySelectorAll("[data-pdf-close]").forEach((el) => {
-    el.onclick = (e) => {
-      e.preventDefault();
-      close();
-    };
-  });
+  function bindPdfPreview() {
+    const modal = document.getElementById("pdfModal");
+    const frame = document.getElementById("pdfModalFrame");
+    const title = document.getElementById("pdfModalTitle");
+    const openLink = document.getElementById("pdfModalOpen");
 
-  if (modal.dataset.bound !== "true") {
-    modal.dataset.bound = "true";
+    if (!modal || !frame || !title || !openLink) return;
 
-    document.addEventListener("click", (e) => {
-      const trigger = e.target.closest("[data-pdf]");
+    modal.querySelectorAll("[data-pdf-close]").forEach((el) => {
+      el.onclick = (e) => {
+        e.preventDefault();
+        closePdfPreview();
+      };
+    });
+
+    /*
+      Важно:
+      обработчик ставится на document один раз.
+      Он ловит любую кнопку с data-pdf:
+      - отзывы на contacts.md;
+      - dashboard-report-card на portfolio.md;
+      - будущие PDF-кнопки без дополнительного JS.
+    */
+    if (document.documentElement.dataset.pdfPreviewBound === "true") return;
+
+    document.documentElement.dataset.pdfPreviewBound = "true";
+
+    pdfCloseHandler = (e) => {
+      const trigger = e.target.closest("button[data-pdf]");
       if (!trigger) return;
 
-      const pdf = trigger.getAttribute("data-pdf") || trigger.getAttribute("href");
-      const caption = trigger.getAttribute("data-title") || trigger.textContent?.trim() || "Документ";
+      const pdf = trigger.getAttribute("data-pdf");
+      const caption = trigger.getAttribute("data-title") || "Документ";
 
       if (!pdf) return;
 
       e.preventDefault();
-      open(pdf, caption);
-    });
+
+      openPdfPreview(pdf, caption);
+    };
+
+    document.addEventListener("click", pdfCloseHandler);
   }
-}
 
   function ensureEscapeHandler() {
     if (escapeHandlerAdded) return;
+
     escapeHandlerAdded = true;
 
     document.addEventListener("keydown", (e) => {
@@ -391,15 +481,7 @@ function bindPdfPreview() {
 
       closeLightbox();
       closeContactModalIfOpen();
-
-      const pdfModal = document.getElementById("pdfModal");
-      if (pdfModal?.classList.contains("is-open")) {
-        pdfModal.classList.remove("is-open");
-        pdfModal.setAttribute("aria-hidden", "true");
-        const frame = document.getElementById("pdfModalFrame");
-        frame?.removeAttribute("src");
-        document.body.style.overflow = "";
-      }
+      closePdfPreview();
     });
   }
 
@@ -408,6 +490,7 @@ function bindPdfPreview() {
 
     closeLightbox();
     closeContactModalIfOpen();
+    closePdfPreview();
 
     initContactModal();
     initLightbox();

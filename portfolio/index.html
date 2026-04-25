@@ -502,7 +502,7 @@
 <hr>
 <h2 id="bi-">BI-дашборды</h2>
 <div class="dashboard-report-card">
-  <a class="dashboard-report-card__link" href="/files/express_report.pdf" target="_blank" rel="noopener" data-pdf="/files/express_report.pdf" data-title="Экспресс-отчёт по контрагенту" aria-label="Открыть экспресс-отчёт по контрагенту в PDF">
+  <button class="dashboard-report-card__button" type="button" data-pdf="/files/express_report.pdf" data-title="Экспресс-отчёт по контрагенту" aria-label="Открыть экспресс-отчёт по контрагенту">
     <span class="dashboard-report-card__icon" aria-hidden="true">
       <span class="dashboard-report-card__icon-file">PDF</span>
     </span>
@@ -516,7 +516,7 @@
     </span>
 
     <span class="dashboard-report-card__arrow" aria-hidden="true">↗</span>
-  </a>
+  </button>
 </div>
 
 <div class="portfolio-gallery">
@@ -579,6 +579,28 @@
     </div>
   </div>
 
+</div>
+
+<div class="pdf-modal" id="pdfModal" aria-hidden="true">
+  <div class="pdf-modal__overlay" data-pdf-close></div>
+
+  <div class="pdf-modal__content" role="dialog" aria-modal="true" aria-labelledby="pdfModalTitle">
+    <button class="pdf-modal__close" type="button" data-pdf-close aria-label="Закрыть">
+      ×
+    </button>
+
+    <div class="pdf-modal__title" id="pdfModalTitle">
+      Документ
+    </div>
+
+    <iframe class="pdf-modal__frame" id="pdfModalFrame" title="Просмотр PDF"></iframe>
+
+    <div class="pdf-modal__footer">
+      <a class="md-button" id="pdfModalOpen" href="#" target="_blank" rel="noopener">
+        Открыть PDF в новой вкладке
+      </a>
+    </div>
+  </div>
 </div>
 
 <p><a href="https://shilovskyanton.ru">⤴ Вернуться к началу</a></p>
