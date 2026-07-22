@@ -12,6 +12,8 @@
 
   let bannerScrollHandler = null;
   let pdfCloseHandler = null;
+  let structureStickyScrollHandler = null;
+  let structureStickyResizeHandler = null;
 
   function showLightboxImage(index) {
     if (!lightboxOverlay || !lightboxImages.length) return;
@@ -471,6 +473,118 @@
     document.addEventListener("click", pdfCloseHandler);
   }
 
+
+  function initStructureSticky() {
+    const slot = document.querySelector("[data-structure-sticky-slot]");
+    const panel = document.querySelector("[data-structure-sticky]");
+
+    if (structureStickyScrollHandler) {
+      window.removeEventListener("scroll", structureStickyScrollHandler);
+      structureStickyScrollHandler = null;
+    }
+
+    if (structureStickyResizeHandler) {
+      window.removeEventListener("resize", structureStickyResizeHandler);
+      structureStickyResizeHandler = null;
+    }
+
+    if (!slot || !panel) return;
+
+    panel.classList.remove("is-fixed");
+    panel.style.left = "";
+    panel.style.width = "";
+    panel.style.removeProperty("--structure-fixed-top");
+    slot.style.height = "";
+
+    let anchorY = 0;
+    let ticking = false;
+
+    const getTopOffset = () => {
+      const header = document.querySelector(".md-header");
+
+      if (header) {
+        return Math.ceil(header.getBoundingClientRect().height) + 4;
+      }
+
+      return window.matchMedia("(max-width: 600px)").matches ? 47 : 52;
+    };
+
+    const measure = () => {
+      const wasFixed = panel.classList.contains("is-fixed");
+
+      if (wasFixed) {
+        panel.classList.remove("is-fixed");
+        panel.style.left = "";
+        panel.style.width = "";
+        slot.style.height = "";
+      }
+
+      anchorY = window.scrollY + slot.getBoundingClientRect().top;
+
+      if (wasFixed) {
+        update();
+      }
+    };
+
+    const update = () => {
+      const topOffset = getTopOffset();
+      const shouldFix = window.scrollY + topOffset >= anchorY;
+
+      panel.style.setProperty("--structure-fixed-top", `${topOffset}px`);
+
+      if (shouldFix) {
+        const slotRect = slot.getBoundingClientRect();
+        const panelHeight = panel.offsetHeight;
+
+        slot.style.height = `${panelHeight}px`;
+        panel.classList.add("is-fixed");
+        panel.style.left = `${slotRect.left}px`;
+        panel.style.width = `${slotRect.width}px`;
+      } else {
+        panel.classList.remove("is-fixed");
+        panel.style.left = "";
+        panel.style.width = "";
+        slot.style.height = "";
+      }
+    };
+
+    structureStickyScrollHandler = () => {
+      if (ticking) return;
+
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        ticking = false;
+        update();
+      });
+    };
+
+    structureStickyResizeHandler = () => {
+      requestAnimationFrame(() => {
+        panel.classList.remove("is-fixed");
+        panel.style.left = "";
+        panel.style.width = "";
+        slot.style.height = "";
+
+        anchorY = window.scrollY + slot.getBoundingClientRect().top;
+        update();
+      });
+    };
+
+    window.addEventListener("scroll", structureStickyScrollHandler, {
+      passive: true,
+    });
+
+    window.addEventListener("resize", structureStickyResizeHandler, {
+      passive: true,
+    });
+
+    requestAnimationFrame(() => {
+      measure();
+      update();
+    });
+  }
+
   function ensureEscapeHandler() {
     if (escapeHandlerAdded) return;
 
@@ -496,6 +610,7 @@
     initLightbox();
     initScrollBanner();
     initEduTimelines();
+    initStructureSticky();
 
     bindRecoCarousel();
     bindPdfPreview();
