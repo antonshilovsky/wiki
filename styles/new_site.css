@@ -1451,3 +1451,12 @@ img[alt="Антон Шиловский"]{ float:none !important; }
     flex-direction: column;
   }
 }
+
+.edu-card .about-text {
+  margin: 0 0 0.85rem;
+  line-height: 1.55;
+}
+
+.edu-card .about-text:last-of-type {
+  margin-bottom: 1rem;
+}
