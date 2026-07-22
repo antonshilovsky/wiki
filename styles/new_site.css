@@ -168,21 +168,120 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   font-weight:600;
 }
 
-.home-quicknav{
-  position:sticky;
-  top:4rem;
-  z-index:5;
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  align-items:center;
-  padding:10px 12px;
-  margin:.75rem 0 1.25rem;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  background:rgba(0,0,0,0.18);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:14px;
+/* Закреплённый блок навигации главной страницы */
+
+.structure-sticky {
+  position: sticky;
+  top: 3.2rem;
+  z-index: 50;
+  width: 100%;
+  margin: 1rem 0 1.5rem;
+}
+
+.structure-sticky__inner {
+  padding: 10px 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(10, 10, 10, 0.82);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.structure-sticky__title {
+  margin-bottom: 8px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-quicknav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin: 0;
+  padding: 0;
+
+  /* Sticky теперь находится на .structure-sticky */
+  position: static;
+}
+
+.hq-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.04);
+  color: #bbbbbb !important;
+
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none !important;
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.hq-btn:hover,
+.hq-btn:focus-visible {
+  background: #7a2cff;
+  border-color: #7a2cff;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.hq-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(122, 44, 255, 0.25);
+}
+
+.hq-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .structure-sticky {
+    top: 2.95rem;
+    margin: 0.75rem 0 1.25rem;
+  }
+
+  .structure-sticky__inner {
+    padding: 8px 9px 10px;
+    border-radius: 14px;
+  }
+
+  .structure-sticky__title {
+    margin-bottom: 7px;
+    font-size: 0.65rem;
+  }
+
+  .home-quicknav {
+    flex-wrap: nowrap;
+    gap: 7px;
+  }
+
+  .hq-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 7px;
+    font-size: 0.82rem;
+  }
 }
 
 .hq-btn{
@@ -926,6 +1025,28 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   color: #111827 !important;
 }
 
+[data-md-color-scheme="default"] .structure-sticky__inner {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(15, 23, 42, 0.14);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+}
+
+[data-md-color-scheme="default"] .structure-sticky__title {
+  color: rgba(15, 23, 42, 0.58);
+}
+
+[data-md-color-scheme="default"] .hq-btn {
+  background: rgba(15, 23, 42, 0.04);
+  border-color: rgba(15, 23, 42, 0.18);
+  color: #111827 !important;
+}
+
+[data-md-color-scheme="default"] .hq-btn:hover,
+[data-md-color-scheme="default"] .hq-btn:focus-visible {
+  background: #7a2cff;
+  border-color: #7a2cff;
+  color: #ffffff !important;
+}
   
 :root{
   --net-stroke: 255,255,255;
