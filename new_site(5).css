@@ -1012,12 +1012,12 @@ img[alt="Антон Шиловский"]{ float:none !important; }
 }
 
 [data-md-color-scheme="default"]{
-  --net-stroke: 122,44,255;
-  --net-dot: 122,44,255;
-  --net-line-alpha: 0.28;
-  --net-pointer-alpha: 0.42;
-  --net-pointer-dot-alpha: 0.85;
-  --net-dot-alpha: 0.92;
+  --net-stroke: 17,24,39;
+  --net-dot: 17,24,39;
+  --net-line-alpha: 0.34;
+  --net-pointer-alpha: 0.48;
+  --net-pointer-dot-alpha: 0.90;
+  --net-dot-alpha: 0.88;
 }
 
 [data-md-color-scheme="slate"]{
@@ -1452,93 +1452,88 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   }
 }
 
+.edu-card .about-text {
+  margin: 0 0 0.85rem;
+  line-height: 1.55;
+}
+
+.edu-card .about-text:last-of-type {
+  margin-bottom: 1rem;
+}
+
 /* =========================================================
    MAIN PAGE — MOUNTAIN SCENE
+   ---------------------------------------------------------
+   mountains-sky.webp   = почти неподвижный задний слой
+   mountains-front.webp = foreground с alpha + down-parallax
+   #навыки              = конечная контрольная точка
    ========================================================= */
 
-.mountain-page-marker {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  opacity: 0;
-  pointer-events: none;
+.mountain-page-marker{
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  opacity:0;
+  pointer-events:none;
 }
 
-/* Основная фиксированная сцена */
-.mountain-scene {
-  --mountain-progress: 0;
-  --mountain-fade-progress: 0;
-  --mountain-back-y: 0px;
-  --mountain-front-y: 0px;
-  --mountain-front-brightness: 0.88;
+.mountain-scene{
+  --mountain-progress:0;
+  --mountain-fade-progress:0;
+  --mountain-back-y:0px;
+  --mountain-front-y:0px;
 
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-
-  overflow: hidden;
-  pointer-events: none;
-
-  opacity: 0;
-  visibility: hidden;
-
-  contain: paint;
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  contain:paint;
 
   transition:
-    opacity 0.14s linear,
-    visibility 0s linear 0.14s;
+    opacity .14s linear,
+    visibility 0s linear .14s;
 }
 
-/* JS добавляет is-ready после первого корректного расчёта */
-html.mountain-page-active .mountain-scene.is-ready {
-  opacity: 1;
-  visibility: visible;
+html.mountain-page-active .mountain-scene.is-ready{
+  opacity:1;
+  visibility:visible;
 
   transition:
-    opacity 0.14s linear,
+    opacity .14s linear,
     visibility 0s linear 0s;
 }
 
-/* После прохождения #навыки сцену можно выключить */
-html.mountain-page-active .mountain-scene.is-past-end {
-  visibility: hidden;
+html.mountain-page-active .mountain-scene.is-past-end{
+  visibility:hidden;
 }
 
-/* Фон MkDocs на главной становится прозрачным,
-   чтобы сквозь него была видна mountain scene */
 html.mountain-page-active .md-container,
 html.mountain-page-active .md-main,
 html.mountain-page-active .md-content,
-html.mountain-page-active .md-content__inner {
-  background-color: transparent !important;
+html.mountain-page-active .md-content__inner{
+  background-color:transparent !important;
 }
 
-html.mountain-page-active .md-main {
-  position: relative;
-  z-index: 1;
+html.mountain-page-active .md-main{
+  position:relative;
+  z-index:1;
 }
 
+/* BACKGROUND — звёздное небо + дальние горы */
 
-/* =========================================================
-   BACKGROUND — звёзды + дальние горы
-   ========================================================= */
+.mountain-scene__back{
+  position:absolute;
+  inset:-2vh -2vw;
+  z-index:0;
 
-.mountain-scene__back {
-  position: absolute;
-
-  inset: -3vh -3vw;
-  z-index: 0;
-
-  background-image:
-    url("../images/hero/mountains-sky.webp");
-
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-
-  /* На случай, если theme selector не применился */
-  opacity: 1;
+  background:
+    url("../images/hero/mountains-sky.webp")
+    center center / cover
+    no-repeat;
 
   transform:
     translate3d(
@@ -1546,40 +1541,28 @@ html.mountain-page-active .md-main {
       var(--mountain-back-y),
       0
     )
-    scale(1.04);
+    scale(1.025);
 
-  transform-origin: center center;
-
-  will-change: transform, opacity;
+  transform-origin:center center;
+  will-change:transform, opacity;
 }
 
+/* FOREGROUND — WebP с настоящим alpha */
 
-/* =========================================================
-   FOREGROUND — передние горы с alpha
-   ========================================================= */
-
-.mountain-scene__front {
-  position: absolute;
-
-  /*
-   * Overscan нужен, потому что foreground
-   * будет двигаться вверх.
-   */
-  inset: -7vh -5vw -12vh;
-  z-index: 1;
-
-  background-image:
-    url("../images/hero/mountains-front.webp");
-
-  background-repeat: no-repeat;
-  background-size: cover;
+.mountain-scene__front{
+  position:absolute;
+  inset:0;
+  z-index:1;
 
   /*
-   * Хребет изначально расположен чуть ниже.
+   * 58% по Y намеренно ниже прежнего bottom-position.
+   * У фактического foreground основной alpha-хребет
+   * начинается примерно с середины исходного кадра.
    */
-  background-position: center 58%;
-
-  opacity: 0.98;
+  background:
+    url("../images/hero/mountains-front.webp")
+    center 58% / cover
+    no-repeat;
 
   transform:
     translate3d(
@@ -1587,179 +1570,178 @@ html.mountain-page-active .md-main {
       var(--mountain-front-y),
       0
     )
-    scale(1.12);
+    scale(1.035);
 
-  transform-origin: center bottom;
-
-  /*
-   * Значение brightness меняет mountain-bg.js.
-   */
-  filter:
-    brightness(var(--mountain-front-brightness, 0.88))
-    saturate(0.90)
-    contrast(1.06);
-
-  will-change: transform, opacity, filter;
+  transform-origin:center center;
+  will-change:transform, opacity;
 }
-
-
-/* =========================================================
-   OVERLAY / FADE
-   ========================================================= */
 
 .mountain-scene__wash,
-.mountain-scene__fade {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+.mountain-scene__fade{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
 }
 
-.mountain-scene__wash {
-  z-index: 2;
-  will-change: opacity;
+.mountain-scene__wash{
+  z-index:2;
+  will-change:opacity;
 }
 
-.mountain-scene__fade {
-  z-index: 3;
+.mountain-scene__fade{
+  z-index:3;
 }
 
+/* DARK — night -> slate */
 
-/* =========================================================
-   DARK THEME
-   night → slate
-   ========================================================= */
-
-[data-md-color-scheme="slate"]
-.mountain-scene__back {
+html[data-md-color-scheme="slate"].mountain-page-active
+.mountain-scene__back{
   opacity:
     calc(
       1 -
-      (var(--mountain-fade-progress) * 0.94)
+      (var(--mountain-fade-progress) * .94)
     );
 
   filter:
-    saturate(0.94)
-    brightness(0.86)
+    saturate(.94)
+    brightness(.86)
     contrast(1.03);
 }
 
-[data-md-color-scheme="slate"]
-.mountain-scene__front {
+html[data-md-color-scheme="slate"].mountain-page-active
+.mountain-scene__front{
   opacity:
     calc(
-      0.98 -
-      (var(--mountain-fade-progress) * 0.93)
-    );
-}
-
-[data-md-color-scheme="slate"]
-.mountain-scene__wash {
-  background: rgb(10, 11, 14);
-
-  opacity:
-    calc(
-      0.06 +
-      (var(--mountain-fade-progress) * 0.91)
-    );
-}
-
-[data-md-color-scheme="slate"]
-.mountain-scene__fade {
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(10, 11, 14, 0.01) 0%,
-      rgba(10, 11, 14, 0.02) 38%,
-      rgba(10, 11, 14, 0.15) 60%,
-      rgba(10, 11, 14, 0.48) 80%,
-      var(--md-default-bg-color) 100%
-    );
-}
-
-[data-md-color-scheme="slate"]
-.hero--network h1 {
-  text-shadow:
-    0 2px 16px rgba(0, 0, 0, 0.74);
-}
-
-
-/* =========================================================
-   LIGHT THEME
-   night → light
-   ========================================================= */
-
-[data-md-color-scheme="default"]
-.mountain-scene__back {
-  opacity:
-    calc(
-      0.82 -
-      (var(--mountain-fade-progress) * 0.78)
+      .98 -
+      (var(--mountain-fade-progress) * .95)
     );
 
   filter:
-    saturate(0.78)
-    brightness(0.95)
-    contrast(0.94);
+    saturate(.92)
+    brightness(.84);
 }
 
-[data-md-color-scheme="default"]
-.mountain-scene__front {
-  opacity:
-    calc(
-      0.72 -
-      (var(--mountain-fade-progress) * 0.68)
-    );
-}
-
-[data-md-color-scheme="default"]
-.mountain-scene__wash {
-  background: rgb(255, 255, 255);
+html[data-md-color-scheme="slate"].mountain-page-active
+.mountain-scene__wash{
+  background:rgb(10,11,14);
 
   opacity:
     calc(
-      0.18 +
-      (var(--mountain-fade-progress) * 0.80)
+      .07 +
+      (var(--mountain-fade-progress) * .91)
     );
 }
 
-[data-md-color-scheme="default"]
-.mountain-scene__fade {
+html[data-md-color-scheme="slate"].mountain-page-active
+.mountain-scene__fade{
   background:
     linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.12) 0%,
-      rgba(255, 255, 255, 0.10) 36%,
-      rgba(255, 255, 255, 0.29) 58%,
-      rgba(255, 255, 255, 0.66) 80%,
+      rgba(10,11,14,.01) 0%,
+      rgba(10,11,14,.02) 38%,
+      rgba(10,11,14,.15) 60%,
+      rgba(10,11,14,.48) 80%,
       var(--md-default-bg-color) 100%
     );
 }
 
-[data-md-color-scheme="default"]
-.hero--network h1 {
+html[data-md-color-scheme="slate"].mountain-page-active
+.hero--network h1{
   text-shadow:
-    0 1px 2px rgba(255, 255, 255, 0.96),
-    0 0 18px rgba(255, 255, 255, 0.82);
+    0 2px 16px rgba(0,0,0,.74);
 }
 
+/* LIGHT — night -> light background */
 
-/* Network canvas остаётся поверх mountain background */
+html[data-md-color-scheme="default"].mountain-page-active
+.mountain-scene__back{
+  opacity:
+    calc(
+      .80 -
+      (var(--mountain-fade-progress) * .76)
+    );
+
+  filter:
+    saturate(.78)
+    brightness(.95)
+    contrast(.94);
+}
+
+html[data-md-color-scheme="default"].mountain-page-active
+.mountain-scene__front{
+  opacity:
+    calc(
+      .72 -
+      (var(--mountain-fade-progress) * .69)
+    );
+
+  filter:
+    saturate(.72)
+    brightness(.92)
+    contrast(.94);
+}
+
+html[data-md-color-scheme="default"].mountain-page-active
+.mountain-scene__wash{
+  background:rgb(255,255,255);
+
+  opacity:
+    calc(
+      .18 +
+      (var(--mountain-fade-progress) * .80)
+    );
+}
+
+html[data-md-color-scheme="default"].mountain-page-active
+.mountain-scene__fade{
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.13) 0%,
+      rgba(255,255,255,.10) 36%,
+      rgba(255,255,255,.29) 58%,
+      rgba(255,255,255,.66) 80%,
+      var(--md-default-bg-color) 100%
+    );
+}
+
+html[data-md-color-scheme="default"].mountain-page-active
+.hero--network h1{
+  text-shadow:
+    0 1px 2px rgba(255,255,255,.96),
+    0 0 18px rgba(255,255,255,.82);
+}
+
 html.mountain-page-active
-.hero--network canvas.network-bg {
-  background: transparent;
+.hero--network canvas.network-bg{
+  background:transparent;
 }
 
+/* LIGHT THEME NETWORK — графитовые точки и линии */
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
+[data-md-color-scheme="default"]{
+  --net-stroke:17,24,39;
+  --net-dot:17,24,39;
+  --net-line-alpha:.34;
+  --net-pointer-alpha:.48;
+  --net-pointer-dot-alpha:.90;
+  --net-dot-alpha:.88;
+}
 
-@media (max-width: 600px) {
+[data-md-color-scheme="default"]
+.hero--network canvas.network-bg{
+  opacity:.92;
+  filter:none;
+}
 
-  .mountain-scene__back {
-    inset: -2vh -5vw;
+/* MOBILE */
 
-    background-position: 56% center;
+@media (max-width:600px){
+  .mountain-scene__back{
+    inset:-1vh -4vw;
+
+    background-position:
+      56% center;
 
     transform:
       translate3d(
@@ -1767,13 +1749,12 @@ html.mountain-page-active
         var(--mountain-back-y),
         0
       )
-      scale(1.06);
+      scale(1.035);
   }
 
-  .mountain-scene__front {
-    inset: -6vh -7vw -12vh;
-
-    background-position: 50% 58%;
+  .mountain-scene__front{
+    background-position:
+      50% 58%;
 
     transform:
       translate3d(
@@ -1781,71 +1762,64 @@ html.mountain-page-active
         var(--mountain-front-y),
         0
       )
-      scale(1.10);
+      scale(1.025);
   }
 
-  [data-md-color-scheme="slate"]
-  .mountain-scene__fade {
+  html[data-md-color-scheme="slate"].mountain-page-active
+  .mountain-scene__fade{
     background:
       linear-gradient(
         to bottom,
-        rgba(10, 11, 14, 0.03) 0%,
-        rgba(10, 11, 14, 0.04) 36%,
-        rgba(10, 11, 14, 0.22) 60%,
-        rgba(10, 11, 14, 0.60) 82%,
+        rgba(10,11,14,.03) 0%,
+        rgba(10,11,14,.04) 36%,
+        rgba(10,11,14,.22) 60%,
+        rgba(10,11,14,.60) 82%,
         var(--md-default-bg-color) 100%
       );
   }
 
-  [data-md-color-scheme="default"]
-  .mountain-scene__fade {
+  html[data-md-color-scheme="default"].mountain-page-active
+  .mountain-scene__fade{
     background:
       linear-gradient(
         to bottom,
-        rgba(255, 255, 255, 0.20) 0%,
-        rgba(255, 255, 255, 0.18) 36%,
-        rgba(255, 255, 255, 0.38) 60%,
-        rgba(255, 255, 255, 0.76) 82%,
+        rgba(255,255,255,.20) 0%,
+        rgba(255,255,255,.18) 36%,
+        rgba(255,255,255,.38) 60%,
+        rgba(255,255,255,.76) 82%,
         var(--md-default-bg-color) 100%
       );
   }
 }
 
-
-/* =========================================================
-   MOBILE LANDSCAPE
-   ========================================================= */
+/* Mobile landscape */
 
 @media
-  (max-width: 900px)
-  and (max-height: 520px)
-  and (orientation: landscape) {
+  (max-width:900px)
+  and (max-height:520px)
+  and (orientation:landscape){
 
-  .mountain-scene__back {
-    background-position: center 50%;
+  .mountain-scene__back{
+    background-position:center 50%;
   }
 
-  .mountain-scene__front {
-    background-position: center 58%;
+  .mountain-scene__front{
+    background-position:center 58%;
   }
 }
 
+/* REDUCED MOTION */
 
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
+@media (prefers-reduced-motion:reduce){
   .mountain-scene,
   .mountain-scene__back,
   .mountain-scene__front,
-  .mountain-scene__wash {
-    transition: none !important;
+  .mountain-scene__wash{
+    transition:none !important;
   }
 
   .mountain-scene__back,
-  .mountain-scene__front {
-    will-change: opacity;
+  .mountain-scene__front{
+    will-change:opacity;
   }
 }
