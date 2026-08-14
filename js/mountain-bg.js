@@ -21,17 +21,9 @@
       document.querySelector("[data-mountain-page]");
     const scene =
       document.querySelector("[data-mountain-scene]");
-    /*
-     * Конечная контрольная точка:
-     * ## Навыки, сообщества и подход {#навыки}
-     */
     const skills =
       document.getElementById("навыки");
 
-    /*
-     * На portfolio / contacts этих маркеров нет,
-     * поэтому mountain-bg не создаёт ни scene, ни listeners.
-     */
     if (!marker || !scene || !skills) {
       return null;
     }
@@ -42,10 +34,6 @@
       marker.closest(".md-content__inner") ||
       document.querySelector(".md-content__inner");
 
-    /*
-     * Выносим fixed scene в body, чтобы её не ломали
-     * overflow / transform / stacking context MkDocs Material.
-     */
     if (scene.parentElement !== document.body) {
       document.body.appendChild(scene);
     }
@@ -58,6 +46,7 @@
     let rafId = 0;
     let readyRaf1 = 0;
     let readyRaf2 = 0;
+    let resizeRaf = 0;
     let dirty = true;
     let progressStartY = 0;
     let progressEndY = 1;
@@ -67,6 +56,7 @@
       Math.max(window.innerHeight || 0, 1);
     let skillsTopY = 0;
     let resizeObserver = null;
+    const lastVars = {};
 
     const reducedMotionQuery =
       window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -77,6 +67,15 @@
       return window.scrollY ||
         window.pageYOffset ||
         0;
+    }
+
+    /* Пишем CSS-var только при реальном изменении значения,
+       чтобы не дёргать style recalc каждый кадр. */
+    function setVar(name, value) {
+      if (lastVars[name] !== value) {
+        lastVars[name] = value;
+        scene.style.setProperty(name, value);
+      }
     }
 
     function measure() {
@@ -105,11 +104,6 @@
         scrollY + skillsRect.top;
       skillsTopY = skillsTop;
 
-      /*
-       * --mountain-progress:
-       * 0 = верх главной;
-       * 1 = #навыки достигает своей обычной anchor-позиции.
-       */
       const rootFontSize =
         parseFloat(
           getComputedStyle(
@@ -128,23 +122,13 @@
           rootFontSize * (mobileQuery.matches ? 7 : 8)
         );
 
-      /*
-       * Foreground двигается на всём диапазоне
-       * от начала главной до фактического #навыки.
-       */
       progressStartY = markerTop;
       progressEndY =
-        skillsTop -
-        anchorOffset;
+        skillsTop - anchorOffset;
       if (progressEndY <= progressStartY + 120) {
-        progressEndY =
-          progressStartY + 120;
+        progressEndY = progressStartY + 120;
       }
 
-      /*
-       * Fade начинается мягко после hero,
-       * но заканчивается в той же контрольной точке #навыки.
-       */
       fadeStartY =
         Math.max(
           progressStartY,
@@ -152,8 +136,7 @@
         );
       fadeEndY = progressEndY;
       if (fadeEndY <= fadeStartY + 80) {
-        fadeEndY =
-          fadeStartY + 80;
+        fadeEndY = fadeStartY + 80;
       }
 
       dirty = true;
@@ -183,96 +166,63 @@
       const fadeProgress =
         smoothstep(rawFade);
 
-      /*
-       * Foreground движется вниз заметно быстрее background.
-       * easeOutCubic делает движение наиболее заметным в первой
-       * половине диапазона, но мягко тормозит к #навыки.
-       */
       const frontMotion =
         easeOutCubic(progress);
 
-      /*
-       * mountains-sky.webp остаётся визуально неподвижным.
-       */
+      /* mountains-sky.webp остаётся визуально неподвижным. */
       const backY = 0;
       let frontStartY = 0;
       let frontTravelY = 0;
 
-      /* ИСПРАВЛЕНО №1: было "f (mobileQuery.matches)" — SyntaxError ломал весь файл */
       if (mobileQuery.matches) {
-        /*
-         * На мобильном foreground стартует немного ниже,
-         * но диапазон движения вверх меньше.
-         */
+        /* ИСПРАВЛЕНО: амплитуда движения ВВЕРХ на мобильном
+           увеличена, чтобы parallax был явно виден. */
         frontStartY =
-          Math.min(22, Math.max(14, viewportHeight * 0.022));
+          Math.min(26, Math.max(16, viewportHeight * 0.028));
         frontTravelY =
-          Math.min(110, Math.max(80, viewportHeight * 0.10));
+          Math.min(200, Math.max(140, viewportHeight * 0.22));
       } else {
-        /*
-         * Desktop:
-         * foreground изначально опущен вниз,
-         * затем заметно быстрее поднимается вверх.
-         */
         frontStartY =
           Math.min(34, Math.max(20, viewportHeight * 0.028));
         frontTravelY =
           Math.min(165, Math.max(120, viewportHeight * 0.145));
       }
 
-      /*
-       * ВАЖНО:
-       * минус перед frontTravelY = движение ВВЕРХ
-       * при прокрутке страницы вниз.
-       */
+      /* минус = движение ВВЕРХ при прокрутке вниз */
       let frontY =
         frontStartY -
         frontTravelY * frontMotion;
 
-      /*
-       * reduced-motion:
-       * foreground остаётся в начальной позиции,
-       * fade и затемнение продолжают работать.
-       */
       if (reducedMotionQuery.matches) {
         frontY = frontStartY;
       }
 
-      /*
-       * Дополнительно затемняем foreground по мере scroll.
-       * progress 0 → brightness 0.88
-       * progress 1 → brightness 0.52
-       */
       const frontBrightness =
         0.88 - 0.36 * progress;
 
-      scene.style.setProperty(
+      /* Округляем до целых px / шагов 0.02 —
+         меньше style invalidation на мобильных GPU. */
+      setVar(
         "--mountain-progress",
-        progress.toFixed(5)
+        progress.toFixed(3)
       );
-      scene.style.setProperty(
+      setVar(
         "--mountain-fade-progress",
-        fadeProgress.toFixed(5)
+        fadeProgress.toFixed(3)
       );
-      scene.style.setProperty(
+      setVar(
         "--mountain-back-y",
-        `${backY.toFixed(2)}px`
+        `${backY.toFixed(0)}px`
       );
-      scene.style.setProperty(
+      setVar(
         "--mountain-front-y",
-        `${frontY.toFixed(2)}px`
+        `${Math.round(frontY)}px`
       );
-      /* ИСПРАВЛЕНО №2: brightness раньше вычислялся, но не применялся */
-      scene.style.setProperty(
+      setVar(
         "--mountain-front-brightness",
-        frontBrightness.toFixed(3)
+        (Math.round(frontBrightness * 50) / 50).toFixed(2)
       );
 
-      /*
-       * На самой точке #навыки scene остаётся в DOM
-       * с финальными opacity/position. Полностью выключаем
-       * painting только после прохождения раздела ещё на 25vh.
-       */
       scene.classList.toggle(
         "is-past-end",
         scrollY >=
@@ -282,10 +232,6 @@
 
     function scheduleReady() {
       if (destroyed) return;
-      /*
-       * Два RAF дают браузеру время применить direct anchor /
-       * scroll restoration. До этого scene остаётся невидимой.
-       */
       readyRaf1 = requestAnimationFrame(() => {
         readyRaf1 = 0;
         readyRaf2 = requestAnimationFrame(() => {
@@ -305,9 +251,18 @@
       requestTick();
     }
 
+    /* ИСПРАВЛЕНО: resize (сворачивание адресной панели на мобильном)
+       больше не вызывает measure() синхронно на каждый event —
+       только один раз на следующий кадр. */
     function onResize() {
       if (destroyed) return;
-      measure();
+      if (resizeRaf) {
+        cancelAnimationFrame(resizeRaf);
+      }
+      resizeRaf = requestAnimationFrame(() => {
+        resizeRaf = 0;
+        measure();
+      });
     }
 
     function onReducedMotionChange() {
@@ -340,7 +295,7 @@
     if ("ResizeObserver" in window) {
       resizeObserver =
         new ResizeObserver(() => {
-          measure();
+          onResize();
         });
       if (content) {
         resizeObserver.observe(content);
@@ -380,9 +335,7 @@
       typeof mobileQuery.addListener ===
         "function"
     ) {
-      mobileQuery.addListener(
-        onMobileChange
-      );
+      mobileQuery.addListener(onMobileChange);
     }
 
     const onWindowLoad = () => {
@@ -396,9 +349,6 @@
       );
     }
 
-    /*
-     * Первый расчёт выполняется до отображения scene.
-     */
     measure();
     scheduleReady();
 
@@ -418,23 +368,18 @@
         cancelAnimationFrame(readyRaf2);
         readyRaf2 = 0;
       }
+      if (resizeRaf) {
+        cancelAnimationFrame(resizeRaf);
+        resizeRaf = 0;
+      }
 
-      window.removeEventListener(
-        "scroll",
-        onScroll
-      );
-      window.removeEventListener(
-        "resize",
-        onResize
-      );
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
       window.removeEventListener(
         "orientationchange",
         onResize
       );
-      window.removeEventListener(
-        "load",
-        onWindowLoad
-      );
+      window.removeEventListener("load", onWindowLoad);
 
       if (resizeObserver) {
         resizeObserver.disconnect();
@@ -470,35 +415,20 @@
         typeof mobileQuery.removeListener ===
           "function"
       ) {
-        mobileQuery.removeListener(
-          onMobileChange
-        );
+        mobileQuery.removeListener(onMobileChange);
       }
 
-      scene.classList.remove(
-        "is-ready",
-        "is-past-end"
-      );
-      scene.style.removeProperty(
-        "--mountain-progress"
-      );
+      scene.classList.remove("is-ready", "is-past-end");
+      scene.style.removeProperty("--mountain-progress");
       scene.style.removeProperty(
         "--mountain-fade-progress"
       );
-      scene.style.removeProperty(
-        "--mountain-back-y"
-      );
-      scene.style.removeProperty(
-        "--mountain-front-y"
-      );
+      scene.style.removeProperty("--mountain-back-y");
+      scene.style.removeProperty("--mountain-front-y");
       scene.style.removeProperty(
         "--mountain-front-brightness"
       );
 
-      /*
-       * При navigation.instant old scene уже вынесена в body,
-       * поэтому удаляем её явно.
-       */
       if (scene.isConnected) {
         scene.remove();
       }

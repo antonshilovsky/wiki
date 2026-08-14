@@ -316,7 +316,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   height:100%;
   display:block;
   z-index:0;
-  pointer-events:none; 
+  pointer-events:none;
   opacity:1;
   transition:opacity .35s ease, filter .35s ease;
 }
@@ -480,6 +480,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
     text-align: center;
   }
 }
+
 .pdf-modal.is-open{ display:block; }
 
 .pdf-modal__overlay{
@@ -744,16 +745,13 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.16);
   background: rgba(255,255,255,0.06);
   color: rgba(255,255,255,0.92);
-
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-
   transition: background .15s ease, border-color .15s ease, transform .15s ease, color .15s ease;
 }
 
@@ -807,14 +805,14 @@ img[alt="Антон Шиловский"]{ float:none !important; }
 [data-md-color-scheme="default"] .md-typeset a,
 [data-md-color-scheme="default"] .md-nav__link,
 [data-md-color-scheme="default"] .md-footer a {
-  color: #4b5563 !important;     
+  color: #4b5563 !important;
   text-decoration: none !important;
 }
 
 [data-md-color-scheme="default"] .md-typeset a:hover,
 [data-md-color-scheme="default"] .md-nav__link:hover,
 [data-md-color-scheme="default"] .md-footer a:hover {
-  color: #111827 !important;       
+  color: #111827 !important;
   font-weight: 600 !important;
 }
 
@@ -860,7 +858,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   font-weight: 600 !important;
 }
 
-
 [data-md-color-scheme="default"] .md-typeset{
   color: #0f172a !important;
 }
@@ -903,8 +900,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   color: #111827 !important;
   font-weight: 600;
 }
-
-
 
 [data-md-color-scheme="default"] .contact-btn,
 [data-md-color-scheme="default"] .brut-btn{
@@ -1001,7 +996,7 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   border-color:#7a2cff !important;
   color:#ffffff !important;
 }
-  
+
 :root{
   --net-stroke: 255,255,255;
   --net-dot: 255,255,255;
@@ -1088,18 +1083,14 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   grid-template-columns: auto 1fr auto;
   gap: 18px;
   align-items: center;
-
   width: 100%;
   padding: 20px 22px;
   border-radius: 22px;
-
   font: inherit;
   text-align: left;
   cursor: pointer;
-
   overflow: hidden;
   isolation: isolate;
-
   transition:
     transform 0.22s ease,
     border-color 0.22s ease,
@@ -1114,7 +1105,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   background:
     radial-gradient(circle at 18% 20%, rgba(122, 44, 255, 0.42), transparent 32%),
     linear-gradient(135deg, rgba(24, 24, 28, 0.96), rgba(10, 10, 12, 0.98));
-
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow:
     0 18px 44px rgba(0, 0, 0, 0.34),
@@ -1127,7 +1117,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   background:
     radial-gradient(circle at 18% 20%, rgba(122, 44, 255, 0.14), transparent 34%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(243, 244, 246, 0.98));
-
   border: 1px solid rgba(15, 23, 42, 0.14);
   box-shadow:
     0 18px 44px rgba(15, 23, 42, 0.12),
@@ -1139,7 +1128,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   position: absolute;
   inset: -2px;
   z-index: -2;
-
   background:
     linear-gradient(
       120deg,
@@ -1148,7 +1136,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
       rgba(255, 128, 0, 0.72) 52%,
       transparent 76%
     );
-
   opacity: 0;
   transition: opacity 0.22s ease;
 }
@@ -1206,11 +1193,9 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   width: 66px;
   height: 66px;
   border-radius: 20px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   background:
     linear-gradient(145deg, rgba(122, 44, 255, 0.96), rgba(255, 128, 0, 0.92));
   box-shadow:
@@ -1239,14 +1224,11 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   width: 38px;
   height: 46px;
   border-radius: 8px 8px 10px 10px;
-
   background: rgba(255, 255, 255, 0.96);
   color: #171717;
-
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -1257,10 +1239,8 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   position: absolute;
   top: 0;
   right: 0;
-
   width: 12px;
   height: 12px;
-
   background: linear-gradient(135deg, #dedede 50%, rgba(255, 255, 255, 0) 50%);
   border-radius: 0 8px 0 3px;
 }
@@ -1273,7 +1253,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
 
 .dashboard-report-card__eyebrow {
   margin-bottom: 5px;
-
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1304,7 +1283,6 @@ img[alt="Антон Шиловский"]{ float:none !important; }
 
 .dashboard-report-card__text {
   margin-top: 6px;
-
   font-size: 0.9rem;
   line-height: 1.35;
 }
@@ -1321,13 +1299,10 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   width: 42px;
   height: 42px;
   border-radius: 999px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   font-size: 1.2rem;
-
   transition:
     transform 0.22s ease,
     background 0.22s ease,
@@ -1474,7 +1449,14 @@ img[alt="Антон Шиловский"]{ float:none !important; }
   --mountain-front-brightness: 0.88;
 
   position: fixed;
-  inset: 0;
+  /* ИСПРАВЛЕНО: высота через lvh не меняется при
+     сворачивании адресной панели мобильного браузера */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: auto;
+  height: 100vh;   /* fallback для старых браузеров */
+  height: 100lvh;  /* стабильная высота сцены */
   z-index: 0;
 
   overflow: hidden;
@@ -1519,7 +1501,6 @@ html.mountain-page-active .md-main {
   z-index: 1;
 }
 
-
 /* =========================================================
    BACKGROUND — звёзды + дальние горы
    ========================================================= */
@@ -1527,7 +1508,8 @@ html.mountain-page-active .md-main {
 .mountain-scene__back {
   position: absolute;
 
-  inset: -3vh -3vw;
+  /* ИСПРАВЛЕНО: % от стабильного бокса сцены вместо vh */
+  inset: -3% -3vw;
   z-index: 0;
 
   background-image:
@@ -1553,7 +1535,6 @@ html.mountain-page-active .md-main {
   will-change: transform, opacity;
 }
 
-
 /* =========================================================
    FOREGROUND — передние горы с alpha
    ========================================================= */
@@ -1564,8 +1545,9 @@ html.mountain-page-active .md-main {
   /*
    * Overscan нужен, потому что foreground
    * будет двигаться вверх.
+   * ИСПРАВЛЕНО: % вместо vh — стабильная геометрия на мобильном.
    */
-  inset: -7vh -5vw -12vh;
+  inset: -7% -5vw -12%;
   z-index: 1;
 
   background-image:
@@ -1602,7 +1584,6 @@ html.mountain-page-active .md-main {
   will-change: transform, opacity, filter;
 }
 
-
 /* =========================================================
    OVERLAY / FADE
    ========================================================= */
@@ -1622,7 +1603,6 @@ html.mountain-page-active .md-main {
 .mountain-scene__fade {
   z-index: 3;
 }
-
 
 /* =========================================================
    DARK THEME
@@ -1681,7 +1661,6 @@ html.mountain-page-active .md-main {
   text-shadow:
     0 2px 16px rgba(0, 0, 0, 0.74);
 }
-
 
 /* =========================================================
    LIGHT THEME
@@ -1742,13 +1721,11 @@ html.mountain-page-active .md-main {
     0 0 18px rgba(255, 255, 255, 0.82);
 }
 
-
 /* Network canvas остаётся поверх mountain background */
 html.mountain-page-active
 .hero--network canvas.network-bg {
   background: transparent;
 }
-
 
 /* =========================================================
    MOBILE
@@ -1757,7 +1734,8 @@ html.mountain-page-active
 @media (max-width: 600px) {
 
   .mountain-scene__back {
-    inset: -2vh -5vw;
+    /* ИСПРАВЛЕНО: % вместо vh */
+    inset: -2% -5vw;
 
     background-position: 56% center;
 
@@ -1771,7 +1749,8 @@ html.mountain-page-active
   }
 
   .mountain-scene__front {
-    inset: -6vh -7vw -12vh;
+    /* ИСПРАВЛЕНО: % вместо vh */
+    inset: -6% -7vw -12%;
 
     background-position: 50% 58%;
 
@@ -1811,7 +1790,6 @@ html.mountain-page-active
   }
 }
 
-
 /* =========================================================
    MOBILE LANDSCAPE
    ========================================================= */
@@ -1829,7 +1807,6 @@ html.mountain-page-active
     background-position: center 58%;
   }
 }
-
 
 /* =========================================================
    REDUCED MOTION
