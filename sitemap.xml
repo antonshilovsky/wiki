@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://shilovskyanton.ru/</loc>
-         <lastmod>2026-08-14</lastmod>
+         <lastmod>2026-08-15</lastmod>
     </url>
     <url>
          <loc>https://shilovskyanton.ru/contacts/</loc>
-         <lastmod>2026-08-14</lastmod>
+         <lastmod>2026-08-15</lastmod>
     </url>
     <url>
          <loc>https://shilovskyanton.ru/portfolio/</loc>
-         <lastmod>2026-08-14</lastmod>
+         <lastmod>2026-08-15</lastmod>
+    </url>
+    <url>
+         <loc>https://shilovskyanton.ru/services/</loc>
+         <lastmod>2026-08-15</lastmod>
     </url>
     <url>
          <loc>https://shilovskyanton.ru/tasks/</loc>
-         <lastmod>2026-08-14</lastmod>
+         <lastmod>2026-08-15</lastmod>
     </url>
 </urlset>
