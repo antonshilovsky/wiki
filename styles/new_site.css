@@ -2561,10 +2561,6 @@ html.mountain-page-active
   }
 }
 
-/* =========================================================
-   SERVICES — COURSE PRICE INFO TOOLTIP
-   ========================================================= */
-
 .service-price-info{
   position:relative;
   display:inline-flex;
@@ -2775,3 +2771,13 @@ html.mountain-page-active
   }
 }
 
+.service-price-info--centered{
+  flex:1 0 100%;
+  width:100%;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  margin-top:3px;
+}
