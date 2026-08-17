@@ -539,19 +539,35 @@
     </div>
   </details>
 
-  <details class="service-card service-card--purple" id="course-development">
-    <summary class="service-card__summary">
-      <span class="service-card__summary-main">
-        <span class="service-card__meta">Методическая разработка</span>
-        <span class="service-card__title">Разработка учебного курса с контрольными элементами</span>
-        <span class="service-price" aria-label="Стоимость: от 1 тыс. ₽ за 1 академический час">
-          <span class="service-price__label">Стоимость</span>
-          <strong class="service-price__value">от 1 тыс. ₽ / ак. ч.</strong>
-          <span class="service-price__note">Итоговая стоимость рассчитывается по числу академических часов курса.</span>
-        </span>
-      </span>
-      <span class="service-card__arrow" aria-hidden="true"></span>
-    </summary>
+  <span class="service-price" aria-label="Стоимость: от 1 тыс. ₽ за 1 академический час">
+  <span class="service-price__label">
+    Стоимость
+  </span>
+
+  <strong class="service-price__value">
+    от 1 тыс. ₽ / ак. ч.
+  </strong>
+
+  <span class="service-price-info">
+
+    <a class="service-price-info__trigger" href="https://www.consultant.ru/law/podborki/povyshenie_kvalifikacii_skolko_chasov/" target="_blank" rel="noopener" aria-describedby="course-min-hours-tip" aria-label="Информация о минимальной продолжительности программы повышения квалификации" onclick="event.stopPropagation()">
+      ⓘ
+    </a>
+
+    <span id="course-min-hours-tip" class="service-price-info__tooltip" role="tooltip">
+      Минимальная продолжительность курса повышения квалификации составляет 16 часов.
+
+      <a class="service-price-info__source" href="https://www.consultant.ru/law/podborki/povyshenie_kvalifikacii_skolko_chasov/" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+        Источник: КонсультантПлюс ↗
+      </a>
+    </span>
+
+  </span>
+
+  <span class="service-price__note">
+    Итоговая стоимость рассчитывается по числу академических часов курса.
+  </span>
+</span>
 
     <div class="service-card__reveal">
       <div class="service-card__reveal-inner">
@@ -612,7 +628,7 @@
         </div>
       </div>
     </div>
-  </details>
+  
 </section>
 
 <section class="services-section" aria-labelledby="services-analytics-title">
