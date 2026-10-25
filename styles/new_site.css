@@ -2781,3 +2781,169 @@ html.mountain-page-active
 
   margin-top:6px;
 }
+
+/* =========================================================
+   PAGE-WIDE NETWORK BACKGROUND
+   Contacts + Services
+   ========================================================= */
+
+.network-page-scope{
+  position:relative;
+
+  width:100%;
+  min-width:0;
+
+  /*
+   * Не даём canvas или частицам создать
+   * горизонтальный overflow.
+   */
+  overflow:hidden;
+
+  /*
+   * Собственный stacking context:
+   * canvas остаётся позади контента,
+   * но не проваливается за страницу MkDocs.
+   */
+  isolation:isolate;
+}
+
+
+/* Canvas всей страницы */
+
+.network-page-scope > canvas.network-bg{
+  position:absolute;
+
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  z-index:0;
+
+  pointer-events:none;
+
+  opacity:1;
+
+  transition:
+    opacity .35s ease,
+    filter .35s ease;
+}
+
+
+/*
+ * Весь реальный контент страницы
+ * находится поверх canvas.
+ */
+
+.network-page-scope > :not(canvas.network-bg){
+  position:relative;
+  z-index:1;
+}
+
+
+/*
+ * Старый hero продолжает отвечать
+ * только за визуальную компоновку шапки.
+ */
+
+.network-page-scope .hero--network{
+  z-index:1;
+}
+
+
+/*
+ * В page-wide режиме canvas не должен
+ * получать hero-specific позиционирование.
+ */
+
+.network-page-scope > canvas.network-bg.is-dim{
+  opacity:0;
+  filter:blur(2px);
+}
+
+
+/* =========================================================
+   CONTACTS
+   ========================================================= */
+
+/*
+ * Карточки уже полупрозрачные,
+ * поэтому сеть будет естественно видна за ними.
+ */
+
+.network-page-scope .reco-card{
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+
+.services-page.network-page-scope .services-nav,
+.services-page.network-page-scope .services-section{
+  position:relative;
+  z-index:1;
+}
+
+
+/*
+ * Сохраняем полупрозрачность карточек,
+ * чтобы network был виден, но не мешал тексту.
+ */
+
+[data-md-color-scheme="slate"]
+.services-page.network-page-scope .service-card{
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-md-color-scheme="default"]
+.network-page-scope > canvas.network-bg{
+  opacity:.78;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width:600px){
+
+  .network-page-scope{
+    overflow:hidden;
+  }
+
+  .network-page-scope > canvas.network-bg{
+    /*
+     * Чуть спокойнее на телефоне:
+     * меньше визуального шума под карточками.
+     */
+    opacity:.82;
+  }
+
+  [data-md-color-scheme="default"]
+  .network-page-scope > canvas.network-bg{
+    opacity:.62;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+  .network-page-scope > canvas.network-bg{
+    transition:none;
+  }
+}
